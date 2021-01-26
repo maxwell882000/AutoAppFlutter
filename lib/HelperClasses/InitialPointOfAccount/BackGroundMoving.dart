@@ -84,6 +84,8 @@ class _BackGroundMovingState extends State<BackGroundMoving> {
           height: width * 0.6,
           child: SvgPicture.asset(
             backGround,
+            width: width,
+            height: width * 0.6,
           ),
         ),
         Positioned(
@@ -92,6 +94,8 @@ class _BackGroundMovingState extends State<BackGroundMoving> {
           height: width * 0.6,
           child: SvgPicture.asset(
             backGround,
+            width: width,
+            height: width * 0.6,
           ),
         ),
         Positioned(

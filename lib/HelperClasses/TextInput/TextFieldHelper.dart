@@ -1,4 +1,5 @@
 import 'package:TestApplication/Provider/ErrorMessageProvider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +13,9 @@ class TextFieldHelper extends StatefulWidget {
 class _TextFieldHelperState extends State<TextFieldHelper> {
   final controller = TextEditingController();
   bool cursor = true;
-  var provider;
+  ErrorMessageProvider provider;
+  String text = ""; // empty string to carry what was there before it onChanged
+  int maxLength = 40;
 
   //"#DF5867"
   @override
@@ -20,19 +23,31 @@ class _TextFieldHelperState extends State<TextFieldHelper> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
   void controllerListener() {
     controller.addListener(() {
+      if (controller.text.length <= maxLength) {
+        text = controller.text;
+      } else {
+        controller.text = text;
+        controller.selection = TextSelection.fromPosition(
+            TextPosition(offset: controller.text.length));
+      }
       provider.setInputData(controller.text);
+
+      provider.setSelected(controller.text.isNotEmpty ? true : false);
+      if (controller.text.isNotEmpty) {
+        provider.setError(false);
+      }
       setState(() {
         cursor = controller.text.isEmpty ? false : true;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -42,27 +57,31 @@ class _TextFieldHelperState extends State<TextFieldHelper> {
     controllerListener();
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.transparent,
       ),
       width: double.infinity,
-      height: width * 0.13,
-      padding: EdgeInsets.all(0),
+      height: width * 0.16,
+      padding: EdgeInsets.zero,
       child: TextField(
+        scrollPhysics: AlwaysScrollableScrollPhysics(),
         controller: controller,
         cursorColor: Color.fromRGBO(66, 66, 74, 1),
         showCursor: cursor,
         cursorHeight: width * 0.045,
         textAlign: TextAlign.left,
         autocorrect: false,
+        maxLines: 1,
         style: TextStyle(
           fontSize: width * 0.04,
           fontFamily: "Roboto",
           color: Color.fromRGBO(66, 66, 74, 1),
         ),
         decoration: new InputDecoration(
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          counterText: '',
           fillColor: Colors.white,
-          contentPadding: EdgeInsets.fromLTRB(
-              width * 0.02, width * 0.12, width * 0.02, width * 0.08),
+          contentPadding: EdgeInsets.symmetric(
+              horizontal: width * 0.02, vertical: width * 0.01),
           labelText: provider.nameOfHelper,
           labelStyle: TextStyle(
             fontSize: width * 0.03,

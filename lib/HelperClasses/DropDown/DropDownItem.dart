@@ -11,7 +11,8 @@ class DropDownItem extends StatefulWidget {
   final double width;
   final double disabledHeight;
   final double enabledHeight;
-
+  final Function additionalItemsFunction;
+  final Function toChange;
   const DropDownItem({
     Key key,
     this.items,
@@ -20,6 +21,8 @@ class DropDownItem extends StatefulWidget {
     this.width,
     this.disabledHeight,
     this.enabledHeight,
+    this.additionalItemsFunction,
+    this.toChange,
   }) : super(key: key);
 
   @override
@@ -30,6 +33,8 @@ class DropDownItem extends StatefulWidget {
         width: width,
         disabledHeight: disabledHeight,
         enabledHeight: enabledHeight,
+        additionalItemsFunction: additionalItemsFunction==null?(element){}:additionalItemsFunction,
+    toChange: toChange,
       );
 }
 
@@ -41,6 +46,8 @@ class _DropDownItemState extends State<DropDownItem> {
   final double width;
   final double disabledHeight;
   final double enabledHeight;
+  final Function additionalItemsFunction;
+  final Function toChange;
   // inside
   List connectAll;
   bool visibility = true;
@@ -59,6 +66,8 @@ class _DropDownItemState extends State<DropDownItem> {
     this.width,
     this.disabledHeight,
     this.enabledHeight,
+    this.additionalItemsFunction,
+    this.toChange,
   });
 
   @override
@@ -73,8 +82,14 @@ class _DropDownItemState extends State<DropDownItem> {
       if (scrolling == 2) {
         scrolling = 0;
         visibility = !visibility;
+
+        if(provider.inputData!=choosenItem) {
+          additionalItemsFunction(choosenItem);
+          provider.setInputData(choosenItem);
+        }
       }
-      provider.setInputData(choosenItem);
+
+
       pressed = !pressed;
     });
  
@@ -87,27 +102,38 @@ class _DropDownItemState extends State<DropDownItem> {
   void toGetList() {
     String choosenItem = provider.inputData;
     ErrorMessageProvider errorProvider = provider;
-    if (choosenItem.isEmpty && initial) {
-      hintText = errorProvider.nameOfHelper;
-      var temp1 = [
-        [hintText],
-        items.map((e) => e).toList(),
-      ];
-      var temp2 = temp1.expand((i) => i).toList();
-      connectAll = temp2;
-    } else if (errorProvider.error &&
-        (choosenItem.isEmpty || choosenItem == hintText)) {
-      hintText = errorProvider.nameOfHelper;
-      connectAll[0] = hintText;
-    } else {
-      connectAll.remove(choosenItem);
-      connectAll.join(', ');
-      connectAll.remove(hintText);
-      connectAll.join(', ');
-      connectAll.insert(0, choosenItem);
-    }
-    dropDownWidget = connectAll.map((e) => getChoices(e, width)).toList();
-    initial = false;
+
+      if (choosenItem.isEmpty && initial) {
+        print("Here something" + errorProvider.nameOfHelper);
+        hintText = errorProvider.nameOfHelper;
+        var temp1 = [
+          [hintText],
+          items.map((e) => e).toList(),
+        ];
+        var temp2 = temp1.expand((i) => i).toList();
+        connectAll = temp2;
+      } else if (errorProvider.error &&
+          (choosenItem.isEmpty || choosenItem == hintText)) {
+        hintText = errorProvider.nameOfHelper;
+        connectAll[0] = hintText;
+      } else
+      if (choosenItem.isNotEmpty && connectAll != null) {
+        connectAll.remove(choosenItem);
+        connectAll.join(', ');
+        connectAll.remove(hintText);
+        connectAll.join(', ');
+        connectAll.insert(0, choosenItem);
+      }
+      if (connectAll == null && choosenItem.isNotEmpty){
+
+        connectAll = items;
+        connectAll.remove(choosenItem);
+        connectAll.join(', ');
+        connectAll.insert(0, choosenItem);
+      }
+
+      dropDownWidget = connectAll==null?<Widget>[]:connectAll.map((e) => getChoices(e, width)).toList();
+      initial = false;
   }
 
   Widget getChoices(String item, double width) {
@@ -135,6 +161,7 @@ class _DropDownItemState extends State<DropDownItem> {
                 )
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     SvgPicture.asset(
                       item != items[0] ? uzbekFlag : russionFlag,
@@ -157,7 +184,7 @@ class _DropDownItemState extends State<DropDownItem> {
                   ],
                 ),
           Visibility(
-            visible: hintText == item ? true : false,
+            visible: visibility ? true : false,
             child: SvgPicture.asset(
               "assets/arrow_down.svg",
               width: width * 0.03,
@@ -167,11 +194,15 @@ class _DropDownItemState extends State<DropDownItem> {
       ),
     );
   }
-
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    provider = Provider.of<ErrorMessageProvider>(context);
+    provider = provider==null?Provider.of<ErrorMessageProvider>(context):provider;
     toGetList();
 
     return Stack(

@@ -25,13 +25,9 @@ class _DynamicLinksState extends State<DynamicLinks> {
   void initDynamicLinks() async {
     FirebaseDynamicLinks.instance.onLink(
         onSuccess: (PendingDynamicLinkData dynamicLink) async {
-      final PendingDynamicLinkData data1 =
-          await FirebaseDynamicLinks.instance.getInitialLink();
-      print("Data 1 $data1");
       final Uri deepLink = dynamicLink?.link;
       if (deepLink != null) {
-        print(dynamicLink.link);
-        print(deepLink.path);
+        print(deepLink.queryParameters['tt']);
         Navigator.pushNamed(context, deepLink.path);
       }
     }, onError: (OnLinkErrorException e) async {

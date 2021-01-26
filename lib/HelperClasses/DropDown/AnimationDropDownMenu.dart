@@ -1,3 +1,4 @@
+import 'package:TestApplication/HelperClasses/AnimatedContainerBorder.dart';
 import 'package:TestApplication/Provider/ErrorMessageProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -26,22 +27,11 @@ class AnimationDropDownMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var error = Provider.of<ErrorMessageProvider>(context);
     return Visibility(
       visible: visibility,
-      child: AnimatedContainer(
-        curve: Curves.easeInQuart,
-        duration: Duration(milliseconds: pressed ? 1000 : 600),
-        padding: EdgeInsets.zero,
-        margin: EdgeInsets.zero,
+      child: AnimatedContainerBorder(
+        duration:pressed ? 1000 : 600,
         height: pressed ? enabledHeight : disabledHeight,
-        decoration: BoxDecoration(
-          border: Border.all(
-              color: !error.error ? HexColor("#7FA6C9") : HexColor("#DF5867"),
-              width: 1.2),
-          borderRadius:
-              BorderRadius.circular(MediaQuery.of(context).size.width * 0.02),
-        ),
         child: Center(
           child: SingleChildScrollView(
               physics: scrolling == 1

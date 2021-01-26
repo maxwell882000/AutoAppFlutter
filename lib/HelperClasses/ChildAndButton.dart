@@ -36,6 +36,7 @@ class ChildAndButton extends StatelessWidget {
             ),
           ),
           Container(
+            width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.02),

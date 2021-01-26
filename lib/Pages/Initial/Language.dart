@@ -3,7 +3,7 @@ import 'package:TestApplication/HelperClasses/Buttons.dart';
 import 'package:TestApplication/HelperClasses/ChildAndButton.dart';
 import 'package:TestApplication/HelperClasses/DropDown/DropDownItem.dart';
 import 'package:TestApplication/Provider/ErrorMessageProvider.dart';
-import 'package:TestApplication/SingletonGlobal.dart';
+import 'file:///F:/ProjectsWork/FlutterProjects/AutoApp/AutoApp/lib/Singleton/SingletonGlobal.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +29,7 @@ class Language extends StatelessWidget {
   }
 
   void selectedLanguage(BuildContext context) {
+    print(errorsMessage.inputData);
     selectLanguage(errorsMessage.inputData);
     if (!errorsMessage.selected) {
       errorsMessage.setError(true);
@@ -51,6 +52,7 @@ class Language extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return ChangeNotifierProvider<ErrorMessageProvider>.value(
+
       value: errorsMessage,
       child: Base(
         width: width,
@@ -58,6 +60,7 @@ class Language extends StatelessWidget {
         icon: "assets/languages.svg",
         aboveText: "Выбор Языка",
         child: ChildAndButton(
+          key: UniqueKey(),
           aboveChild: DropDownItem(
             items: items,
             width: width,

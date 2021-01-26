@@ -1,21 +1,23 @@
 import 'package:TestApplication/HelperClasses/InsideOfAccount/AbovePartOfAccount.dart';
 import 'package:TestApplication/HelperClasses/InsideOfAccount/AppBarForAccount.dart';
 import 'package:TestApplication/HelperClasses/InsideOfAccount/ListOfInicator.dart';
+import 'package:TestApplication/HelperClasses/InsideOfAccount/MainMenu.dart';
+import 'package:TestApplication/HelperClasses/TextFlexible.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import 'MainMenu.dart';
 
-class BaseOfAccount extends StatefulWidget {
+
+class User extends StatefulWidget {
   final Widget child;
-  const BaseOfAccount({Key key, this.child}) : super(key: key);
+  const User({Key key, this.child}) : super(key: key);
 
   @override
-  _BaseOfAccountState createState() => _BaseOfAccountState();
+  _UserState createState() => _UserState();
 }
 
-class _BaseOfAccountState extends State<BaseOfAccount> {
+class _UserState extends State<User> {
   List indicators = [
     ["Замена Моторного Масла", 23.0],
     ["Замена X Фильтров", 30.0],
@@ -27,36 +29,45 @@ class _BaseOfAccountState extends State<BaseOfAccount> {
   List logic(double dataToBeHandled, double width) {
     Color color;
     double widthOfIndicator;
-  
-      int dataHandle = (dataToBeHandled / 10).floor();
-      switch (dataHandle) {
-        case 0:
-          color = Color.fromRGBO(165, 235, 120, 1);
-          break;
-        case 1:
-          color = Color.fromRGBO(255, 204, 51, 1);
-          break;
-        default:
-          color = Color.fromRGBO(223, 88, 103, 1);
-          break;
-      }
-      widthOfIndicator = width * dataToBeHandled/ 30;
+
+    int dataHandle = (dataToBeHandled / 10).floor();
+    switch (dataHandle) {
+      case 0:
+        color = Color.fromRGBO(165, 235, 120, 1);
+        break;
+      case 1:
+        color = Color.fromRGBO(255, 204, 51, 1);
+        break;
+      default:
+        color = Color.fromRGBO(223, 88, 103, 1);
+        break;
+    }
+    widthOfIndicator = width * dataToBeHandled/ 30;
 
     return [color, widthOfIndicator];
   }
 
-
+  GlobalKey key = new GlobalKey();
   Function logicForIndicators;
   @override
   void initState() {
     super.initState();
     logicForIndicators = logic;
+    Future.delayed(Duration(milliseconds: 500)).then((value) => info());
   }
+  void info(){
 
+  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+
     return MainMenu(
+      nameBar: TextFlexible(
+        key: key,
+        text: "AUTOAPP",
+        numberOfCharacters: 25,
+      ),
       body: Container(
         margin: EdgeInsets.symmetric(
             vertical: width * 0.05, horizontal: width * 0.03),
@@ -68,18 +79,18 @@ class _BaseOfAccountState extends State<BaseOfAccount> {
             height: width * 0.04,
           ),
           ListOfIndicator(
-              indicators: indicators,
-              logicForIndicator: logicForIndicators,
-            ),
+            indicators: indicators,
+            logicForIndicator: logicForIndicators,
+          ),
         ]),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.transparent,
         onPressed: (){},
         child: SvgPicture.asset("assets/add.svg",
-        height: width*0.13,
+          height: width*0.13,
         ),
-        ),
+      ),
     );
   }
 }

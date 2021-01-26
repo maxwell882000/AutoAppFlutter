@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../SingletonGlobal.dart';
+import '../../Singleton/SingletonGlobal.dart';
 
 class DirectToThePage extends StatefulWidget {
   DirectToThePage({Key key}) : super(key: key);
@@ -18,6 +18,7 @@ class _DirectToThePageState extends State<DirectToThePage> {
   void initState() {
     super.initState();
     initDynamicLinks();
+    _directToRightPage(context);
   }
 
   void initDynamicLinks() async {
@@ -44,8 +45,6 @@ class _DirectToThePageState extends State<DirectToThePage> {
   Future<void> _directToRightPage(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int language = prefs.getInt('language') ?? -1;
-    print("LANGUAG CHOOSEN");
-    print(language);
     if (language == -1) {
       SingletonGlobal().language = Languages.EMPTY;
       Navigator.pushNamed(context, "/language");
@@ -58,8 +57,7 @@ class _DirectToThePageState extends State<DirectToThePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(mounted);
-    if (mounted) _directToRightPage(context);
+
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: HexColor("F0F8FF"),

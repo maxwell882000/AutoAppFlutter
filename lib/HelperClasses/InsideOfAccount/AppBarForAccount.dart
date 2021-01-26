@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AppBarForAccount extends StatelessWidget {
-  const AppBarForAccount({Key key}) : super(key: key);
+  final Widget nameBar;
+  final double heightBar;
+  const AppBarForAccount({Key key, this.nameBar , this.heightBar}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,18 +16,18 @@ class AppBarForAccount extends StatelessWidget {
         onPressed: () {},
         icon: Icon(
           Icons.menu,
+          size: width*0.1,
         ),
         color: Color.fromRGBO(66, 66, 74, 1),
       ),
-      title: Center(
-        child: Text(
-          "AUTOAPP",
-          style: TextStyle(
-            color: Color.fromRGBO(66, 66, 74, 1),
-            fontSize: width * 0.035,
-          ),
+      title: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            nameBar,
+            Flexible(child:Text("") ,),
+          ],
         ),
-      ),
+    toolbarHeight: width*0.15,
       centerTitle: true,
       actions: <Widget>[
         GestureDetector(

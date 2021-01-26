@@ -1,5 +1,8 @@
 import 'package:TestApplication/HelperClasses/DropDown/DropDownItem.dart';
+import 'package:TestApplication/HelperClasses/TextInput/TextFieldHelper.dart';
 import 'package:TestApplication/Provider/ErrorMessageProvider.dart';
+import 'package:TestApplication/Singleton/SingletonRegistrationAuto.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +12,9 @@ class ListOfDropDownItemWithText extends StatefulWidget {
   final double disabledHeightOfItem;
   final double enabledHeightOfItem;
   final double heightOfDropDownItems;
+  final List itemWithTextField;
+  final ErrorMessageProvider provider;
+
   ListOfDropDownItemWithText({
     Key key,
     this.item,
@@ -16,7 +22,10 @@ class ListOfDropDownItemWithText extends StatefulWidget {
     this.disabledHeightOfItem,
     this.enabledHeightOfItem,
     this.heightOfDropDownItems,
+    this.itemWithTextField,
+    this.provider,
   }) : super(key: key);
+
   @override
   _ListOfDropDownItemWithTextState createState() =>
       _ListOfDropDownItemWithTextState(
@@ -25,6 +34,8 @@ class ListOfDropDownItemWithText extends StatefulWidget {
         disabledHeightOfItem: disabledHeightOfItem,
         enabledHeightOfItem: enabledHeightOfItem,
         heightOfDropDownItems: heightOfDropDownItems,
+        itemWithTextField: itemWithTextField,
+        provider: provider,
       );
 }
 
@@ -35,23 +46,30 @@ class _ListOfDropDownItemWithTextState
   final double disabledHeightOfItem;
   final double enabledHeightOfItem;
   final double heightOfDropDownItems;
+  final List itemWithTextField;
+
   _ListOfDropDownItemWithTextState({
     this.item,
     this.width,
     this.disabledHeightOfItem,
     this.enabledHeightOfItem,
     this.heightOfDropDownItems,
+    this.itemWithTextField,
+    this.provider,
   });
 
+  int selection;
   String hintText;
   String nameOfTextHelper;
   List dropDownItem;
-  var rowWithText;
+  List<Widget> rowWithText;
   List collectionOfPreparedData;
-  ErrorMessageProvider provider;
+  final ErrorMessageProvider provider;
+
   @override
   void initState() {
     super.initState();
+    dataPreparing();
   }
 
   List prepareData(List item) {
@@ -64,10 +82,11 @@ class _ListOfDropDownItemWithTextState
   Widget getTextWithChoices(List value) {
     final String textHelper = value[0];
     final String textHint = value[1];
-    final ErrorMessageProvider errors = ErrorMessageProvider(textHint);
+    final ErrorMessageProvider errors = new ErrorMessageProvider(textHint);
     final List errorsWithText = [textHelper, errors];
     provider.setErrorsMessageWithText(errorsWithText);
     return ChangeNotifierProvider<ErrorMessageProvider>.value(
+      key: UniqueKey(),
       value: errors,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -107,13 +126,199 @@ class _ListOfDropDownItemWithTextState
     );
   }
 
+  Function getAdditionalItems( List element) {
+    return (String chosenItem) {
+      List sub = SingletonRegistrationAuto().subList(chosenItem, element[1]);
+      if (sub.isNotEmpty) {
+        List prepared = sub[1].map((e) => prepareDataWithTextField(e)).toList();
+        String additional = sub[2];
+        int index;
+        setState(() {
+          List removed = collectionOfPreparedData
+              .where((element) =>
+                  (element[1] == prepared[0][1]) || (element[1] == additional))
+              .map((e) => e)
+              .toList();
+          if (removed.isNotEmpty) {
+            int index = collectionOfPreparedData.indexOf(element)+1;
+            if(sub[3]==1) {
+              removed.forEach((e) =>
+              {
+                rowWithText.removeAt(collectionOfPreparedData.indexOf(e)),
+                provider.errorsMessageWithText.removeAt(collectionOfPreparedData.indexOf(e)),
+                collectionOfPreparedData.remove(e),
+              });
+            }
+            else if(sub[3]==2 && index < collectionOfPreparedData.length){
+              rowWithText.removeAt(index);
+              provider.errorsMessageWithText.removeAt(index);
+              collectionOfPreparedData.removeAt(index);
+            }
+          }
+          index=collectionOfPreparedData.indexOf(element);
+          prepared.asMap().forEach((i,e) => {
+                collectionOfPreparedData.insert(index + i+1,e),
+                rowWithText.insert(index + i+1,getUpdate(e,index+i+1))
+              });
+        });
+      }
+    };
+  }
+  Widget getUpdate(List v , int index) {
+    final String textHelper = v[1];
+    final String textHint = v[2];
+    ErrorMessageProvider errors = provider.newErrorMessageProvider(textHint);
+    if (v[0] == 1) {
+      errors.setTextField(true);
+    } else {
+      errors.setItems(v[3]);
+    }
+    final List errorsWithText = [textHelper, errors];
+    provider.errorsMessageWithText.insert(index,errorsWithText);
+    return ChangeNotifierProvider<ErrorMessageProvider>.value(
+      key: UniqueKey(),
+      value: provider.errorsMessageWithText[
+      provider.errorsMessageWithText.indexOf(errorsWithText)][1],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: width * 0.04,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Text(
+                  textHelper,
+                  overflow: TextOverflow.visible,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: "Montserrat",
+                    fontSize: width * 0.03,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Flexible(
+                child: Container(
+                  child: v[0] == 1
+                      ? TextFieldHelper()
+                      : DropDownItem(
+                    items: errors.items,
+                    width: width,
+                    disabledHeight: disabledHeightOfItem,
+                    enabledHeight: enabledHeightOfItem,
+                    additionalItemsFunction:
+                    getAdditionalItems(v),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget getTextCombiningWithTextField(List v) {
+    final String textHelper = v[1];
+    final String textHint = v[2];
+    ErrorMessageProvider errors = provider.newErrorMessageProvider(textHint);
+    if (v[0] == 1) {
+      errors.setTextField(true);
+    } else {
+      errors.setItems(v[3]);
+    }
+    final List errorsWithText = [textHelper, errors];
+    provider.errorsMessageWithText.add(errorsWithText);
+    return ChangeNotifierProvider<ErrorMessageProvider>.value(
+      key: UniqueKey(),
+      value: provider.errorsMessageWithText[
+          provider.errorsMessageWithText.indexOf(errorsWithText)][1],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: width * 0.04,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Text(
+                  textHelper,
+                  overflow: TextOverflow.visible,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: "Montserrat",
+                    fontSize: width * 0.03,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Flexible(
+                child: Container(
+                  child: v[0] == 1
+                      ? TextFieldHelper()
+                      : DropDownItem(
+                          items: errors.items,
+                          width: width,
+                          disabledHeight: disabledHeightOfItem,
+                          enabledHeight: enabledHeightOfItem,
+                          additionalItemsFunction:
+                              getAdditionalItems(v),
+                        ),
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  List prepareDataWithTextField(List item) {
+    selection = item[0];
+    nameOfTextHelper = item[1];
+    hintText = item[2];
+    if (selection == 0) {
+      dropDownItem = item.sublist(3);
+      return [selection, nameOfTextHelper, hintText, dropDownItem];
+    }
+    return [selection, nameOfTextHelper, hintText];
+  }
+
+  void dataPreparing() {
+    if (itemWithTextField == null) {
+      collectionOfPreparedData =
+          item.map((value) => prepareData(value)).toList();
+
+      rowWithText = collectionOfPreparedData
+          .map((value) => getTextWithChoices(value))
+          .toList();
+    } else {
+      collectionOfPreparedData = itemWithTextField
+          .map((value) => prepareDataWithTextField(value))
+          .toList();
+      rowWithText = collectionOfPreparedData
+          .map((value) => getTextCombiningWithTextField(value))
+          .toList();
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+
+    provider.errorsMessageWithText.forEach((element) {
+      element[1].dispose();
+    });
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    provider = Provider.of<ErrorMessageProvider>(context);
-    collectionOfPreparedData = item.map((value) => prepareData(value)).toList();
-    rowWithText = collectionOfPreparedData
-        .map((value) => getTextWithChoices(value))
-        .toList();
     return Container(
       height: heightOfDropDownItems,
       child: SingleChildScrollView(

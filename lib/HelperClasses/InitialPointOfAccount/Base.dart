@@ -22,72 +22,77 @@ class Base extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     var provider = Provider.of<ErrorMessageProvider>(context);
     return Scaffold(
       backgroundColor: HexColor("F0F8FF"),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: LoadingScreen(
-              visible: provider.nextPage
-            ),
-          ),
-          Visibility(
-            visible: !provider.nextPage,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(width * 0.035),
-              ),
-              padding: EdgeInsets.all(0),
-              margin: EdgeInsets.fromLTRB(width * 0.05, 0, width * 0.05, 0),
-              width: width,
-              child: Container(
-                margin: EdgeInsets.all(0),
-                width: width,
-                padding: EdgeInsets.all(0),
-                height: height,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.zero,
-                      margin: EdgeInsets.fromLTRB(
-                          width * 0.09, width * 0.12, width * 0.09, 0),
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        alignment: WrapAlignment.center,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          Align(
-                            alignment: Alignment.center,
-                            child: SvgPicture.asset(
-                              icon,
-                              height: width * 0.15,
-                            ),
-                          ),
-                          Text(
-                            aboveText,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.visible,
-                            style: TextStyle(
-                              fontSize: width * 0.06,
-                              fontFamily: "Montserrat",
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromRGBO(66, 66, 74, 1),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    child,
-                  ],
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: LoadingScreen(
+                  visible: provider.nextPage
                 ),
               ),
-            ),
+              Visibility(
+                visible: !provider.nextPage,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(width * 0.035),
+                  ),
+                  padding: EdgeInsets.all(0),
+                  margin: EdgeInsets.fromLTRB(width * 0.05, 0, width * 0.05, 0),
+                  width: width,
+                  child: Container(
+                    margin: EdgeInsets.all(0),
+                    width: width,
+                    padding: EdgeInsets.all(0),
+                    height: height,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.zero,
+                          margin: EdgeInsets.fromLTRB(
+                              width * 0.09, width * 0.12, width * 0.09, 0),
+                          child: Wrap(
+                            direction: Axis.horizontal,
+                            alignment: WrapAlignment.center,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: SvgPicture.asset(
+                                  icon,
+                                  height: width * 0.15,
+                                ),
+                              ),
+                              Text(
+                                aboveText,
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.visible,
+                                style: TextStyle(
+                                  fontSize: width * 0.06,
+                                  fontFamily: "Montserrat",
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromRGBO(66, 66, 74, 1),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        child,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

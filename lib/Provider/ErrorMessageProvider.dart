@@ -6,14 +6,21 @@ class ErrorMessageProvider with ChangeNotifier {
   bool _error;
   bool _selected;
   bool _nextPage;
+  bool _textField;
   List _errorsMessageWithText;
+  List _items;
+  bool _dispose = false;
+  ErrorMessageProvider _errorMessageProvider;
+  Widget _swapWidget;
   ErrorMessageProvider(String nameOfHelper) {
     this._nameOfHelper = nameOfHelper;
     this._error = false;
     this._selected = false;
     this._nextPage = false;
+    this._textField = false;
     this._inputData = "";
     this._errorsMessageWithText = [];
+    this._items = [];
   }
   List get errorsMessageWithText => _errorsMessageWithText;
 
@@ -22,6 +29,13 @@ class ErrorMessageProvider with ChangeNotifier {
   bool get selected => _selected;
   bool get nextPage => _nextPage;
   String get inputData => _inputData;
+  bool get textField => _textField;
+  List get items => _items;
+
+  void setItems(List items){
+    this._items = items;
+    notifyListeners();
+  }
 
   void setInputData(String inputData) {
     this._inputData = inputData;
@@ -30,10 +44,18 @@ class ErrorMessageProvider with ChangeNotifier {
 
   void setErrorsMessageWithText(List errorsMessageWithText) {
     this._errorsMessageWithText.add(errorsMessageWithText);
-  }
 
+  }
+  ErrorMessageProvider newErrorMessageProvider(String nameOfHelper){
+    this._errorMessageProvider = new ErrorMessageProvider(nameOfHelper);
+    return _errorMessageProvider;
+  }
   void setNextPage(bool nextPage) {
     this._nextPage = nextPage;
+    notifyListeners();
+  }
+  void setTextField(bool textField) {
+    this._textField = textField;
     notifyListeners();
   }
 
@@ -50,5 +72,16 @@ class ErrorMessageProvider with ChangeNotifier {
   void setSelected(bool selected) {
     this._selected = selected;
     notifyListeners();
+  }
+  @override
+  void dispose() {
+    _dispose = true;
+    super.dispose();
+  }
+  @override
+  void notifyListeners() {
+    if (!_dispose) {
+      super.notifyListeners();
+    }
   }
 }

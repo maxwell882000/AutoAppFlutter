@@ -10,20 +10,32 @@ class TextInputForum extends StatelessWidget {
   final String svgPicture;
   final String aboveText;
   final String nameOfButton;
-  TextInputForum({Key key, this.svgPicture,this.aboveText, this.nameOfButton}) : super(key: key);
+  final Function connectDataBase;
+
+  TextInputForum(
+      {Key key,
+      this.svgPicture,
+      this.aboveText,
+      this.nameOfButton,
+      this.connectDataBase})
+      : super(key: key);
 
   final ErrorMessageProvider errorMessageProvider =
       new ErrorMessageProvider("Введите Email или Номер телефона");
 
-  void registerAccount(BuildContext context) {
+  void registerAccount(BuildContext context) async {
     if (errorMessageProvider.inputData.isNotEmpty) {
-      RegExp firstCases = new RegExp(r"(\+|\d)");
-      bool match = firstCases.hasMatch(errorMessageProvider.inputData);
+      RegExp firstCases = new RegExp(r"(\+|(\d))");
+      bool match = firstCases.hasMatch(errorMessageProvider.inputData[0]);
+
       if (match) {
         RegExp exp = new RegExp(r"\+([8-9]{3,3})(\d{9,9})");
         bool match = exp.hasMatch(errorMessageProvider.inputData);
         if (match) {
           errorMessageProvider.setError(false);
+          errorMessageProvider.setNextPage(true);
+          connectDataBase(
+              errorMessageProvider.inputData, "phone", errorMessageProvider);
         } else {
           errorMessageProvider.setError(true);
           errorMessageProvider
@@ -34,7 +46,9 @@ class TextInputForum extends StatelessWidget {
         bool match = exp.hasMatch(errorMessageProvider.inputData);
         if (match) {
           errorMessageProvider.setError(false);
-          Navigator.of(context).pushNamed("/authorized/select_unit");
+          errorMessageProvider.setNextPage(true);
+          connectDataBase(
+              errorMessageProvider.inputData, "email", errorMessageProvider);
         } else {
           errorMessageProvider.setError(true);
           errorMessageProvider
