@@ -42,17 +42,15 @@ class TextFlexible extends StatelessWidget {
 
   String fromatedString(){
     List grouped = text.split(" ");
-    print('Grouped $grouped');
+
     String temp = "";
     List prepared=[];
     String spannedText;
     List.generate(grouped.length, (index) => {
       if(temp.length + grouped[index].length <= numberOfCharacters){
         temp = "$temp ${grouped[index]}",
-        print("Temp $temp $index"),
       }else{
         prepared.add(temp),
-        print(prepared),
         temp=grouped[index]
       }
     });

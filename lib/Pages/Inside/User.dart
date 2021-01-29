@@ -86,7 +86,9 @@ class _UserState extends State<User> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.transparent,
-        onPressed: (){},
+        onPressed: (){
+          Navigator.of(context).pushNamed("/create_cards");
+        },
         child: SvgPicture.asset("assets/add.svg",
           height: width*0.13,
         ),

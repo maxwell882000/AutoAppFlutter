@@ -12,7 +12,7 @@ class DropDownItem extends StatefulWidget {
   final double disabledHeight;
   final double enabledHeight;
   final Function additionalItemsFunction;
-  final Function toChange;
+  final Widget iconsAddition;
   const DropDownItem({
     Key key,
     this.items,
@@ -22,7 +22,7 @@ class DropDownItem extends StatefulWidget {
     this.disabledHeight,
     this.enabledHeight,
     this.additionalItemsFunction,
-    this.toChange,
+    this.iconsAddition,
   }) : super(key: key);
 
   @override
@@ -34,7 +34,7 @@ class DropDownItem extends StatefulWidget {
         disabledHeight: disabledHeight,
         enabledHeight: enabledHeight,
         additionalItemsFunction: additionalItemsFunction==null?(element){}:additionalItemsFunction,
-    toChange: toChange,
+    iconsAddition: iconsAddition,
       );
 }
 
@@ -47,7 +47,8 @@ class _DropDownItemState extends State<DropDownItem> {
   final double disabledHeight;
   final double enabledHeight;
   final Function additionalItemsFunction;
-  final Function toChange;
+  final Widget iconsAddition;
+
   // inside
   List connectAll;
   bool visibility = true;
@@ -67,7 +68,7 @@ class _DropDownItemState extends State<DropDownItem> {
     this.disabledHeight,
     this.enabledHeight,
     this.additionalItemsFunction,
-    this.toChange,
+    this.iconsAddition,
   });
 
   @override
@@ -100,10 +101,12 @@ class _DropDownItemState extends State<DropDownItem> {
   }
 
   void toGetList() {
+
     String choosenItem = provider.inputData;
     ErrorMessageProvider errorProvider = provider;
-
-      if (choosenItem.isEmpty && initial) {
+    print("${provider.textField}");
+    print('$connectAll $choosenItem');
+      if ((choosenItem.isEmpty && initial) || connectAll == null ) {
         print("Here something" + errorProvider.nameOfHelper);
         hintText = errorProvider.nameOfHelper;
         var temp1 = [
@@ -112,6 +115,7 @@ class _DropDownItemState extends State<DropDownItem> {
         ];
         var temp2 = temp1.expand((i) => i).toList();
         connectAll = temp2;
+       Future.delayed(Duration(milliseconds: 100)).then((value) => provider.setInputData(""));
       } else if (errorProvider.error &&
           (choosenItem.isEmpty || choosenItem == hintText)) {
         hintText = errorProvider.nameOfHelper;
@@ -184,8 +188,8 @@ class _DropDownItemState extends State<DropDownItem> {
                   ],
                 ),
           Visibility(
-            visible: visibility ? true : false,
-            child: SvgPicture.asset(
+            visible: scrolling == 0 ? true : false,
+            child: iconsAddition!=null?iconsAddition:SvgPicture.asset(
               "assets/arrow_down.svg",
               width: width * 0.03,
             ),

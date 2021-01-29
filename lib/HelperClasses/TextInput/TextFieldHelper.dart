@@ -4,19 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TextFieldHelper extends StatefulWidget {
-  TextFieldHelper({Key key}) : super(key: key);
+  final Widget suffixIcon;
+  final Widget prefixIcon;
+  TextFieldHelper({Key key, this.suffixIcon,this.prefixIcon}) : super(key: key);
 
   @override
-  _TextFieldHelperState createState() => _TextFieldHelperState();
+  _TextFieldHelperState createState() => _TextFieldHelperState(
+    suffixIcon: suffixIcon,
+    prefixIcon: prefixIcon,
+    );
 }
 
 class _TextFieldHelperState extends State<TextFieldHelper> {
   final controller = TextEditingController();
+  final Widget suffixIcon;
+  final Widget prefixIcon;
   bool cursor = true;
   ErrorMessageProvider provider;
   String text = ""; // empty string to carry what was there before it onChanged
   int maxLength = 40;
-
+  _TextFieldHelperState({this.suffixIcon,this.prefixIcon});
   //"#DF5867"
   @override
   void initState() {
@@ -33,7 +40,7 @@ class _TextFieldHelperState extends State<TextFieldHelper> {
             TextPosition(offset: controller.text.length));
       }
       provider.setInputData(controller.text);
-
+      provider.setTextField(true);
       provider.setSelected(controller.text.isNotEmpty ? true : false);
       if (controller.text.isNotEmpty) {
         provider.setError(false);
@@ -56,11 +63,11 @@ class _TextFieldHelperState extends State<TextFieldHelper> {
     provider = Provider.of<ErrorMessageProvider>(context);
     controllerListener();
     return Container(
+      margin: EdgeInsets.zero,
       decoration: BoxDecoration(
         color: Colors.transparent,
       ),
       width: double.infinity,
-      height: width * 0.16,
       padding: EdgeInsets.zero,
       child: TextField(
         scrollPhysics: AlwaysScrollableScrollPhysics(),
@@ -77,6 +84,8 @@ class _TextFieldHelperState extends State<TextFieldHelper> {
           color: Color.fromRGBO(66, 66, 74, 1),
         ),
         decoration: new InputDecoration(
+          suffixIcon: suffixIcon,
+          prefixIcon: prefixIcon,
           floatingLabelBehavior: FloatingLabelBehavior.always,
           counterText: '',
           fillColor: Colors.white,

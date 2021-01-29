@@ -32,16 +32,13 @@ class AnimationDropDownMenu extends StatelessWidget {
       child: AnimatedContainerBorder(
         duration:pressed ? 1000 : 600,
         height: pressed ? enabledHeight : disabledHeight,
-        child: Center(
-          child: SingleChildScrollView(
-              physics: scrolling == 1
-                  ? AlwaysScrollableScrollPhysics()
-                  : NeverScrollableScrollPhysics(),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: dropDownWidget.toList(),
-              )),
-        ),
+        child: SingleChildScrollView(
+            physics: scrolling == 1
+                ? AlwaysScrollableScrollPhysics()
+                : NeverScrollableScrollPhysics(),
+            child: Column(
+              children: dropDownWidget.toList(),
+            )),
       ),
     );
   }

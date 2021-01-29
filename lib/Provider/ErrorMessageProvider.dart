@@ -31,7 +31,11 @@ class ErrorMessageProvider with ChangeNotifier {
   String get inputData => _inputData;
   bool get textField => _textField;
   List get items => _items;
-
+  Widget get swapWidget => _swapWidget;
+  void setSwapWidget(Widget swapWidget){
+    _swapWidget = swapWidget;
+    notifyListeners();
+  }
   void setItems(List items){
     this._items = items;
     notifyListeners();
