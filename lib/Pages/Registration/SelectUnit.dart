@@ -4,6 +4,7 @@ import 'package:TestApplication/HelperClasses/DropDown/ListOfDropDownItemWithTex
 import 'package:TestApplication/HelperClasses/SelectOptions.dart';
 import 'package:TestApplication/Provider/ErrorMessageProvider.dart';
 import 'package:TestApplication/Singleton/SingletonRegistrationAuto.dart';
+import 'package:TestApplication/Singleton/SingletonStoreUnits.dart';
 import 'package:TestApplication/Singleton/SingletonUnits.dart';
 import 'package:TestApplication/Singleton/SingletonUserInformation.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +14,13 @@ import 'package:provider/provider.dart';
 
 class SelectUnit extends StatelessWidget {
   final List items = [
-    ["Cкорость","Выберите скорость" ,"Километр в секунду ","Метр в секунду ","Километр в час ", "Метр в час","Миля в секунду","Миля в час","Фут в секунду","Фут в час "],
-    ["Расстояние", "Выберите растояние" , "Миллиметр","Сантиметр","Метр", "Километр","Инч","Фут","Ярд","Миля"],
-    ["Расход топлива", "Выберите расход топлива" ,  "км/л ","л/км ","л/100км ", "ми/л","л/ми","ми/г","г(US)/ми"],
-    ["Валюта","Выберите валюту" , "USD","EUR","UZS", "RUB"],
+  ["Cкорость","Выберите скорость" ,SingletonStoreUnits().speed.KM_C,SingletonStoreUnits().speed.M_C,SingletonStoreUnits().speed.KM_H,SingletonStoreUnits().speed.M_H,SingletonStoreUnits().speed.KM_D,SingletonStoreUnits().speed.M_D,SingletonStoreUnits().speed.KM_Y,SingletonStoreUnits().speed.M_Y],
+  ["Расстояние", "Выберите растояние",SingletonStoreUnits().distance.CM,SingletonStoreUnits().distance.KM,SingletonStoreUnits().distance.M,SingletonStoreUnits().distance.MM],
+  ["Расход топлива", "Выберите расход топлива" , SingletonStoreUnits().fuelConsumption.KM_L,SingletonStoreUnits().fuelConsumption.L_100KM,SingletonStoreUnits().fuelConsumption.L_KM],
+  ["Валюта","Выберите валюту" ,  SingletonStoreUnits().currency.EUR,SingletonStoreUnits().currency.RUB,SingletonStoreUnits().currency.USD,SingletonStoreUnits().currency.UZS],
   ];
+
+
   SelectUnit({Key key}) : super(key: key);
   final ErrorMessageProvider selectOptionsErrorProvider =
   new ErrorMessageProvider("");
@@ -48,6 +51,7 @@ class SelectUnit extends StatelessWidget {
       SingletonUnits().setFuelConsumption(errorMessageProvider[2][1].inputData);
       SingletonUnits().setCurrency(errorMessageProvider[3][1].inputData);
       SingletonUnits().setToTheDisk();
+      print(SingletonUserInformation().emailOrPhone);
       http.put(
           'https://autoapp.elite-house.uz/units/${SingletonUserInformation().emailOrPhone}/',
           headers: <String, String>{

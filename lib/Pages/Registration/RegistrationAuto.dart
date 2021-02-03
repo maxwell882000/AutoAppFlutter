@@ -4,6 +4,7 @@ import 'package:TestApplication/HelperClasses/DropDown/ListOfDropDownItemWithTex
 
 import 'package:TestApplication/HelperClasses/SelectOptions.dart';
 import 'package:TestApplication/Provider/ErrorMessageProvider.dart';
+import 'package:TestApplication/Singleton/SingletonUnits.dart';
 import 'package:TestApplication/Singleton/SingletonUserInformation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +20,9 @@ class RegistrationAuto extends StatelessWidget {
     return (BuildContext context) {
       var errors = selectOptionsErrorProvider.errorsMessageWithText;
       var selected = errors
-          .where((element) => !element[1].selected)
+          .where((element) => !element[1].selected && element[0]!= "ТЕХ ПАСПОРТ")
           .map((element) => errors.indexOf(element));
-      print(selected);
+
       if (selected.length == 0) {
         // selectOptionsErrorProvider.setNextPage(true);
         loadToHard(errors);
@@ -43,26 +44,31 @@ class RegistrationAuto extends StatelessWidget {
       SingletonUserInformation().setYearOfMade(errors[3][1].inputData);
       SingletonUserInformation().setYearOfPurchase(errors[4][1].inputData);
       SingletonUserInformation().setNumber(errors[5][1].inputData);
-      SingletonUserInformation().setNumberOfTank(int.parse(errors[6][1].inputData));
-      SingletonUserInformation().setFirstTankType(errors[7][1].inputData);
-      SingletonUserInformation().setFirstTankVolume(int.parse(errors[8][1].inputData));
+      SingletonUserInformation().setRun(double.parse(errors[6][1].inputData));
+      SingletonUserInformation().setTechPassport(errors[7][1].inputData);
+      SingletonUserInformation().setNumberOfTank(int.parse(errors[8][1].inputData));
+      SingletonUserInformation().setFirstTankType(errors[9][1].inputData);
+      SingletonUserInformation().setFirstTankVolume(int.parse(errors[10][1].inputData));
+      SingletonUserInformation().setInitialRun(SingletonUserInformation().run);
+      print("Run ${SingletonUserInformation().run}");
+      print("Run after ${SingletonUnits().convertDistanceForDB(SingletonUserInformation().run)}");
       if (SingletonUserInformation().numberOfTank == 2){
-        SingletonUserInformation().setSecondTankType(errors[9][1].inputData);
-        SingletonUserInformation().setSecondTankVolume(int.parse(errors[10][1].inputData));
+        SingletonUserInformation().setSecondTankType(errors[11][1].inputData);
+        SingletonUserInformation().setSecondTankVolume(int.parse(errors[12][1].inputData));
       }
       else{
         SingletonUserInformation().setSecondTankType("");
         SingletonUserInformation().setSecondTankVolume(0);
       }
-      SingletonUserInformation().setToTheDisk();
-      print(SingletonUserInformation().emailOrPhone);
-      http.put(
+      SingletonUserInformation().setDate(DateTime.now());
+      //SingletonUserInformation().setToTheDisk();
+      http.post(
           'https://autoapp.elite-house.uz/transport/${SingletonUserInformation().emailOrPhone}/',
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body:jsonEncode(SingletonUserInformation().toJson()));
-        print("Information ${SingletonUserInformation()}");
+
         Navigator.of(context).pushNamed("/authorized");
     };
   }

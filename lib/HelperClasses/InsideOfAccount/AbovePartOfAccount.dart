@@ -1,9 +1,20 @@
+import 'package:TestApplication/Singleton/SingletonUnits.dart';
+import 'package:TestApplication/Singleton/SingletonUserInformation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class AbovePartOfAccount extends StatelessWidget {
   final List informationAboutCar;
   final double width;
+  final String nameOfCar = "${SingletonUserInformation().marka} ${SingletonUserInformation().model}";
+  final String number = "${SingletonUserInformation().number}";
+  final String techPassport ="${SingletonUserInformation().techPassport}";
+  final String run ="${SingletonUserInformation().run} ${SingletonUnits().distance}";
+  final String tenure = "${SingletonUserInformation().tenure()} лет";
+  final String averageRun = "${SingletonUserInformation().averageRun()} ${SingletonUnits().speed}";
+  final String changeDetails = "11";
+  final String allExpense = "${SingletonUserInformation().expenses.all_time} ${SingletonUnits().currency}";
+  final String inMonthExpense = "${SingletonUserInformation().expenses.in_this_month} ${SingletonUnits().currency}";
   AbovePartOfAccount({Key key, this.informationAboutCar, this.width})
       : super(key: key);
   @override
@@ -18,14 +29,13 @@ class AbovePartOfAccount extends StatelessWidget {
           color: Color.fromRGBO(62, 124, 165, 1),
           borderRadius: BorderRadius.circular(10),
         ),
-        padding: EdgeInsets.symmetric(
-            vertical: width * 0.04, horizontal: width * 0.04),
+        padding: EdgeInsets.symmetric( horizontal: width * 0.03),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Name OF The car",
+              "$nameOfCar",
               style: TextStyle(
                 fontFamily: "Montserrat",
                 fontWeight: FontWeight.bold,
@@ -34,13 +44,13 @@ class AbovePartOfAccount extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: width*0.07,
+              height: width*0.05,
             ),
            Text(
-           "Some Information",
+           "$number",
            style: TextStyle(
              fontFamily: "Montserrat",
-             fontSize: width * 0.03,
+             fontSize: width * 0.034,
              color: HexColor("#FFFFFF"),
            ),
             ),
@@ -48,46 +58,94 @@ class AbovePartOfAccount extends StatelessWidget {
               height: width*0.035,
             ),
             Text(
-           "Some Information",
+           "$techPassport",
            style: TextStyle(
              fontFamily: "Montserrat",
-             fontSize: width * 0.03,
+             fontSize: width * 0.034,
              color: HexColor("#FFFFFF"),
            ),
             ),
           SizedBox(
               height: width*0.035,
             ),
-            Text(
-           "Some Information",
-           style: TextStyle(
-             fontFamily: "Montserrat",
-             fontSize: width * 0.03,
-             color: HexColor("#FFFFFF"),
-           ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Текущий пробег:",
+                  style: TextStyle(
+                    fontFamily: "Montserrat",
+                    fontSize: width * 0.025,
+                    color: HexColor("#FFFFFF"),
+                  ),
+                ),
+                Flexible(
+                  child: Text(
+                    "$run",
+                    style: TextStyle(
+                      fontFamily: "Montserrat",
+                      fontSize: width * 0.025,
+                      color: HexColor("#FFFFFF"),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
             ),
         SizedBox(
               height: width*0.035,
             ),
-            Text(
-           "Some Information",
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+           "Срок Владения:",
            style: TextStyle(
-             fontFamily: "Montserrat",
-             fontSize: width * 0.03,
-             color: HexColor("#FFFFFF"),
+                 fontFamily: "Montserrat",
+                 fontSize: width * 0.025,
+                 color: HexColor("#FFFFFF"),
            ),
+                ),
+                Flexible(
+                  child: Text(
+                    "$tenure",
+                    style: TextStyle(
+                      fontFamily: "Montserrat",
+                      fontSize: width * 0.025,
+                      color: HexColor("#FFFFFF"),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
             ),
             SizedBox(
               height: width*0.035,
             ),
-             Text(
-           "Some Information",
+             Row(
+               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               children: [
+                 Text(
+           "Средний пробег:  ",
            style: TextStyle(
-             fontFamily: "Montserrat",
-             fontSize: width * 0.03,
-             color: HexColor("#FFFFFF"),
+                 fontFamily: "Montserrat",
+                 fontSize: width * 0.025,
+                 color: HexColor("#FFFFFF"),
            ),
             ),
+                 Flexible(
+                   child: Text(
+                     "$averageRun",
+                     style: TextStyle(
+                       fontFamily: "Montserrat",
+                       fontSize: width * 0.025,
+                       color: HexColor("#FFFFFF"),
+                       fontWeight: FontWeight.bold,
+                     ),
+                   ),
+                 ),
+               ],
+             ),
           ],
         ),
       ),
@@ -110,10 +168,24 @@ class AbovePartOfAccount extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Flexible(
                       child: Text(
-                        "Some information",
+                        "$changeDetails",
+                        style: TextStyle(
+                          fontFamily: "Montserrat",
+                          fontSize: width * 0.03,
+                          color: HexColor("#FFFFFF"),
+                        ),
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.visible,
+                      ),
+                    ),
+                    Flexible(
+                      child: Text(
+                        "деталей нуждаются в проверке/замене",
                         style: TextStyle(
                           fontFamily: "Montserrat",
                           fontSize: width * 0.03,
@@ -141,10 +213,24 @@ class AbovePartOfAccount extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Flexible(
                       child: Text(
-                        "Some information",
+                        "Расход на детали за всё время",
+                        style: TextStyle(
+                          fontFamily: "Montserrat",
+                          fontSize: width * 0.03,
+                          color: HexColor("#42424A"),
+                        ),
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.visible,
+                      ),
+                    ),
+                    Flexible(
+                      child: Text(
+                        "$allExpense",
                         style: TextStyle(
                           fontFamily: "Montserrat",
                           fontSize: width * 0.03,
@@ -172,10 +258,24 @@ class AbovePartOfAccount extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Flexible(
                       child: Text(
-                        "Some information",
+                        "Расход на детали за этот месяц",
+                        style: TextStyle(
+                          fontFamily: "Montserrat",
+                          fontSize: width * 0.03,
+                          color: HexColor("#42424A"),
+                        ),
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.visible,
+                      ),
+                    ),
+                    Flexible(
+                      child: Text(
+                        "$inMonthExpense",
                         style: TextStyle(
                           fontFamily: "Montserrat",
                           fontSize: width * 0.03,

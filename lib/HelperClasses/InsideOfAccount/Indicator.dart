@@ -1,6 +1,7 @@
 import 'package:TestApplication/Pages/Inside/ModifyCards.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class Indicator extends StatefulWidget {
   final Function logicForIndicator;
@@ -81,7 +82,7 @@ class _IndicatorState extends State<Indicator> {
         children: [
           AnimatedContainer(
             duration: Duration(milliseconds: 1000),
-            height: delete ? 0 : width * 0.25,
+            height: delete ? 0 : width * 0.3,
             width: double.infinity,
             padding: EdgeInsets.fromLTRB(
                 width * 0.02, width * 0.02, width * 0.02, width * 0.02),
@@ -91,9 +92,10 @@ class _IndicatorState extends State<Indicator> {
             ),
             child: Column(
               children: [
-                modifying != null
-                    ? modifying
-                    : Expanded(
+                // modifying != null
+                //     ? modifying
+                //     :
+             Expanded(
                         child: Align(
                           alignment: Alignment.topRight,
                           child: GestureDetector(
@@ -105,6 +107,32 @@ class _IndicatorState extends State<Indicator> {
                           ),
                         ),
                       ),
+                Flexible(
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Text("на 5304 км",
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                          color:HexColor("42424A"),
+                          fontFamily: 'Roboto',
+                          fontSize: width*0.03
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Text("на 5304 км",
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                          color:HexColor("42424A"),
+                          fontFamily: 'Roboto',
+                          fontSize: width*0.03
+                      ),
+                    ),
+                  ),
+                ),
                 Expanded(
                   flex: 1,
                   child: Align(
@@ -117,6 +145,11 @@ class _IndicatorState extends State<Indicator> {
                         fontSize: width * 0.03,
                       ),
                     ),
+                  ),
+                ),
+                Expanded(
+                  child: SizedBox(
+                    height: width*0.01,
                   ),
                 ),
                 Expanded(

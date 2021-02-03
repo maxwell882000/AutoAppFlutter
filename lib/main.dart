@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
     ]);
     return MaterialApp(
 
-      initialRoute: "/authorized",
+      initialRoute: "/direct",
 
       routes: <String, WidgetBuilder>{
         "/direct": (context) => DirectToThePage(),

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:TestApplication/HelperClasses/TextInput/TextInputForum.dart';
 import 'package:TestApplication/Provider/ErrorMessageProvider.dart';
+import 'package:TestApplication/Singleton/SingletonConnection.dart';
 import 'package:TestApplication/Singleton/SingletonUserInformation.dart';
 
 import 'package:flutter/material.dart';
@@ -26,9 +27,11 @@ class LogIn extends StatelessWidget {
      var resultOfResponse = jsonDecode(response.body);
      print(resultOfResponse);
      if (resultOfResponse[1] == 200) {
+       Map json = jsonDecode(response.body)[0];
        SingletonUserInformation()
-           .setEmailOrPhone(jsonDecode(response.body)[0]["emailOrPhone"]);
-       Navigator.of(context).pushNamed("/authorized");
+           .setEmailOrPhone(json["emailOrPhone"]);
+
+      SingletonConnection().authorizedData().then((value) => Navigator.of(context).pushNamed("/authorized"));
      } else {
        prov.setNextPage(false);
        prov.setError(true);

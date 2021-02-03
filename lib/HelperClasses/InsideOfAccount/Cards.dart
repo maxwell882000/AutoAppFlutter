@@ -335,7 +335,14 @@ class _CardsState extends State<Cards> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("57000000 км"),
+                                Text("57000000 км",
+                                  style: TextStyle(
+                                    color: HexColor("#42424A"),
+                                    fontFamily: 'Montserrat',
+                                    fontSize: width * 0.035,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ],
                             ),
                           )),

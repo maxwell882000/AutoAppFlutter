@@ -2,7 +2,8 @@ import 'package:TestApplication/HelperClasses/DropDown/DropDownItem.dart';
 import 'package:TestApplication/HelperClasses/TextInput/TextFieldHelper.dart';
 import 'package:TestApplication/Provider/ErrorMessageProvider.dart';
 import 'package:TestApplication/Singleton/SingletonRegistrationAuto.dart';
-
+import 'package:TestApplication/Singleton/SingletonUnits.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -175,6 +176,25 @@ class _ListOfDropDownItemWithTextState
     }
     final List errorsWithText = [textHelper, errors];
     provider.errorsMessageWithText.insert(index,errorsWithText);
+    return getWidget(provider, errorsWithText, textHelper, v, errors);
+  }
+
+  Widget getTextCombiningWithTextField(List v) {
+    final String textHelper = v[1];
+    final String textHint = v[2];
+    ErrorMessageProvider errors = provider.newErrorMessageProvider(textHint);
+    if (v[0] == 1) {
+      errors.setTextField(true);
+    } else {
+      errors.setItems(v[3]);
+    }
+    final List errorsWithText = [textHelper, errors];
+    provider.errorsMessageWithText.add(errorsWithText);
+    return getWidget(provider, errorsWithText, textHelper, v, errors);
+  }
+
+  Widget getWidget(ErrorMessageProvider provider,List errorsWithText, String textHelper,
+                  List v,ErrorMessageProvider errors){
     return ChangeNotifierProvider<ErrorMessageProvider>.value(
       key: UniqueKey(),
       value: provider.errorsMessageWithText[
@@ -203,7 +223,27 @@ class _ListOfDropDownItemWithTextState
               Flexible(
                 child: Container(
                   child: v[0] == 1
-                      ? TextFieldHelper()
+                      ? TextFieldHelper(
+                    onlyInteger: v[3]==2||v[3]==1?true:false,
+                    suffixIcon: v[3]!=2?null:SizedBox(
+                        height: width * 0.1,
+                        child: Container(
+                          margin: EdgeInsets.only(right: width * 0.03),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(SingletonUnits().distance,
+                                style: TextStyle(
+                                  color: HexColor("#42424A"),
+                                  fontFamily: 'Roboto',
+                                  fontSize: width * 0.035,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ),
+                  )
                       : DropDownItem(
                     items: errors.items,
                     width: width,
@@ -220,64 +260,6 @@ class _ListOfDropDownItemWithTextState
       ),
     );
   }
-
-  Widget getTextCombiningWithTextField(List v) {
-    final String textHelper = v[1];
-    final String textHint = v[2];
-    ErrorMessageProvider errors = provider.newErrorMessageProvider(textHint);
-    if (v[0] == 1) {
-      errors.setTextField(true);
-    } else {
-      errors.setItems(v[3]);
-    }
-    final List errorsWithText = [textHelper, errors];
-    provider.errorsMessageWithText.add(errorsWithText);
-    return ChangeNotifierProvider<ErrorMessageProvider>.value(
-      key: UniqueKey(),
-      value: provider.errorsMessageWithText[
-          provider.errorsMessageWithText.indexOf(errorsWithText)][1],
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: width * 0.04,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                child: Text(
-                  textHelper,
-                  overflow: TextOverflow.visible,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontFamily: "Montserrat",
-                    fontSize: width * 0.03,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Flexible(
-                child: Container(
-                  child: v[0] == 1
-                      ? TextFieldHelper()
-                      : DropDownItem(
-                          items: errors.items,
-                          width: width,
-                          disabledHeight: disabledHeightOfItem,
-                          enabledHeight: enabledHeightOfItem,
-                          additionalItemsFunction:
-                              getAdditionalItems(v),
-                        ),
-                ),
-              )
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   List prepareDataWithTextField(List item) {
     selection = item[0];
     nameOfTextHelper = item[1];
@@ -286,7 +268,8 @@ class _ListOfDropDownItemWithTextState
       dropDownItem = item.sublist(3);
       return [selection, nameOfTextHelper, hintText, dropDownItem];
     }
-    return [selection, nameOfTextHelper, hintText];
+    int modification = item[3];
+    return [selection, nameOfTextHelper, hintText, modification];
   }
 
   void dataPreparing() {

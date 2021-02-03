@@ -2,28 +2,34 @@ import 'package:TestApplication/Provider/ErrorMessageProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter/services.dart';
 class TextFieldHelper extends StatefulWidget {
   final Widget suffixIcon;
   final Widget prefixIcon;
-  TextFieldHelper({Key key, this.suffixIcon,this.prefixIcon}) : super(key: key);
+  final bool onlyInteger;
+
+  TextFieldHelper({Key key, this.suffixIcon, this.prefixIcon, this.onlyInteger})
+      : super(key: key);
 
   @override
   _TextFieldHelperState createState() => _TextFieldHelperState(
-    suffixIcon: suffixIcon,
-    prefixIcon: prefixIcon,
-    );
+      suffixIcon: suffixIcon,
+      prefixIcon: prefixIcon,
+      onlyInteger: onlyInteger == null ? false : onlyInteger);
 }
 
 class _TextFieldHelperState extends State<TextFieldHelper> {
   final controller = TextEditingController();
   final Widget suffixIcon;
   final Widget prefixIcon;
+  final bool onlyInteger;
   bool cursor = true;
   ErrorMessageProvider provider;
   String text = ""; // empty string to carry what was there before it onChanged
   int maxLength = 40;
-  _TextFieldHelperState({this.suffixIcon,this.prefixIcon});
+
+  _TextFieldHelperState({this.suffixIcon, this.prefixIcon, this.onlyInteger});
+
   //"#DF5867"
   @override
   void initState() {
@@ -115,7 +121,10 @@ class _TextFieldHelperState extends State<TextFieldHelper> {
             borderRadius: BorderRadius.all(Radius.circular(width * 0.02)),
           ),
         ),
-        keyboardType: TextInputType.text,
+        keyboardType: onlyInteger?TextInputType.number:TextInputType.text,
+        inputFormatters: onlyInteger?<TextInputFormatter>[
+          FilteringTextInputFormatter.digitsOnly
+        ]:[],
       ),
     );
   }
