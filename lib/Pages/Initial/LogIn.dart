@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:TestApplication/HelperClasses/TextInput/TextInputForum.dart';
 import 'package:TestApplication/Provider/ErrorMessageProvider.dart';
 import 'package:TestApplication/Singleton/SingletonConnection.dart';
+import 'package:TestApplication/Singleton/SingletonRecomendation.dart';
 import 'package:TestApplication/Singleton/SingletonUserInformation.dart';
 
 import 'package:flutter/material.dart';
@@ -31,7 +32,15 @@ class LogIn extends StatelessWidget {
        SingletonUserInformation()
            .setEmailOrPhone(json["emailOrPhone"]);
 
-      SingletonConnection().authorizedData().then((value) => Navigator.of(context).pushNamed("/authorized"));
+      SingletonConnection().authorizedData().then((value) {
+        final res = Navigator.of(context).popAndPushNamed('/authorized');
+        res.then((value) {
+          print("LOG OUT");
+          SingletonUserInformation().clean();
+          SingletonRecomendation().clean();
+        });
+      });
+
      } else {
        prov.setNextPage(false);
        prov.setError(true);

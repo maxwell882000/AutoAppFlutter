@@ -1,3 +1,4 @@
+import 'package:TestApplication/Provider/FeeProvider.dart';
 import 'package:flutter/material.dart';
 
 class ErrorMessageProvider with ChangeNotifier {
@@ -12,6 +13,11 @@ class ErrorMessageProvider with ChangeNotifier {
   bool _dispose = false;
   ErrorMessageProvider _errorMessageProvider;
   Widget _swapWidget;
+  Widget _recommendations;
+
+  ErrorMessageProvider.zero(){
+    this._nextPage = false;
+  }
   ErrorMessageProvider(String nameOfHelper) {
     this._nameOfHelper = nameOfHelper;
     this._error = false;
@@ -23,7 +29,7 @@ class ErrorMessageProvider with ChangeNotifier {
     this._items = [];
   }
   List get errorsMessageWithText => _errorsMessageWithText;
-
+  Widget get recommendations => _recommendations;
   bool get error => _error;
   String get nameOfHelper => _nameOfHelper;
   bool get selected => _selected;
@@ -32,6 +38,14 @@ class ErrorMessageProvider with ChangeNotifier {
   bool get textField => _textField;
   List get items => _items;
   Widget get swapWidget => _swapWidget;
+  void addItems(var items){
+    _items.add(items);
+    notifyListeners();
+  }
+  void setRecommendations(Widget recommendations){
+    this._recommendations = recommendations;
+    notifyListeners();
+  }
   void setSwapWidget(Widget swapWidget){
     _swapWidget = swapWidget;
     notifyListeners();

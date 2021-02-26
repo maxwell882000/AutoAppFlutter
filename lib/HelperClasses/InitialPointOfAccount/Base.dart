@@ -25,7 +25,7 @@ class Base extends StatelessWidget {
 
     var provider = Provider.of<ErrorMessageProvider>(context);
     return Scaffold(
-      backgroundColor: HexColor("F0F8FF"),
+      backgroundColor: HexColor("#F0F8FF"),
       body: Center(
         child: SingleChildScrollView(
           child: Column(

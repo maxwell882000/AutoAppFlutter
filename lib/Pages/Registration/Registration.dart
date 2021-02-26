@@ -27,7 +27,7 @@ class Registration extends StatelessWidget {
       if (resultOfResponse[1] == 200) {
         SingletonUserInformation()
             .setEmailOrPhone(jsonDecode(response.body)[0]["emailOrPhone"]);
-        Navigator.of(context).pushNamed("/select_unit");
+        Navigator.of(context).popAndPushNamed("/select_unit");
       } else {
         prov.setNextPage(false);
         prov.setError(true);

@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:TestApplication/HelperClasses/Dialog/DataNotSave.dart';
 import 'package:TestApplication/HelperClasses/DropDown/ListOfDropDownItemWithText.dart';
 import 'package:TestApplication/HelperClasses/SelectOptions.dart';
 import 'package:TestApplication/Provider/ErrorMessageProvider.dart';
+import 'package:TestApplication/Singleton/SingletonConnection.dart';
 import 'package:TestApplication/Singleton/SingletonRegistrationAuto.dart';
 import 'package:TestApplication/Singleton/SingletonStoreUnits.dart';
 import 'package:TestApplication/Singleton/SingletonUnits.dart';
@@ -63,32 +65,53 @@ class SelectUnit extends StatelessWidget {
       );
       jsonDecode(items.body).forEach((e)=> SingletonRegistrationAuto().fromJson(e));
       SingletonRegistrationAuto().finish();
-      Navigator.of(context).pushNamed("/registration_auto");
+      Navigator.of(context).popAndPushNamed("/registration_auto");
     };
   }
+
+  Function _onWillPop(BuildContext context)  {
+
+    return  () async{
+
+      final bool response = await showDialog(
+          context: context,
+        barrierDismissible: false,
+        builder: (context) => DataNotSave()
+      );
+      if(response){
+        SingletonRegistrationAuto().clean();
+        SingletonConnection().deleteUser();
+      }
+      return response;
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return ChangeNotifierProvider.value(
-      value: selectOptionsErrorProvider,
-      child: SelectOptions(
-        key: UniqueKey(),
-        width: width,
-        height: width * 1.5,
-        icon: "assets/unit.svg",
-        aboveText: "Выбор единицы измерения",
-        child: ListOfDropDownItemWithText(
-          item: items,
-          disabledHeightOfItem: width*0.13,
-          enabledHeightOfItem: width*0.25,
+    return WillPopScope(
+      onWillPop: _onWillPop(context),
+      child: ChangeNotifierProvider.value(
+        value: selectOptionsErrorProvider,
+        child: SelectOptions(
+          key: UniqueKey(),
           width: width,
-          heightOfDropDownItems: width*0.77,
-          provider:selectOptionsErrorProvider,
+          height: width * 1.5,
+          icon: "assets/unit.svg",
+          aboveText: "Выбор единицы измерения",
+          child: ListOfDropDownItemWithText(
+            item: items,
+            disabledHeightOfItem: width*0.13,
+            enabledHeightOfItem: width*0.25,
+            width: width,
+            heightOfDropDownItems: width*0.77,
+            provider:selectOptionsErrorProvider,
+          ),
+          loadToHard: getUnits(context),
+          clickEvent: readyToTheNext,
+          widthOfButton: width * 0.2,
+          heightOfButton: width * 0.018,
         ),
-        loadToHard: getUnits(context),
-        clickEvent: readyToTheNext,
-        widthOfButton: width * 0.2,
-        heightOfButton: width * 0.018,
       ),
     );
   }

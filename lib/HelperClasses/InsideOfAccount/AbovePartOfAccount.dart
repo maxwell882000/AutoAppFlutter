@@ -1,24 +1,28 @@
+import 'package:TestApplication/Provider/UserProvider.dart';
 import 'package:TestApplication/Singleton/SingletonUnits.dart';
 import 'package:TestApplication/Singleton/SingletonUserInformation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:provider/provider.dart';
 
 class AbovePartOfAccount extends StatelessWidget {
   final List informationAboutCar;
   final double width;
-  final String nameOfCar = "${SingletonUserInformation().marka} ${SingletonUserInformation().model}";
-  final String number = "${SingletonUserInformation().number}";
-  final String techPassport ="${SingletonUserInformation().techPassport}";
-  final String run ="${SingletonUserInformation().run} ${SingletonUnits().distance}";
-  final String tenure = "${SingletonUserInformation().tenure()} лет";
-  final String averageRun = "${SingletonUserInformation().averageRun()} ${SingletonUnits().speed}";
-  final String changeDetails = "11";
-  final String allExpense = "${SingletonUserInformation().expenses.all_time} ${SingletonUnits().currency}";
-  final String inMonthExpense = "${SingletonUserInformation().expenses.in_this_month} ${SingletonUnits().currency}";
+  // final String nameOfCar = "${SingletonUserInformation().marka} ${SingletonUserInformation().model}";
+  // final String number = "${SingletonUserInformation().number}";
+  // final String techPassport ="${SingletonUserInformation().techPassport}";
+  // final String run ="${SingletonUserInformation().run} ${SingletonUnits().distance}";
+  // final String tenure = "${SingletonUserInformation().tenure()} лет";
+  // final String averageRun = "${SingletonUserInformation().average} ${SingletonUnits().speed}";
+  // final String changeDetails = "${SingletonUserInformation().cards.changeDetails}";
+  // final String allExpense = "${SingletonUserInformation().expenses.all_time} ${SingletonUnits().currency}";
+  // final String inMonthExpense = "${SingletonUserInformation().expenses.in_this_month} ${SingletonUnits().currency}";
+
   AbovePartOfAccount({Key key, this.informationAboutCar, this.width})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    UserProvider provider = Provider.of<UserProvider>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -35,7 +39,7 @@ class AbovePartOfAccount extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "$nameOfCar",
+              "${provider.nameOfCar}",
               style: TextStyle(
                 fontFamily: "Montserrat",
                 fontWeight: FontWeight.bold,
@@ -47,7 +51,7 @@ class AbovePartOfAccount extends StatelessWidget {
               height: width*0.05,
             ),
            Text(
-           "$number",
+           "${provider.number}",
            style: TextStyle(
              fontFamily: "Montserrat",
              fontSize: width * 0.034,
@@ -58,7 +62,7 @@ class AbovePartOfAccount extends StatelessWidget {
               height: width*0.035,
             ),
             Text(
-           "$techPassport",
+           "${provider.techPassport}",
            style: TextStyle(
              fontFamily: "Montserrat",
              fontSize: width * 0.034,
@@ -81,7 +85,7 @@ class AbovePartOfAccount extends StatelessWidget {
                 ),
                 Flexible(
                   child: Text(
-                    "$run",
+                    "${provider.run.toStringAsExponential(3)} ${SingletonUnits().distance}",
                     style: TextStyle(
                       fontFamily: "Montserrat",
                       fontSize: width * 0.025,
@@ -108,7 +112,7 @@ class AbovePartOfAccount extends StatelessWidget {
                 ),
                 Flexible(
                   child: Text(
-                    "$tenure",
+                    "${provider.tenure}",
                     style: TextStyle(
                       fontFamily: "Montserrat",
                       fontSize: width * 0.025,
@@ -135,13 +139,13 @@ class AbovePartOfAccount extends StatelessWidget {
             ),
                  Flexible(
                    child: Text(
-                     "$averageRun",
-                     style: TextStyle(
-                       fontFamily: "Montserrat",
-                       fontSize: width * 0.025,
-                       color: HexColor("#FFFFFF"),
-                       fontWeight: FontWeight.bold,
-                     ),
+                     "${provider.averageRun.toStringAsExponential(3)} ${SingletonUnits().speed}",
+                       style: TextStyle(
+                         fontFamily: "Montserrat",
+                         fontSize: width * 0.025,
+                         color: HexColor("#FFFFFF"),
+                         fontWeight: FontWeight.bold,
+                       ),
                    ),
                  ),
                ],
@@ -158,44 +162,47 @@ class AbovePartOfAccount extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
-              child: Container(
-                height: width * 0.19,
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(
-                    vertical: width * 0.04, horizontal: width * 0.04),
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(223, 88, 103, 1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        "$changeDetails",
-                        style: TextStyle(
-                          fontFamily: "Montserrat",
-                          fontSize: width * 0.03,
-                          color: HexColor("#FFFFFF"),
+              child: GestureDetector(
+                onTap: ()=>provider.setSortChange(true),
+                child: Container(
+                  height: width * 0.19,
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(
+                      vertical: width * 0.04, horizontal: width * 0.04),
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(223, 88, 103, 1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          "${provider.changeDetail}",
+                          style: TextStyle(
+                            fontFamily: "Montserrat",
+                            fontSize: width * 0.03,
+                            color: HexColor("#FFFFFF"),
+                          ),
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.visible,
                         ),
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.visible,
                       ),
-                    ),
-                    Flexible(
-                      child: Text(
-                        "деталей нуждаются в проверке/замене",
-                        style: TextStyle(
-                          fontFamily: "Montserrat",
-                          fontSize: width * 0.03,
-                          color: HexColor("#FFFFFF"),
+                      Flexible(
+                        child: Text(
+                          "деталей нуждаются в проверке/замене",
+                          style: TextStyle(
+                            fontFamily: "Montserrat",
+                            fontSize: width * 0.03,
+                            color: HexColor("#FFFFFF"),
+                          ),
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.visible,
                         ),
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.visible,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -230,7 +237,7 @@ class AbovePartOfAccount extends StatelessWidget {
                     ),
                     Flexible(
                       child: Text(
-                        "$allExpense",
+                        "${provider.expenseAll} ${SingletonUnits().currency}",
                         style: TextStyle(
                           fontFamily: "Montserrat",
                           fontSize: width * 0.03,
@@ -275,7 +282,7 @@ class AbovePartOfAccount extends StatelessWidget {
                     ),
                     Flexible(
                       child: Text(
-                        "$inMonthExpense",
+                        "${provider.expenseMonth} ${SingletonUnits().currency}",
                         style: TextStyle(
                           fontFamily: "Montserrat",
                           fontSize: width * 0.03,

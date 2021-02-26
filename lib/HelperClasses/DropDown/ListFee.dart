@@ -1,43 +1,31 @@
+import 'package:TestApplication/Provider/ErrorMessageProvider.dart';
+import 'package:TestApplication/Provider/FeeProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'Fee.dart';
 
-class ListFee extends StatefulWidget {
-  final List fee;
-  ListFee({Key key, this.fee}):super(key:key);
-  @override
-  _ListFeeState createState() => _ListFeeState(
-    fee: fee,
-  );
-}
+class ListFee extends StatelessWidget {
 
-class _ListFeeState extends State<ListFee> {
-  final List fee;
-  _ListFeeState({Key key, this.fee});
+  Widget getWidgets(FeeProvider element){
 
-  List widgetFee = [];
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    preparationData();
-  }
-  void preparationData(){
-    widgetFee = fee.map((e) => getWidgets(e)).toList();
-  }
-  Widget getWidgets(List element){
-    return Fee(
-      delition: (){
-        fee.remove(element);
-      },
-      nameExpense: element[0],
-      priceSpent: element[1],
+    return element.delete?SizedBox()
+        :ChangeNotifierProvider.value(
+      value: element,
+      child: Fee(
+          id: element.id,
+          initAmount: element.amount,
+        initName: element.name,
+        initSum: element.sum,
+      ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
+    final fee = Provider.of<ErrorMessageProvider>(context);
+    final List<Widget> widgetFee =fee.items.map((e) => getWidgets(e)).toList();
     return Column(
-
       children: widgetFee,
     );
   }

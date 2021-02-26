@@ -127,7 +127,7 @@ class _ListOfDropDownItemWithTextState
     );
   }
 
-  Function getAdditionalItems( List element) {
+  Function getAdditionalItems(List element) {
     return (String chosenItem) {
       List sub = SingletonRegistrationAuto().subList(chosenItem, element[1]);
       if (sub.isNotEmpty) {
@@ -294,9 +294,9 @@ class _ListOfDropDownItemWithTextState
   void dispose() {
     // TODO: implement dispose
 
-    provider.errorsMessageWithText.forEach((element) {
-      element[1].dispose();
-    });
+    // provider.errorsMessageWithText.forEach((element) {
+    //   element[1].dispose();
+    // });
     super.dispose();
   }
 

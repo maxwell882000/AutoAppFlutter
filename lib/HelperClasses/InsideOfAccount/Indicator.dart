@@ -1,46 +1,96 @@
 import 'package:TestApplication/Pages/Inside/ModifyCards.dart';
+import 'package:TestApplication/Pages/Inside/User.dart';
+import 'package:TestApplication/Provider/UserProvider.dart';
+import 'package:TestApplication/Singleton/SingletonConnection.dart';
+import 'package:TestApplication/Singleton/SingletonRecomendation.dart';
+import 'package:TestApplication/Singleton/SingletonUnits.dart';
+import 'package:TestApplication/Singleton/SingletonUserInformation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class Indicator extends StatefulWidget {
-  final Function logicForIndicator;
   final String textOfIndicator;
-  final double dataToBeHandled;
-  final Widget modifying;
+  final dataTime;
+  final dataDistance;
+  final double dataPercent;
+  final int id;
+  final bool modifying;
 
   Indicator(
       {Key key,
-      this.logicForIndicator,
       this.textOfIndicator,
-      this.dataToBeHandled,
-      this.modifying})
+      this.modifying,
+      this.dataPercent,
+      this.dataDistance,
+      this.dataTime,
+      this.id})
       : super(key: key);
 
   @override
   _IndicatorState createState() => _IndicatorState(
-        logicForIndicator: logicForIndicator,
         textOfIndicator: textOfIndicator,
-        dataToBeHandled: dataToBeHandled,
-        modifying: modifying,
+        modifying: modifying == null ? true : modifying,
+        dataDistance: dataDistance,
+        dataPercent: dataPercent,
+        dataTime: dataTime,
+        id: id,
       );
 }
 
 class _IndicatorState extends State<Indicator> {
-  final Function logicForIndicator;
   final String textOfIndicator;
-  final double dataToBeHandled;
-  final Widget modifying;
 
-  _IndicatorState(
-      {this.logicForIndicator,
-      this.textOfIndicator,
-      this.dataToBeHandled,
-      this.modifying});
+  final dataTime;
+  final dataDistance;
+  final double dataPercent;
+  final int id;
+  bool modifying;
+  bool change;
 
-  void deleteObject() {
+  _IndicatorState({
+    this.textOfIndicator,
+    this.modifying,
+    this.dataTime,
+    this.dataDistance,
+    this.dataPercent,
+    this.id,
+  });
+
+  List logic(double percent, double width) {
+    Color color;
+    double widthOfIndicator;
+
+    if (percent < 0.5) {
+      color = Color.fromRGBO(165, 235, 120, 1);
+    } else if (percent >= 0.5 && percent < 0.8) {
+      color = Color.fromRGBO(255, 204, 51, 1);
+    } else if (percent >= 0.8) {
+      setState(() {
+        change = true;
+      });
+      color = Color.fromRGBO(223, 88, 103, 1);
+    }
+
+    widthOfIndicator = width * percent + width * 0.02;
+    if (widthOfInidcator != null && widthOfInidcator > width) {
+      widthOfInidcator = width;
+    }
+    return [color, widthOfIndicator];
+  }
+
+  void deleteObject(UserProvider provider) {
     setState(() {
       delete = true;
+      if (dataPercent >= 0.8)
+        provider.setChangeDetails(
+            provider.changeDetail == 0 ? 0 : provider.changeDetail - 1);
+
+      Future.delayed(Duration(milliseconds: 300)).then((value) {provider.deletedIndicators.add(id);});
+
+      http.delete('https://autoapp.elite-house.uz/cards/$id/');
     });
   }
 
@@ -52,7 +102,7 @@ class _IndicatorState extends State<Indicator> {
 
   void setInitialVartiables(double width) {
     setState(() {
-      colorAndWidth = logicForIndicator(dataToBeHandled, width);
+      colorAndWidth = logic(dataPercent, width);
 
       color = colorAndWidth[0];
       widthOfInidcator = colorAndWidth[1];
@@ -62,26 +112,75 @@ class _IndicatorState extends State<Indicator> {
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
-
     setInitialVartiables(width);
-
+    final provider = Provider.of<UserProvider>(context);
     return GestureDetector(
       onTap: () {
-        if(modifying==null)
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => ModifyCards(
-              appBarName: textOfIndicator,
-              dataToBeHandeled: dataToBeHandled,
-              logic: logicForIndicator,
+        if (modifying == true) {
+          SingletonUserInformation().setNewCard(id);
+          final result = Navigator.of(context).push(
+            new MaterialPageRoute(
+              builder: (context) => ModifyCards(
+                appBarName: textOfIndicator,
+                child: ChangeNotifierProvider.value(
+                  value: provider,
+                  child: Indicator(
+                    textOfIndicator: textOfIndicator,
+                    dataPercent: dataPercent,
+                    dataTime: dataTime,
+                    dataDistance: dataDistance,
+                    id: id,
+                    modifying: false,
+                  ),
+                ),
+              ),
             ),
-          ),
-        );
+          );
+          result.then((value) {
+            provider.setClean();
+            if (value == null) {
+              SingletonUserInformation().newCardClean();
+            } else {
+
+              provider.setLoading(true);
+              SingletonConnection().modifyCard();
+              int expenses = SingletonUserInformation().expenses.all_time;
+              int month = SingletonUserInformation().expenses.in_this_month;
+
+              provider.setExpenseAll(expenses);
+              provider.setExpenseMonth(month);
+              SingletonConnection().updateExpenses();
+              provider.setRun(SingletonUserInformation().run);
+              SingletonUserInformation().averageRun();
+              provider.setAverageRun(SingletonUserInformation().average);
+              SingletonUserInformation()
+                  .newCard
+                  .attach
+                  .uploadedImage
+                  .forEach((element) {
+                SingletonUserInformation().newCard.attach.image.add(element);
+              });
+              SingletonUserInformation().newCard.attach.clean();
+              int index;
+              SingletonUserInformation().newCard.change.setInitialRun(SingletonUserInformation().run);
+              SingletonUserInformation().cards.card.where((element) => element.id==SingletonUserInformation().newCard.id).forEach((element) {
+                index = SingletonUserInformation().cards.card.indexOf(element);
+              });
+              SingletonUserInformation().cards.card.removeAt(index);
+              SingletonUserInformation().cards.card.insert(index, SingletonUserInformation().newCard);
+
+              provider.setIndicators(SingletonUserInformation().indicators());
+              provider.setChanged(true);
+              provider.setLoading(false);
+              SingletonUserInformation().newCardClean();
+            }
+          });
+        }
       },
       child: Column(
         children: [
           AnimatedContainer(
-            duration: Duration(milliseconds: 1000),
+            duration: Duration(milliseconds: 300),
             height: delete ? 0 : width * 0.3,
             width: double.infinity,
             padding: EdgeInsets.fromLTRB(
@@ -92,44 +191,48 @@ class _IndicatorState extends State<Indicator> {
             ),
             child: Column(
               children: [
-                // modifying != null
-                //     ? modifying
-                //     :
-             Expanded(
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: GestureDetector(
-                            onTap: () => deleteObject(),
-                            child: SvgPicture.asset(
-                              "assets/cross.svg",
-                              height: width * 0.05,
-                            ),
-                          ),
+                Expanded(
+                  flex: 2,
+                  child: Visibility(
+                    visible: modifying,
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: GestureDetector(
+                        onTap: () => deleteObject(provider),
+                        child: SvgPicture.asset(
+                          "assets/cross.svg",
+                          height: width * 0.1,
                         ),
                       ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: delete ? 0 : width * 0.01,
+                ),
                 Flexible(
                   child: Align(
                     alignment: Alignment.topRight,
-                    child: Text("на 5304 км",
+                    child: Text(
+                      "на  ${dataDistance is double ?dataDistance.toInt():dataDistance} ${SingletonUnits().distance}",
                       textAlign: TextAlign.end,
                       style: TextStyle(
-                          color:HexColor("42424A"),
+                          color: HexColor("42424A"),
                           fontFamily: 'Roboto',
-                          fontSize: width*0.03
-                      ),
+                          fontSize: width * 0.03),
                     ),
                   ),
                 ),
                 Flexible(
                   child: Align(
                     alignment: Alignment.topRight,
-                    child: Text("на 5304 км",
+                    child: Text(
+                        dataTime is int || dataTime is double? "через ${dataTime.toInt()} ${SingletonUnits().convertDaysToString(dataTime.toInt())}":dataTime,
                       textAlign: TextAlign.end,
                       style: TextStyle(
-                          color:HexColor("42424A"),
+                          color: HexColor("42424A"),
                           fontFamily: 'Roboto',
-                          fontSize: width*0.03
-                      ),
+                          fontSize: width * 0.03),
                     ),
                   ),
                 ),
@@ -149,7 +252,7 @@ class _IndicatorState extends State<Indicator> {
                 ),
                 Expanded(
                   child: SizedBox(
-                    height: width*0.01,
+                    height: delete ? 0 : width * 0.01,
                   ),
                 ),
                 Expanded(
@@ -161,16 +264,16 @@ class _IndicatorState extends State<Indicator> {
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: Color.fromRGBO(201, 202, 206, 1),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(width * 0.02),
                         ),
                       ),
                       AnimatedContainer(
-                        duration: Duration(milliseconds: 1000),
+                        duration: Duration(milliseconds: 300),
                         height: width * 0.05,
                         width: widthOfInidcator,
                         decoration: BoxDecoration(
                           color: color,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(width * 0.02),
                         ),
                       ),
                     ],
@@ -180,7 +283,7 @@ class _IndicatorState extends State<Indicator> {
             ),
           ),
           AnimatedContainer(
-            duration: Duration(milliseconds: 1000),
+            duration: Duration(milliseconds: 300),
             height: delete ? 0 : width * 0.05,
           )
         ],

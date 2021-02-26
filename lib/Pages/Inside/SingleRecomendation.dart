@@ -2,6 +2,8 @@ import 'package:TestApplication/HelperClasses/InsideOfAccount/BaseOfAccount.dart
 import 'package:TestApplication/HelperClasses/InsideOfAccount/MainMenu.dart';
 import 'package:TestApplication/HelperClasses/InsideOfAccount/Recomendation.dart';
 import 'package:TestApplication/HelperClasses/TextFlexible.dart';
+import 'package:TestApplication/Singleton/SingletonRecomendation.dart';
+import 'package:TestApplication/Singleton/SingletonUserInformation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -13,9 +15,10 @@ class SingleRecomendation extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return MainMenu(
+      filterVisible:false,
       nameBar: TextFlexible(
         key: key,
-        text: "Рекомендации по замене моторного масла для CHEVROLET GENTRA",
+        text: "Рекомендации по ${SingletonRecomendation().choosenRecommendation.mainName} для ${SingletonUserInformation().marka} ${SingletonUserInformation().model}",
         numberOfCharacters: 25,
       ),
       body: Recomendation(
@@ -32,8 +35,7 @@ class SingleRecomendation extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
-                      child: Text("asdadfgdsgdfgsfhpfdhmfoph,foh,fdsoh opm opfdmh fpdohm soph "
-                          "mfsdoph mfdsoph msfdhop mfdhpo mfsdhpo mfdoph mhpo mds",
+                      child: Text(SingletonRecomendation().choosenRecommendation.description,
                         style: TextStyle(
                           color: HexColor("#42424A"),
                           fontFamily: 'Montserrat',

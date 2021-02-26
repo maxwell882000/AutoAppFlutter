@@ -31,7 +31,7 @@ class TextInputForum extends StatelessWidget {
       if (match) {
         RegExp exp = new RegExp(r"\+([8-9]{3,3})(\d{9,9})");
         bool match = exp.hasMatch(errorMessageProvider.inputData);
-        if (match) {
+        if (match && errorMessageProvider.inputData.length==13) {
           errorMessageProvider.setError(false);
           errorMessageProvider.setNextPage(true);
           connectDataBase(

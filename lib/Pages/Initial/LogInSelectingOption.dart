@@ -1,4 +1,8 @@
+import 'package:TestApplication/HelperClasses/LoadingScreen.dart';
 import 'package:TestApplication/Provider/CheckProvider.dart';
+import 'package:TestApplication/Singleton/SingletonConnection.dart';
+import 'package:TestApplication/Singleton/SingletonRecomendation.dart';
+import 'package:TestApplication/Singleton/SingletonRegistrationAuto.dart';
 import 'package:TestApplication/Singleton/SingletonUserInformation.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,6 +37,7 @@ class _LogInSelectingOptionState extends State<LogInSelectingOption> {
 
   final CheckProvider checkProvider = new CheckProvider();
 
+  bool nextPage = false;
   @override
   void initState() {
     super.initState();
@@ -86,7 +91,23 @@ class _LogInSelectingOptionState extends State<LogInSelectingOption> {
       if (deepLink != null) {
         SingletonUserInformation()
             .setEmailOrPhone(deepLink.queryParameters['emailOrPhone']);
-        Navigator.pushNamed(context, deepLink.path);
+          print("WATCH"+ deepLink.path);
+        if (deepLink.path == "/select_unit"){
+
+         final result  = Navigator.pushNamed(context, deepLink.path);
+        }
+        else{
+          setState(() {
+            nextPage = true;
+          });
+          SingletonConnection().authorizedData().then((value) {
+            setState(() {
+              nextPage= false;
+            });
+          final  result = Navigator.pushNamed(context, deepLink.path);
+          });
+
+        }
       }
     }, onError: (OnLinkErrorException e) async {
       print('onLinkError');
@@ -99,7 +120,21 @@ class _LogInSelectingOptionState extends State<LogInSelectingOption> {
     if (deepLink != null) {
       SingletonUserInformation()
           .setEmailOrPhone(deepLink.queryParameters['emailOrPhone']);
-      Navigator.pushNamed(context, deepLink.path);
+      if (deepLink.path == "/select_unit"){
+        final result  = Navigator.pushNamed(context, deepLink.path);
+      }
+      else{
+        setState(() {
+          nextPage = true;
+        });
+        SingletonConnection().authorizedData().then((value) {
+          setState(() {
+            nextPage= false;
+          });
+          final  result = Navigator.pushNamed(context, deepLink.path);
+        });
+
+      }
     }
   }
 
@@ -111,7 +146,13 @@ class _LogInSelectingOptionState extends State<LogInSelectingOption> {
       value: checkProvider,
       child: Scaffold(
         backgroundColor: HexColor("#F0F8FF"),
-        body: SingleChildScrollView(
+        body: nextPage?
+            Center(
+              child: LoadingScreen(
+                visible: nextPage,
+              ),
+            )
+            : SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -227,6 +268,7 @@ class _LogInSelectingOptionState extends State<LogInSelectingOption> {
                       height: width,
                       onPressed: login(() {
                         Navigator.of(context).pushNamed("/select/login");
+
                       }),
                       nameOfTheButton: "Войти сейчас",
                     ),

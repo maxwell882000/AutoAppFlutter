@@ -37,7 +37,7 @@ class Language extends StatelessWidget {
     } else {
       errorsMessage.setNextPage(true);
       saveData();
-      Navigator.of(context).pushNamed('/select');
+      Navigator.of(context).popAndPushNamed('/select');
     }
   }
 

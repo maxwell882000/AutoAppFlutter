@@ -33,6 +33,16 @@ dependencies:
   http: ^0.12.2
   flutter_datetime_picker: ^1.5.0
   intl: ^0.16.1
+  path_provider: ^1.6.27
+  image_picker: ^0.6.7+22
+  geolocator: ^6.2.0
+  google_maps_flutter: ^1.2.0
+  flutter_polyline_points: ^0.2.1
+  location: ^3.2.4
+  excel: ^1.1.5
+  downloads_path_provider: ^0.1.0
+  permission_handler: ^5.0.1
+  responsive_framework: ^0.0.14
 dev_dependencies:
   flutter_test:
     sdk: flutter

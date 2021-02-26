@@ -1,3 +1,6 @@
+
+
+import 'package:TestApplication/Singleton/SingletonConnection.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -43,15 +46,19 @@ class _DirectToThePageState extends State<DirectToThePage> {
   }
   
   Future<void> _directToRightPage(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SingletonGlobal().setPrefs(await SharedPreferences.getInstance());
+    SharedPreferences prefs = SingletonGlobal().prefs;
     int language = prefs.getInt('language') ?? -1;
+    List images = prefs.getStringList('images') ?? [];
+    List expenses = prefs.getStringList('expenses')?? [];
+    SingletonConnection().deleteCache(images, expenses);
     if (language == -1) {
       SingletonGlobal().language = Languages.EMPTY;
-      Navigator.pushNamed(context, "/language");
+      Navigator.of(context).popAndPushNamed("/language");
     } else {
       SingletonGlobal().language =
           language == 0 ? Languages.RUSSIAN : Languages.UZBEK;
-      Navigator.pushNamed(context, "/select");
+      Navigator.of(context).popAndPushNamed("/select");
     }
   }
 

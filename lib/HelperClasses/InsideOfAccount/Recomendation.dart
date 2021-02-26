@@ -1,11 +1,35 @@
+import 'dart:typed_data';
+
+import 'package:TestApplication/HelperClasses/LoadingScreen.dart';
 import 'package:TestApplication/Provider/ErrorMessageProvider.dart';
+import 'package:TestApplication/Singleton/SingletonConnection.dart';
+import 'package:TestApplication/Singleton/SingletonRecomendation.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-class Recomendation extends StatelessWidget {
+class Recomendation extends StatefulWidget {
   final Widget child;
-  final Image image;
-  Recomendation({Key key, this.child,this.image}):super(key: key);
+
+  Recomendation({Key key, this.child}):super(key: key);
+
+  @override
+  _RecomendationState createState() => _RecomendationState();
+}
+
+class _RecomendationState extends State<Recomendation> {
+  Uint8List image;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SingletonConnection().recommendImage().then((value) {
+      if(mounted)
+      setState(() {
+        image =  SingletonRecomendation().imageUnit;
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -25,15 +49,18 @@ class Recomendation extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
-                      child: Image.asset(
-                        'assets/images/menu/background.png',
+                      child: image==null?LoadingScreen(
+                        visible: true,
+                        color: "F0F8FF",
+                      ): Image.memory(
+                       image,
                         fit: BoxFit.fill,
                       )
                   ),
                   SizedBox(
-                    width: width*0.02,
+                    width: width*0.04,
                   ),
-                  Expanded(child: Text("sadsadasdasdasdsjsakfjaskasdgdsgsdgagagsgasgasdgasdgdsag fsdadg asdf lfasfkljfklasjaskfajkfaskfaf0",
+                  Expanded(child: Text("${SingletonRecomendation().textAbove}",
                     style: TextStyle(
                       color: HexColor("#42424A"),
                       fontFamily: 'Montserrat',
@@ -50,7 +77,7 @@ class Recomendation extends StatelessWidget {
           SizedBox(
             height: width*0.04,
           ),
-         child
+         widget.child
         ],
       ),
     );

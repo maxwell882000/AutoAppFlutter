@@ -90,7 +90,7 @@ class _TextFieldHelperState extends State<TextFieldHelper> {
           color: Color.fromRGBO(66, 66, 74, 1),
         ),
         decoration: new InputDecoration(
-          suffixIcon: suffixIcon,
+          suffixIcon: provider.recommendations!=null?provider.inputData.isNotEmpty?null:provider.recommendations:suffixIcon,
           prefixIcon: prefixIcon,
           floatingLabelBehavior: FloatingLabelBehavior.always,
           counterText: '',
