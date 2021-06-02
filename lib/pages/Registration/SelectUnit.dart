@@ -56,17 +56,8 @@ class SelectUnit extends StatelessWidget {
       SingletonUnits().setCurrency(errorMessageProvider[3][1].inputData);
       SingletonUnits().setToTheDisk();
       print(SingletonUserInformation().emailOrPhone);
-      http.put(
-          '${SingletonConnection.URL}/units/${SingletonUserInformation().emailOrPhone}/',
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body:jsonEncode(SingletonUnits().toJson()));
-      final items = await http.get(
-        '${SingletonConnection.URL}/marka/'
-      );
-      jsonDecode(items.body).forEach((e)=> SingletonRegistrationAuto().fromJson(e));
-      SingletonRegistrationAuto().finish();
+      SingletonConnection().submitUnits();
+     await SingletonConnection().getAllMarkaForRegister();
       Navigator.of(context).popAndPushNamed("/registration_auto");
     };
   }

@@ -90,7 +90,7 @@ class _IndicatorState extends State<Indicator> {
       Future.delayed(Duration(milliseconds: 300)).then((value) {provider.deletedIndicators.add(id);});
       SingletonUserInformation().cards.card.removeWhere((element) => element.id==id);
     });
-   final result =  http.delete('${SingletonConnection.URL}/cards/$id/?id_cards=${SingletonUserInformation().cards.id}');
+   final result = SingletonConnection().deleteIndicator(id);
    result.then((value) => print(value.body));
   }
 

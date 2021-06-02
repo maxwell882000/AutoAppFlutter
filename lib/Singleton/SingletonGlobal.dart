@@ -1,8 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/Singleton/SingletonConnection.dart';
 import 'package:flutter_projects/service/translation_service.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'SingletonUserInformation.dart';
 
 class SingletonGlobal {
   Languages _language;
@@ -50,6 +53,21 @@ class SingletonGlobal {
   }
   void setExpenses(List expenses){
     _expenses = expenses;
+  }
+  Future init() async{
+    setPrefs(await SharedPreferences.getInstance());
+    await authorizeUser();
+  }
+  Future<bool> authorizeUser() async{
+    String user = prefs.getString('user')?? "";
+    if (user.isNotEmpty) {
+      SingletonUserInformation().setEmailOrPhone(user);
+      if(await SingletonConnection().authorizedData()){
+        SingletonUserInformation().setPop(true);
+      }
+      return true;
+    }
+    return false;
   }
 
   void setPrefs(SharedPreferences prefs){

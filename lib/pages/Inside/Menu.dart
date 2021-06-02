@@ -245,13 +245,8 @@ class _MenuState extends State<Menu> {
                 loading = true;
               });
               if (SingletonUserInformation().proAccount) {
-                final items = http.get(
-                    '${SingletonConnection.URL}/marka/'
-                );
+                final items = SingletonConnection().getAllMarkaForRegister();
                 items.then((value) {
-                  jsonDecode(value.body).forEach((e) =>
-                      SingletonRegistrationAuto().fromJson(e));
-                  SingletonRegistrationAuto().finish();
                   Navigator.of(_scaffoldKey.currentContext).popAndPushNamed(
                       "/registration_auto", arguments: MenuPOP.NEW_TRANSPORT);
                 });

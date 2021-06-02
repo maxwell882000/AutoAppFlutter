@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter_projects/Singleton/SingletonConnection.dart';
+import 'package:flutter_projects/Singleton/SingletonRestApi.dart';
 import 'package:flutter_projects/helper_clesses/Payme/errors.dart';
-import 'package:http/http.dart' as http;
+
 
 class Payme {
   final String _url = "https://checkout.test.paycom.uz/api";
@@ -42,7 +43,7 @@ class Payme {
     Map<String, dynamic> params = {
       "card": {"number": number, "expire": expire, "save": true},
     };
-    final result = await http.post(_url,
+    final result = await SingletonRestApi.post( url: _url,
         headers: _setHeader(), body: body(CARDS_CREATE_METHOD, params));
     Map response = jsonDecode(result.body);
     print(result.body);
@@ -60,7 +61,7 @@ class Payme {
     Map<String,dynamic> params = {
       'token': _token,
     };
-    final result = await http.post(_url,
+    final result = await SingletonRestApi.post(url: _url,
         headers: _setHeader(), body: body(CARDS_GET_VERIFY_CODE, params));
     print("GET VERIFY CODE ${result.body}");
     if (result.statusCode == 200) {
@@ -89,7 +90,7 @@ class Payme {
 
   Future<Map> cardsVerify(String code) async {
     Map<String,dynamic> params = {'token': _token, 'code': code};
-    final result = await http.post(_url,
+    final result = await SingletonRestApi.post(url: _url,
         headers: _setHeader(), body: body(CARDS_VERIFY, params));
     print("CARDS VERIFY  ${result.body}");
     if (result.statusCode == 200) {
@@ -108,7 +109,7 @@ class Payme {
   }
 
   Future<Map> pay() async {
-    final result = await http.post("${SingletonConnection.URL}/subscribe_pay/",
+    final result = await SingletonRestApi.post(url: "${SingletonConnection.URL}/subscribe_pay/",
         headers: _setHeader(),
         body: jsonEncode(
             {'id_user': userId, 'token': _token, 'id_amount': amountId}));

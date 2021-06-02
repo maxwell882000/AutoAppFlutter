@@ -7,6 +7,7 @@ import 'package:flutter_projects/Singleton/SingletonConnection.dart';
 import 'package:flutter_projects/Singleton/SingletonGlobal.dart';
 import 'package:flutter_projects/Singleton/SingletonRecomendation.dart';
 import 'package:flutter_projects/Singleton/SingletonRegistrationAuto.dart';
+import 'package:flutter_projects/Singleton/SingletonRestApi.dart';
 import 'package:flutter_projects/Singleton/SingletonUserInformation.dart';
 import 'package:flutter_projects/helper_clesses/Dialog/ChoiceDialog.dart';
 import 'package:flutter_projects/helper_clesses/InsideOfAccount/AbovePartOfAccount.dart';
@@ -14,18 +15,18 @@ import 'package:flutter_projects/helper_clesses/InsideOfAccount/Indicator.dart';
 import 'package:flutter_projects/helper_clesses/InsideOfAccount/MainMenu.dart';
 
 import 'package:flutter_projects/helper_clesses/InsideOfAccount/ListOfInicator.dart';
-import 'package:flutter_projects/helper_clesses/InsideOfAccount/get_x_widgets/controller/controllers.dart';
+
 import 'package:flutter_projects/helper_clesses/LoadingScreen.dart';
 import 'package:flutter_projects/helper_clesses/TextFlexible.dart';
 import 'package:flutter_projects/helper_clesses/statefull_wrapper.dart';
 import 'package:flutter_projects/models/visibility.dart';
-import 'package:flutter_projects/provider/ErrorMessageProvider.dart';
+import 'package:flutter_projects/service/fire_base_messaging.dart';
+
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 import 'Adds.dart';
 
@@ -54,6 +55,7 @@ class User extends StatelessWidget {
     SingletonGlobal()
         .prefs
         .setString('user', SingletonUserInformation().emailOrPhone);
+    Get.find<FireBaseService>().sendOrMissToken();
   }
 
   Future<bool> _onWillPop() async {
@@ -73,6 +75,7 @@ class User extends StatelessWidget {
       SingletonRegistrationAuto().clean();
       if (!response) {
         SingletonGlobal().prefs.remove("user");
+        SingletonGlobal().prefs.remove("token");
         Navigator.of(Get.context).popAndPushNamed("/select");
       }
     }
@@ -210,7 +213,7 @@ class User extends StatelessWidget {
                       userProvider.setNextPage(true);
                       userProvider.setClearSettings(true);
                       SingletonRegistrationAuto().clean();
-                      final items = http.get('${SingletonConnection.URL}/marka/');
+                      final items = SingletonConnection().getAllMarka();
                       items.then((value) async {
                         jsonDecode(value.body).forEach(
                             (e) => SingletonRegistrationAuto().fromJson(e));

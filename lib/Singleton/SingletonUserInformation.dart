@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter_projects/Singleton/SingletonConnection.dart';
+import 'package:flutter_projects/Singleton/SingletonGlobal.dart';
 import 'package:flutter_projects/helper_clesses/InsideOfAccount/CardsUser.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'SingletonStoreToTheDiskAndLoad.dart';
 import 'package:get/get.dart';
@@ -9,6 +11,7 @@ import 'SingletonUnits.dart';
 
 class SingletonUserInformation {
   bool _pop = false;
+  bool _isAuthorized = false;
   bool _NO_ACCOUNT = false;
   int _id;
   String _emailOrPhone;
@@ -60,6 +63,8 @@ class SingletonUserInformation {
     _cards.clean();
     _NO_ACCOUNT = false;
     _pop = false;
+    _isAuthorized = false;
+
   }
 
   bool get pop => _pop;
@@ -112,6 +117,11 @@ class SingletonUserInformation {
 
   Cards get cards => _cards;
 
+  bool get isAuthorized => _isAuthorized;
+
+  void setIsAthorized(bool isAuthorized) {
+    _isAuthorized = isAuthorized;
+  }
   void setUserId(int id) {
     this._userId = id;
   }
@@ -360,12 +370,9 @@ class SingletonUserInformation {
   }
 
   void updateRun() {
-    http.put("${SingletonConnection.URL}/transport/$id/",
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({'run': SingletonUnits().convertDistanceForDB(run)}));
+   SingletonConnection().updateRunOfUser(id, run);
   }
+
 
   SingletonUserInformation._internal();
 }
@@ -474,7 +481,9 @@ class CardUser {
         'date': date.toString(),
       };
 
-  CardUser.newCard();
+  CardUser.newCard() {
+    _date = DateTime.now();
+  }
 
   void cleanFully() {
     _id = 0;

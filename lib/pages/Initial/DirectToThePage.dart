@@ -1,5 +1,3 @@
-
-
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/Singleton/SingletonConnection.dart';
@@ -18,12 +16,12 @@ class DirectToThePage extends StatefulWidget {
 }
 
 class _DirectToThePageState extends State<DirectToThePage> {
-
   @override
   void initState() {
     super.initState();
     initDynamicLinks();
-    _directToRightPage(context);
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _directToRightPage(context));
   }
 
   void initDynamicLinks() async {
@@ -46,27 +44,17 @@ class _DirectToThePageState extends State<DirectToThePage> {
       Navigator.pushNamed(context, deepLink.path);
     }
   }
-  
-  Future<void> _directToRightPage(BuildContext context) async {
-    SingletonGlobal().setPrefs(await SharedPreferences.getInstance());
-    SharedPreferences prefs = SingletonGlobal().prefs;
-    String user = prefs.getString('user')?? "";
-    print(user);
-    if (user.isNotEmpty){
-      SingletonUserInformation().setEmailOrPhone(user);
-      if(await SingletonConnection().authorizedData()) {
-        SingletonUserInformation().setPop(true);
-        final res = Navigator.of(context).popAndPushNamed('/authorized');
-        res.then((value) {
-          print("LOG OUT");
-          SingletonUserInformation().clean();
-          SingletonRecomendation().clean();
-        });
-        return;
-      }
-    }
-    int language = prefs.getInt('language') ?? -1;
 
+  Future<void> _directToRightPage(BuildContext context) async {
+    if (SingletonUserInformation().isAuthorized) {
+      final res = Navigator.of(context).popAndPushNamed('/authorized');
+      res.then((value) {
+        print("LOG OUT");
+        SingletonUserInformation().clean();
+        SingletonRecomendation().clean();
+      });
+      return;
+    }
     if (SingletonGlobal().language == Languages.EMPTY) {
       Navigator.of(context).popAndPushNamed("/language");
     } else {
@@ -76,7 +64,6 @@ class _DirectToThePageState extends State<DirectToThePage> {
 
   @override
   Widget build(BuildContext context) {
-
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(

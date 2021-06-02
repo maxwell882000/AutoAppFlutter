@@ -8,9 +8,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 import 'package:flutter_projects/Provider/CheckProvider.dart';
 import 'package:flutter_projects/Singleton/SingletonConnection.dart';
-import 'package:flutter_projects/Singleton/SingletonGetX.dart';
-import 'package:flutter_projects/controller/controller_cards.dart';
-import 'package:get/get.dart';
+
 import 'package:flutter_projects/Singleton/SingletonRecomendation.dart';
 import 'package:flutter_projects/Singleton/SingletonUnits.dart';
 import 'package:flutter_projects/Singleton/SingletonUserInformation.dart';
@@ -21,6 +19,7 @@ import 'package:flutter_projects/provider/ErrorMessageProvider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
+
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -334,8 +333,8 @@ class _CardsUserState extends State<CardsUser> {
     super.initState();
     SingletonConnection().cleanTemp();
 
-   chosenDate = f.format(DateTime.now());
-   dateProvider.setInputData(DateTime.now().toString());
+   chosenDate = f.format(SingletonUserInformation().newCard.date);
+   dateProvider.setInputData(SingletonUserInformation().newCard.date.toString());
    List image = SingletonUserInformation().newCard.attach.image;
    if (image.isNotEmpty)
     image.forEach((element) {
@@ -412,7 +411,7 @@ class _CardsUserState extends State<CardsUser> {
                           dateProvider.setInputData(date.toString());
                           chosenDate = f.format(date);
                         });
-                      }, currentTime: DateTime.now(), locale: LocaleType.ru);
+                      }, currentTime: SingletonUserInformation().newCard.date, locale: LocaleType.ru);
                     },
                     child: Dates(
                         width,

@@ -10,7 +10,7 @@ import 'package:flutter_projects/Singleton/SingletonRecomendation.dart';
 import 'package:flutter_projects/Singleton/SingletonUserInformation.dart';
 import 'package:flutter_projects/helper_clesses/TextInput/TextInputForum.dart';
 import 'package:flutter_projects/provider/ErrorMessageProvider.dart';
-
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 class LogIn extends StatelessWidget {
  LogIn({Key key}) : super(key: key);
@@ -18,21 +18,9 @@ class LogIn extends StatelessWidget {
  Function clickLogin(BuildContext context) {
    return (String emailOrPhone, String provider,
        ErrorMessageProvider prov) async {
-     final http.Response response = await http.post(
-         '${SingletonConnection.URL}/login/',
-         headers: <String, String>{
-           'Content-Type': 'application/json; charset=UTF-8',
-         },
-         body: jsonEncode(<String, String>{
-           'emailOrPhone': emailOrPhone,
-           'provider': provider
-         }));
-     var resultOfResponse = jsonDecode(response.body);
-     print(resultOfResponse);
-     if (resultOfResponse[1] == 200) {
-       Map json = jsonDecode(response.body)[0];
-       SingletonUserInformation()
-           .setEmailOrPhone(json["emailOrPhone"]);
+
+     final result = await SingletonConnection().loginAccount(emailOrPhone, provider);
+     if (result) {
 
       SingletonConnection().authorizedData().then((value) {
         final res = Navigator.of(context).popAndPushNamed('/authorized');
@@ -46,7 +34,7 @@ class LogIn extends StatelessWidget {
      } else {
        prov.setNextPage(false);
        prov.setError(true);
-       prov.setNameOfHelper("Аккаунт с такими данными не существует");
+       prov.setNameOfHelper("Аккаунт с такими данными не существует".tr);
      }
    };
  }
@@ -56,8 +44,8 @@ class LogIn extends StatelessWidget {
 
     return TextInputForum(
       svgPicture:"assets/registration.svg",
-      aboveText: "Войти в аккаунт",
-      nameOfButton: "Войти",
+      aboveText: "Войти в аккаунт".tr,
+      nameOfButton: "Войти".tr,
       connectDataBase: clickLogin(context),
     );
   }

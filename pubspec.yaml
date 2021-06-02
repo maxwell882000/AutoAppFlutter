@@ -25,16 +25,18 @@ dependencies:
     sdk: flutter
   flutter_svg: ^0.20.0-nullsafety.3
   hexcolor:
+  firebase_core: ^1.2.0
+  firebase_messaging: ^10.0.0
   firebase_dynamic_links:
   url_launcher:
   shared_preferences:
   provider:
   cupertino_icons:
-  http:
+  http: ^0.13.3
   flutter_datetime_picker:
   intl:
   path_provider:
-  image_picker:
+  image_picker: ^0.8.0
   geolocator:
   google_maps_flutter:
   flutter_polyline_points:
@@ -43,10 +45,10 @@ dependencies:
   downloads_path_provider:
   permission_handler:
   responsive_framework:
-  flutter_local_notifications:
-  flutter_local_notifications_platform_interface:
+  awesome_notifications:
   platform:
   get:
+  workmanager:
   device_info:
   rxdart:
   flutter_localizations:

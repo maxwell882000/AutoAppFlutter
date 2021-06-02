@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_projects/Singleton/SingletonRestApi.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 import 'SingletonAdds.dart';
 import 'SingletonGlobal.dart';
 import 'SingletonRecomendation.dart';
+import 'SingletonRegistrationAuto.dart';
 import 'SingletonUnits.dart';
 import 'SingletonUserInformation.dart';
 
@@ -17,19 +20,83 @@ class SingletonConnection {
     return _instance;
   }
 
+  Future<bool> saveToken(String token) async{
+     final result = await SingletonRestApi.post(url: "$URL", body: token);
+     if (result.statusCode == 200) {
+       return true;
+     }
+     return false;
+  }
+  Future<bool> registerAccount(String emailOrPhone, String provider) async{
+    return await baseAuthorization(emailOrPhone, provider, '$URL/register/');
+  }
+  Future<bool> loginAccount(String emailOrPhone, String provider) async{
+    return await baseAuthorization(emailOrPhone, provider, '$URL/login/');
+  }
+  Future  deleteIndicator(int id) async{
+    return await SingletonRestApi.delete(url: '${SingletonConnection.URL}/cards/$id/?id_cards=${SingletonUserInformation().cards.id}');
+  }
+  Future<bool> baseAuthorization(String emailOrPhone, String provider, String url)  async{
+    final http.Response response = await SingletonRestApi.post(
+        url: url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'emailOrPhone': emailOrPhone,
+          'provider': provider
+        }));
+    var resultOfResponse = jsonDecode(response.body);
+    print(resultOfResponse);
+    if (resultOfResponse[1] == 200) {
+      SingletonUserInformation()
+          .setEmailOrPhone(jsonDecode(response.body)[0]["emailOrPhone"]);
+      SingletonUserInformation()
+          .setUserId(jsonDecode(response.body)[0]["user_id"]);
+      SingletonUserInformation().setIsAthorized(true);
+      return true;
+    }
+    return false;
+  }
+  Future<void> getAllMarkaForRegister() async {
+    final items = await getAllMarka();
+    jsonDecode(items.body)
+        .forEach((e) => SingletonRegistrationAuto().fromJson(e));
+    SingletonRegistrationAuto().finish();
+  }
+  Future getAllMarka()  async{
+   return await SingletonRestApi.get(url: '$URL/marka/');
+  }
+
+  Future<void> submitUnits() async {
+    return await SingletonRestApi.put(
+        url: 'URL/units/${SingletonUserInformation().emailOrPhone}/',
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(SingletonUnits().toJson()));
+  }
+
+  Future<void> updateRunOfUser(int id, double run) {
+    SingletonRestApi.put(
+        body: jsonEncode({'run': SingletonUnits().convertDistanceForDB(run)}),
+        url: "$URL/transport/$id/");
+  }
 
   Future<bool> cleanTemp() async {
-    final response =
-        await http.get("$URL/clean/temp/${SingletonUserInformation().userId}");
-    if (response.statusCode == 200) {}
+    final response = await SingletonRestApi.get(
+        url: "$URL/clean/temp/${SingletonUserInformation().userId}");
   }
 
   Future<void> loadAdds() async {
-    final response = await http
-        .get("$URL/adds/", headers: {'Content-Type': 'application/json'});
+    final response = await SingletonRestApi.get(
+      url: "$URL/adds/",
+      headers: {'Content-Type': 'application/json'},
+    );
     if (response.statusCode == 200) {
       Map json = jsonDecode(utf8.decode(response.bodyBytes));
-      final result = await http.get("$URL/adds/${json['id']}/",
+      final result = await SingletonRestApi.get(
+          url: "$URL/adds/${json['id']}/",
           headers: {'Content-Type': 'application/json'});
       SingletonAdds().setLinks(json['links']);
       SingletonAdds().setImages(result.bodyBytes);
@@ -44,7 +111,8 @@ class SingletonConnection {
       return true;
     }
     if (location.id != 0) {
-      final result = await http.get('$URL/location/${location.id}/',
+      final result = await SingletonRestApi.get(
+          url: '$URL/location/${location.id}/',
           headers: {'Content-Type': 'application/json'});
       print("Status code ${result.statusCode}");
       if (result.statusCode == 200) {
@@ -63,8 +131,8 @@ class SingletonConnection {
   Future<Requests> shareTransport(String account, String id) async {
     bool internet = await checkConnection();
     if (internet) {
-      final response = await http.post(
-          "$URL/shareChoice/${SingletonUserInformation().emailOrPhone}/",
+      final response = await SingletonRestApi.post(
+          url: "$URL/shareChoice/${SingletonUserInformation().emailOrPhone}/",
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
             'emailOrPhone': account,
@@ -83,8 +151,8 @@ class SingletonConnection {
   }
 
   Future<List> getTransports() async {
-    final result = await http.get(
-        '$URL/shareChoice/${SingletonUserInformation().emailOrPhone}/',
+    final result = await SingletonRestApi.get(
+        url: '$URL/shareChoice/${SingletonUserInformation().emailOrPhone}/',
         headers: {'Content-Type': 'application/json'});
 
     final json = jsonDecode(utf8.decode(result.bodyBytes));
@@ -117,10 +185,11 @@ class SingletonConnection {
     bool connection = await checkConnection();
 
     if (connection) {
-      final result = await http
-          .delete("$URL/cards/images_upload/$id/", headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      });
+      final result = await SingletonRestApi.delete(
+          url: "$URL/cards/images_upload/$id/",
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          });
       if (jsonDecode(result.body)['status'] == 200) {
         return;
       }
@@ -128,21 +197,17 @@ class SingletonConnection {
   }
 
   Future<void> deleteExpense(int id) async {
-    bool connection = await checkConnection();
-
-    if (connection) {
-      final response = await http.delete(
-        '$URL/expense/$id/',
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-      );
-    }
+    final response = await SingletonRestApi.delete(
+      url: '$URL/expense/$id/',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
   }
 
   void deleteUser() async {
-    final response = await http.delete(
-      "$URL/units/${SingletonUserInformation().emailOrPhone}/",
+    final response = await SingletonRestApi.delete(
+      url: "$URL/units/${SingletonUserInformation().emailOrPhone}/",
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -151,7 +216,8 @@ class SingletonConnection {
   }
 
   void updateExpenses() {
-    http.put("$URL/updateExpenses/${SingletonUserInformation().expenses.id}/",
+    SingletonRestApi.put(
+        url: "$URL/updateExpenses/${SingletonUserInformation().expenses.id}/",
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -162,7 +228,8 @@ class SingletonConnection {
   }
 
   void updateExpense(int id, Map<String, dynamic> json) {
-    http.put("$URL/expense/$id/",
+    SingletonRestApi.put(
+        url: "$URL/expense/$id/",
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -170,7 +237,8 @@ class SingletonConnection {
   }
 
   Future<Map> createExpense() async {
-    final response = await http.post("$URL/expense/",
+    final response = await SingletonRestApi.post(
+        url: "$URL/expense/",
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -188,7 +256,8 @@ class SingletonConnection {
   }
 
   Future<void> recommendData() async {
-    final response = await http.post('$URL/recomendations/',
+    final response = await SingletonRestApi.post(
+        url: '$URL/recomendations/',
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -207,13 +276,13 @@ class SingletonConnection {
   }
 
   Future<http.Response> downloadImage(int id) async {
-    final response = await http.get("$URL/download/$id/");
+    final response = await SingletonRestApi.get(url: "$URL/download/$id/");
     return response;
   }
 
   Future<void> recommendImage() async {
-    final response = await http.get(
-      "$URL/recomendations/${SingletonRecomendation().id}/",
+    final response = await SingletonRestApi.get(
+      url: "$URL/recomendations/${SingletonRecomendation().id}/",
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -221,7 +290,7 @@ class SingletonConnection {
     SingletonRecomendation().setImageUnit(response.bodyBytes);
   }
 
-  Future sendImage(String path) async {
+  Future<http.StreamedResponse> sendImage(String path) async {
     var request =
         http.MultipartRequest('POST', Uri.parse("$URL/cards/images_upload"));
     request.fields
@@ -232,30 +301,29 @@ class SingletonConnection {
     });
     return await request.send();
   }
+
   Future<Map> getStoreCards(String tag, List card) async {
-    final result = await http.get("${SingletonConnection.URL}/$tag");
+    final result =
+        await SingletonRestApi.get(url: "${SingletonConnection.URL}/$tag");
     print(result.body);
     List json = jsonDecode(utf8.decode(result.bodyBytes));
 
     print(json);
     if (json.isNotEmpty) {
-      json.forEach((e) =>
-          card.add(new CardUser(
-              e['id'],
-              e['name_of_card'],
-              DateTime.parse(e['date']),
-              e['comments'],
-              e['attach']['id'],
-              e['attach']['location'],
-              e['attach']['image'],
-              e['change']['id'],
-              SingletonUnits().convertDistanceForUser(e['change']['run']),
-              SingletonUnits().convertDistanceForUser(
-                  e['change']['initial_run']),
-              e['change']['time'],
-              e['expense'])));
+      json.forEach((e) => card.add(new CardUser(
+          e['id'],
+          e['name_of_card'],
+          DateTime.parse(e['date']),
+          e['comments'],
+          e['attach']['id'],
+          e['attach']['location'],
+          e['attach']['image'],
+          e['change']['id'],
+          SingletonUnits().convertDistanceForUser(e['change']['run']),
+          SingletonUnits().convertDistanceForUser(e['change']['initial_run']),
+          e['change']['time'],
+          e['expense'])));
     }
-
   }
 
   Future<void> modifyCard() async {
@@ -286,7 +354,8 @@ class SingletonConnection {
 
     if (card.uploadedExpense.isNotEmpty)
       json.addAll({'expense_list': card.uploadedExpense});
-    final result = await http.put('$URL/cards/${card.id}/',
+    final result = await SingletonRestApi.put(
+        url: '$URL/cards/${card.id}/',
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -323,19 +392,20 @@ class SingletonConnection {
     if (SingletonUserInformation().cards.id != null &&
         SingletonUserInformation().cards.id != 0) {
       json.addAll({"id": SingletonUserInformation().cards.id});
-      final response = await http.post('$URL/cards/',
+      final response = await SingletonRestApi.post(
+          url: '$URL/cards/',
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(json));
       if (response.statusCode == 200) got = jsonDecode(response.body);
     } else {
-      final response =
-          await http.post('$URL/cards/${SingletonUserInformation().id}/',
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8',
-              },
-              body: jsonEncode(json));
+      final response = await SingletonRestApi.post(
+          url: '$URL/cards/${SingletonUserInformation().id}/',
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(json));
       print(response.body);
       if (response.statusCode == 200) {
         got = jsonDecode(response.body);
@@ -351,9 +421,10 @@ class SingletonConnection {
     }
   }
 
-  Future registerCar() async{
-    return http.post(
-        '${SingletonConnection.URL}/transport/${SingletonUserInformation().emailOrPhone}/',
+  Future registerCar() async {
+    return SingletonRestApi.post(
+        url:
+            '${SingletonConnection.URL}/transport/${SingletonUserInformation().emailOrPhone}/',
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -364,7 +435,8 @@ class SingletonConnection {
     if (text.isEmpty) {
       text = "${SingletonUserInformation().emailOrPhone}/";
     }
-    final result = await http.get('$URL/transport/$text',
+    final result = await SingletonRestApi.get(
+        url: '$URL/transport/$text',
         headers: {'Content-Type': 'application/json'});
     print(result.body);
     print(result.statusCode);
@@ -376,6 +448,7 @@ class SingletonConnection {
 
       SingletonUserInformation().setProAccount(json['pro_account']);
       SingletonUserInformation().setUserId(json['user_id']);
+      SingletonUserInformation().setIsAthorized(true);
       if (json["cards"] == null)
         SingletonUserInformation().setNOACCOUNT(true);
       else {

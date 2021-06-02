@@ -50,7 +50,8 @@ class _BackGroundMovingState extends State<BackGroundMoving> {
   @override
   void initState() {
     super.initState();
-   animationMovement(context);
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => animationMovement(context));
   }
 
   void animationMovement(BuildContext context) {

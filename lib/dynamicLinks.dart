@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -94,6 +95,25 @@ class _DynamicLinksState extends State<DynamicLinks> {
                 ButtonBar(
                   alignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    TextButton(onPressed: () {
+                      AwesomeNotifications().createNotification(
+                        content: NotificationContent(
+                            id: 10,
+                            channelKey: 'usual',
+                            title: 'AAAAAAA',
+                            body: 'Simple body'
+                        ),
+                        actionButtons: [
+
+                          NotificationActionButton(
+                              key: "11",
+                              label: "do",
+                              enabled: true,
+                              buttonType: ActionButtonType.DisabledAction
+                          )
+                        ],
+                      );
+                    }, child: Text("notification")),
                     RaisedButton(
                       onPressed: !_isCreatingLink
                           ? () => _createDynamicLink(false)
