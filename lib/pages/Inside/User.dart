@@ -22,7 +22,6 @@ import 'package:flutter_projects/helper_clesses/statefull_wrapper.dart';
 import 'package:flutter_projects/models/visibility.dart';
 import 'package:flutter_projects/service/fire_base_messaging.dart';
 
-
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
@@ -37,17 +36,18 @@ class User extends StatelessWidget {
   final UserProvider userProvider = SingletonUserInformation().NO_ACCOUNT
       ? UserProvider.noAccount()
       : new UserProvider.start(
-          SingletonUserInformation().run,
-          SingletonUserInformation().average,
-          SingletonUserInformation().cards.changeDetails,
-          SingletonUserInformation().expenses.all_time,
-          SingletonUserInformation().expenses.in_this_month,
-          SingletonUserInformation().proAccount,
-          "${SingletonUserInformation().marka} ${SingletonUserInformation().model}",
-          "${SingletonUserInformation().number}",
-          "${SingletonUserInformation().techPassport}",
-          "${SingletonUserInformation().tenure()} лет",
-          false,
+          run: SingletonUserInformation().run,
+          average: SingletonUserInformation().average,
+          changeDetails: SingletonUserInformation().cards.changeDetails,
+          allExpense: SingletonUserInformation().expenses.all_time,
+          monthExpense: SingletonUserInformation().expenses.in_this_month,
+          proAccount: SingletonUserInformation().proAccount,
+          nameOfCar:
+              "${SingletonUserInformation().marka} ${SingletonUserInformation().model}",
+          number: "${SingletonUserInformation().number}",
+          techPassport: "${SingletonUserInformation().techPassport}",
+          tenure: "${SingletonUserInformation().tenure()} лет",
+          clearSettings: false,
         );
 
   @override
@@ -81,6 +81,7 @@ class User extends StatelessWidget {
     }
     return response;
   }
+
   Widget getIndicators(List indicator) {
     return Indicator(
         key: UniqueKey(),
@@ -118,7 +119,8 @@ class User extends StatelessWidget {
         onInit: initState,
         child: ChangeNotifierProvider.value(
           value: userProvider,
-          child: Consumer<UserProvider>(builder: (context, userProvider, child) {
+          child:
+              Consumer<UserProvider>(builder: (context, userProvider, child) {
             return MainMenu(
               visible: VisibilityClass(
                 filterVisible: true,
@@ -187,7 +189,8 @@ class User extends StatelessWidget {
                               SizedBox(
                                 height: width * 0.04,
                               ),
-                              Expanded(child: ListOfIndicator(
+                              Expanded(
+                                  child: ListOfIndicator(
                                 onLoad: onload,
                                 height: width * 1.05,
                                 getIndicators: getIndicators,

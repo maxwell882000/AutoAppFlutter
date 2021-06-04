@@ -17,6 +17,7 @@ class Indicator extends StatefulWidget {
   final double dataPercent;
   final int id;
   final bool modifying;
+  final bool history;
   final Function onSave;
   Indicator(
       {Key key,
@@ -26,7 +27,9 @@ class Indicator extends StatefulWidget {
       this.dataDistance,
       this.dataTime,
       this.id,
-      this.onSave})
+      this.onSave,
+      this.history = false,
+      })
       : super(key: key);
 
   @override
@@ -108,75 +111,84 @@ class _IndicatorState extends State<Indicator> {
     });
   }
 
+  void modfifyCards(){
+    final provider = Provider.of<UserProvider>(context, listen: false);
+    SingletonUserInformation().setNewCard(id);
+    final result = Navigator.of(context).push(
+      new MaterialPageRoute(
+        builder: (context) => ModifyCards(
+          appBarName: textOfIndicator,
+          child: ChangeNotifierProvider.value(
+            value: provider,
+            child: Indicator(
+              textOfIndicator: textOfIndicator,
+              dataPercent: dataPercent,
+              dataTime: dataTime,
+              dataDistance: dataDistance,
+              id: id,
+              modifying: false,
+            ),
+          ),
+        ),
+      ),
+    );
+    result.then((value) {
+
+      provider.setClean();
+      if (value == null) {
+        SingletonUserInformation().newCardClean();
+      } else {
+        provider.setLoading(true);
+        SingletonConnection().modifyCard();
+        int expenses = SingletonUserInformation().expenses.all_time;
+        int month = SingletonUserInformation().expenses.in_this_month;
+        provider.setExpenseAll(expenses);
+        provider.setExpenseMonth(month);
+        SingletonConnection().updateExpenses();
+        provider.setRun(SingletonUserInformation().run);
+        SingletonUserInformation().averageRun();
+        provider.setAverageRun(SingletonUserInformation().average);
+        SingletonUserInformation()
+            .newCard
+            .attach
+            .uploadedImage
+            .forEach((element) {
+          SingletonUserInformation().newCard.attach.image.add(element);
+        });
+        SingletonUserInformation().newCard.attach.clean();
+        int index;
+        SingletonUserInformation().newCard.change.setInitialRun(SingletonUserInformation().run);
+        SingletonUserInformation().cards.card.where((element) => element.id==SingletonUserInformation().newCard.id).forEach((element) {
+          index = SingletonUserInformation().cards.card.indexOf(element);
+        });
+        SingletonUserInformation().cards.card.removeAt(index);
+        if(value){
+          SingletonUserInformation().cards.card.insert(index, SingletonUserInformation().newCard);
+        }else{
+          this.deleteObject(provider);
+        }
+        provider.setIndicators(SingletonUserInformation().indicators());
+        provider.setChanged(true);
+        provider.setLoading(false);
+        SingletonUserInformation().newCardClean();
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     setInitialVartiables(width);
-    final provider = Provider.of<UserProvider>(context);
+
     return GestureDetector(
       onTap: () async{
 
-        if (modifying == true) {
+        if (modifying == true && !widget.history) {
+            modfifyCards();
+        }
+        else if (widget.history){
           SingletonUserInformation().setNewCard(id);
-          final result = Navigator.of(context).push(
-            new MaterialPageRoute(
-              builder: (context) => ModifyCards(
-                appBarName: textOfIndicator,
-                child: ChangeNotifierProvider.value(
-                  value: provider,
-                  child: Indicator(
-                    textOfIndicator: textOfIndicator,
-                    dataPercent: dataPercent,
-                    dataTime: dataTime,
-                    dataDistance: dataDistance,
-                    id: id,
-                    modifying: false,
-                  ),
-                ),
-              ),
-            ),
-          );
-          result.then((value) {
-            print("RETURN VALUE $value");
-            provider.setClean();
-            if (value == null) {
-              SingletonUserInformation().newCardClean();
-            } else {
-              provider.setLoading(true);
-              SingletonConnection().modifyCard();
-              int expenses = SingletonUserInformation().expenses.all_time;
-              int month = SingletonUserInformation().expenses.in_this_month;
-              provider.setExpenseAll(expenses);
-              provider.setExpenseMonth(month);
-              SingletonConnection().updateExpenses();
-              provider.setRun(SingletonUserInformation().run);
-              SingletonUserInformation().averageRun();
-              provider.setAverageRun(SingletonUserInformation().average);
-              SingletonUserInformation()
-                  .newCard
-                  .attach
-                  .uploadedImage
-                  .forEach((element) {
-                SingletonUserInformation().newCard.attach.image.add(element);
-              });
-              SingletonUserInformation().newCard.attach.clean();
-              int index;
-              SingletonUserInformation().newCard.change.setInitialRun(SingletonUserInformation().run);
-              SingletonUserInformation().cards.card.where((element) => element.id==SingletonUserInformation().newCard.id).forEach((element) {
-                index = SingletonUserInformation().cards.card.indexOf(element);
-              });
-              SingletonUserInformation().cards.card.removeAt(index);
-              if(value){
-                SingletonUserInformation().cards.card.insert(index, SingletonUserInformation().newCard);
-              }else{
-                this.deleteObject(provider);
-              }
-              provider.setIndicators(SingletonUserInformation().indicators());
-              provider.setChanged(true);
-              provider.setLoading(false);
-              SingletonUserInformation().newCardClean();
-            }
-          });
+          final result = Navigator.of(context).pushNamed('/store-cards');
+          result.then((value) => SingletonUserInformation().newCardClean());
         }
       },
       child: Column(

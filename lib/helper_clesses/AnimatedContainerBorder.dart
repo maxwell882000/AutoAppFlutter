@@ -10,12 +10,14 @@ class AnimatedContainerBorder extends StatelessWidget {
   final double width;
   final double height;
   final Widget child;
+  final EdgeInsets margin;
   AnimatedContainerBorder({
     Key key,
     this.width,
     this.height,
     this.duration,
     this.child,
+    this.margin = EdgeInsets.zero
   }) : super(key: key);
 
   @override
@@ -25,7 +27,7 @@ class AnimatedContainerBorder extends StatelessWidget {
       curve:  Curves.easeInOut,
       duration: Duration(milliseconds: duration),
       padding: EdgeInsets.zero,
-      margin: EdgeInsets.zero,
+      margin: margin,
       height: height,
       decoration: BoxDecoration(
         border: Border.all(

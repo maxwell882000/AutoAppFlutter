@@ -128,6 +128,8 @@ class PointerLocationState extends State<PointerLocation> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isStore = ModalRoute.of(context).settings.arguments ?? false;
+    print(isStore);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: HexColor("#F0F8FF"),
@@ -148,13 +150,15 @@ class PointerLocationState extends State<PointerLocation> {
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
                 },
-                onLongPress: _handleTap),
+                onLongPress: isStore? (lat) {}: _handleTap),
           ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: _goToPoint,
+        onPressed: isStore? () {
+          Navigator.of(context).pop();
+        } : _goToPoint,
         child: Icon(Icons.save_alt_outlined),
       ),
     );

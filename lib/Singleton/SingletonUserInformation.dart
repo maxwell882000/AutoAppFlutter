@@ -223,7 +223,7 @@ class SingletonUserInformation {
   }
 
   List indicatorsStore() {
-    if (cards.card.isNotEmpty)
+    if (cards.storeCards.isNotEmpty)
       return cards.storeCards.map((element) => createList(element)).toList();
     return [];
   }
@@ -483,6 +483,9 @@ class CardUser {
 
   CardUser.newCard() {
     _date = DateTime.now();
+    _comments = "";
+    _nameOfCard = "";
+
   }
 
   void cleanFully() {

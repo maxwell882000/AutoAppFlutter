@@ -1,5 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/Singleton/SingletonUserInformation.dart';
+import 'package:flutter_projects/provider/FeeProvider.dart';
+
+
 
 class ErrorMessageProvider with ChangeNotifier {
   String _nameOfHelper;
@@ -14,7 +18,12 @@ class ErrorMessageProvider with ChangeNotifier {
   ErrorMessageProvider _errorMessageProvider;
   Widget _swapWidget;
   Widget _recommendations;
-
+  itemsFill() {
+    SingletonUserInformation().newCard.expense.forEach((element) {
+      addItems(new FeeProvider.downloaded(element.id, element.name,
+          element.sum.toString(), element.amount.toString()));
+    });
+  }
   ErrorMessageProvider.zero(){
     this._nextPage = false;
   }

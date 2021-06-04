@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_projects/Pages/Inside/Map.dart';
 import 'package:flutter_projects/Singleton/SingletonUserInformation.dart';
 import 'package:flutter_projects/dynamicLinks.dart';
+import 'package:flutter_projects/helper_clesses/InsideOfAccount/StoreCards.dart';
 import 'package:flutter_projects/helper_clesses/Payme/code_verification.dart';
 import 'package:flutter_projects/helper_clesses/Payme/payme_pay.dart';
 import 'package:flutter_projects/pages/Date.dart';
@@ -63,7 +64,6 @@ void backTask() {
       );
     }
     else {
-
       NotificationService.initializeNotification('track_channel');
       AwesomeNotifications().createNotification(
         content: NotificationContent(
@@ -164,7 +164,9 @@ class MyApp extends StatelessWidget {
         "/date": (context) => Date(),
         "/payme": (context) => PaymePay(),
         "/code-verification": (context) => CodeVerification(),
-        "/track-user": (context) => TrackUser()
+        "/track-user": (context) => TrackUser(),
+        "/store-cards":(context) => StoreCards(),
+
       },
     );
   }

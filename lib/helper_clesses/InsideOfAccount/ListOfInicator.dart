@@ -77,7 +77,7 @@ class _ListOfIndicatorState extends State<ListOfIndicator> {
     allIndicators.clear();
     provider.indicators.sort((b, a) => a[1].compareTo(b[1]));
     allIndicators.value =
-        provider.indicators.map((element) => widget.getIndicators(element)).toList();
+        provider.indicators.map<Widget>((element) => widget.getIndicators(element)).toList();
     WidgetsBinding.instance
         .addPostFrameCallback((_) => provider.setSortChange(false));
   }
@@ -119,7 +119,7 @@ class _ListOfIndicatorState extends State<ListOfIndicator> {
         zet[index] = temp;
       }
     }
-    allIndicators.value = zet.map((element) => widget.getIndicators(element)).toList();
+    allIndicators.value = zet.map<Widget>((element) => widget.getIndicators(element)).toList();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider.setSortRecent(false);
     });
@@ -137,7 +137,7 @@ class _ListOfIndicatorState extends State<ListOfIndicator> {
     });
     own.addAll(def);
 
-    allIndicators.value = own.map((element) => widget.getIndicators(element)).toList();
+    allIndicators.value = own.map<Widget>((element) => widget.getIndicators(element)).toList();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider.setSortOfUser(false);
     });
@@ -145,7 +145,7 @@ class _ListOfIndicatorState extends State<ListOfIndicator> {
 
   void changed(UserProvider provider) {
     int count = 0;
-    allIndicators.value = provider.indicators.map((indicator) {
+    allIndicators.value = provider.indicators.map<Widget>((indicator) {
       double handle = indicator[1];
       count = handle > 0.8 ? 1 + count : count;
       return widget.getIndicators(indicator);

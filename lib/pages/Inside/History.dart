@@ -29,6 +29,7 @@ class History extends StatelessWidget {
   Widget getIndicators(List indicator) {
     print(indicator[4]);
     return Indicator(
+        history: true,
         key: UniqueKey(),
         textOfIndicator: indicator[0],
         dataPercent: indicator[1],

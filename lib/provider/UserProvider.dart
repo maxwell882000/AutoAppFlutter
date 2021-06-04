@@ -35,11 +35,11 @@ class UserProvider with ChangeNotifier {
     _clearMenu = true;
     _clearSettings = false;
   }
-  UserProvider.start(double run,double average,
+  UserProvider.start({double run,double average,
       int changeDetails, int allExpense, int monthExpense, bool proAccount,
       String nameOfCar,String number,
       String techPassport, String tenure,
-       bool clearSettings){
+       bool clearSettings}){
     if (proAccount == null){
       proAccount = false;
     }

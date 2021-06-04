@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/helper_clesses/ListExpenses.dart';
 import 'package:flutter_projects/helper_clesses/statefull_wrapper.dart';
 import 'package:get/get.dart';
 import 'package:flutter_projects/Provider/CheckProvider.dart';
-import 'package:flutter_projects/Provider/FeeProvider.dart';
+import 'package:flutter_projects/provider/FeeProvider.dart';
 import 'package:flutter_projects/Provider/UserProvider.dart';
 import 'package:flutter_projects/Singleton/SingletonConnection.dart';
 import 'package:flutter_projects/Singleton/SingletonRecomendation.dart';
 import 'package:flutter_projects/Singleton/SingletonUnits.dart';
 import 'package:flutter_projects/Singleton/SingletonUserInformation.dart';
 import 'package:flutter_projects/helper_clesses/Dialog/DataNotSave.dart';
-import 'package:flutter_projects/helper_clesses/DropDown/ListFee.dart';
+
 import 'package:flutter_projects/helper_clesses/InsideOfAccount/CardsUser.dart';
 import 'package:flutter_projects/helper_clesses/InsideOfAccount/Check.dart';
 import 'package:flutter_projects/helper_clesses/TextInput/TextFieldHelper.dart';
@@ -62,7 +63,6 @@ class ModifyCards extends StatelessWidget {
               ),
             ),
           ),
-
           Visibility(
             visible: check.checked,
             child: Text("TEXT VISIBLE "),
@@ -154,7 +154,8 @@ class ModifyCards extends StatelessWidget {
             children: [
               Align(
                 alignment: Alignment.center,
-                child: Consumer<CheckProvider>(builder: (context, provider, child) {
+                child: Consumer<CheckProvider>(
+                    builder: (context, provider, child) {
                   return Check(
                     onTap: () {
                       check.setChecked(!provider.checked);
@@ -167,11 +168,8 @@ class ModifyCards extends StatelessWidget {
                 height: width * 0.02,
               ),
               Consumer<CheckProvider>(
-                builder: (context, provider, child){
-                  return Visibility(
-                     visible: provider.checked,
-                      child: child
-                  );
+                builder: (context, provider, child) {
+                  return Visibility(visible: provider.checked, child: child);
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -218,7 +216,6 @@ class ModifyCards extends StatelessWidget {
   }
 
   void initState() {
-
     provider.setNameOfHelper(appBarName);
     provider.setInputData(appBarName);
     SingletonUserInformation().newCard.expense.forEach((element) {
@@ -304,7 +301,8 @@ class ModifyCards extends StatelessWidget {
       }
       if (SingletonRecomendation().checkRecomm(provider.inputData) == 0 &&
           repeatTimeProvider.inputData.isEmpty &&
-          repeatDistProvider.inputData.isEmpty && check.checked== true) {
+          repeatDistProvider.inputData.isEmpty &&
+          check.checked == true) {
         error = true;
         repeatDistProvider.setError(true);
       }
@@ -405,6 +403,34 @@ class ModifyCards extends StatelessWidget {
     return response;
   }
 
+  Widget addExpenses() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        GestureDetector(
+          onTap: () {
+            provider.addItems(new FeeProvider());
+          },
+          child: SvgPicture.asset(
+            'assets/add.svg',
+            width: Get.width * 0.055,
+          ),
+        ),
+        SizedBox(
+          width: Get.width * 0.02,
+        ),
+        Text(
+          "Добавить",
+          style: TextStyle(
+            color: HexColor("#42424A"),
+            fontFamily: 'Montserrat',
+            fontSize: Get.width * 0.032,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -417,64 +443,7 @@ class ModifyCards extends StatelessWidget {
           child: CardsUser(
             recommendationFunction: recomendationCards(context),
             secondChild: child,
-            middleChild: Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: width * 0.02),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Расходы",
-                        style: TextStyle(
-                          color: HexColor("#42424A"),
-                          fontFamily: 'Montserrat',
-                          fontSize: width * 0.035,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: width * 0.05),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ListFee(),
-                            SizedBox(
-                              height: width * 0.01,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    provider.addItems(new FeeProvider());
-                                  },
-                                  child: SvgPicture.asset(
-                                    'assets/add.svg',
-                                    width: width * 0.055,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: width * 0.02,
-                                ),
-                                Text(
-                                  "Добавить",
-                                  style: TextStyle(
-                                    color: HexColor("#42424A"),
-                                    fontFamily: 'Montserrat',
-                                    fontSize: width * 0.032,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            middleChild: ListExpenses(child: addExpenses()),
             childAboveButton: [
               'assets/reload.svg',
               "Продолжить\nиспользование\nкарточки ?".tr,
