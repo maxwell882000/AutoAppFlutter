@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-
+import 'package:get/get.dart';
 class DataNotSave extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     return AlertDialog(
       content: Text(
-        'Вы уверены что хотите выйти',
+        'Вы уверены что хотите выйти'.tr,
         style: TextStyle(
           color: HexColor("#42424A"),
           fontFamily: 'Montserrat',
@@ -15,7 +15,7 @@ class DataNotSave extends StatelessWidget {
         ),
       ),
       title: Text(
-        'Ваши данные не сохраняться',
+        'Ваши данные не сохраняться'.tr,
         style: TextStyle(
           color: HexColor("#42424A"),
           fontFamily: 'Montserrat',
@@ -25,13 +25,13 @@ class DataNotSave extends StatelessWidget {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text('Да'),
+          child: Text('Да'.tr),
           onPressed: () {
             Navigator.of(context).pop(true);
           },
         ),
         TextButton(
-          child: Text('Нет'),
+          child: Text('Нет'.tr),
           onPressed: () {
             Navigator.of(context).pop(false);
           },

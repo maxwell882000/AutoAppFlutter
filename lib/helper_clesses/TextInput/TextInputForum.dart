@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../Buttons.dart';
 import '../ChildAndButton.dart';
 import 'TextFieldHelper.dart';
-
+import 'package:get/get.dart';
 class TextInputForum extends StatelessWidget {
   final String svgPicture;
   final String aboveText;
@@ -24,7 +24,7 @@ class TextInputForum extends StatelessWidget {
       : super(key: key);
 
   final ErrorMessageProvider errorMessageProvider =
-      new ErrorMessageProvider("Введите Email или Номер телефона");
+      new ErrorMessageProvider("Введите Email или Номер телефона".tr);
 //r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.(\w)" mail
   void registerAccount(BuildContext context) async {
     if (errorMessageProvider.inputData.isNotEmpty) {
@@ -47,7 +47,7 @@ class TextInputForum extends StatelessWidget {
         } else {
           errorMessageProvider.setError(true);
           errorMessageProvider
-              .setNameOfHelper("Номер телефона в формате: +998ХХХХХХХХХ ");
+              .setNameOfHelper("Номер телефона в формате: +998ХХХХХХХХХ".tr);
         }
       } else {
         RegExp exp = mail;
@@ -60,18 +60,18 @@ class TextInputForum extends StatelessWidget {
         } else {
           errorMessageProvider.setError(true);
           errorMessageProvider
-              .setNameOfHelper("Пожалуйста введите правильный Email");
+              .setNameOfHelper("Пожалуйста введите правильный Email".tr);
         }
       }
     } else {
       errorMessageProvider.setError(true);
-      errorMessageProvider.setNameOfHelper("Необходимо заполнить");
+      errorMessageProvider.setNameOfHelper("Необходимо заполнить".tr);
     }
   }
 
   void setHintText() {
     if (!errorMessageProvider.error)
-      errorMessageProvider.setNameOfHelper("Введите Email или Номер телефона");
+      errorMessageProvider.setNameOfHelper("Введите Email или Номер телефона".tr);
   }
 
   @override

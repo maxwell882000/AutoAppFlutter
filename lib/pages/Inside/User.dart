@@ -63,7 +63,7 @@ class User extends StatelessWidget {
       context: Get.context,
       barrierDismissible: false,
       builder: (context) => ChoiceDialog(
-        text: "Вы уверены что хотите выйти ?",
+        text: "Вы уверены что хотите выйти ?".tr,
       ),
     );
     if (response) {
@@ -153,7 +153,7 @@ class User extends StatelessWidget {
                       children: <Widget>[
                         Center(
                           child: Text(
-                            "Добавьте транспортное средство",
+                            "Добавьте транспортное средство".tr,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: width * 0.1,

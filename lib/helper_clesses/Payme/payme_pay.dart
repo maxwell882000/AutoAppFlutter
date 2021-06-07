@@ -56,7 +56,7 @@ class PaymePay extends StatelessWidget {
                       height: Get.height * 0.01,
                     ),
                     TextFieldHelperClean(
-                        nameOfHelper: "Введите номер карты",
+                        nameOfHelper: "Введите номер карты".tr,
                         onSave: _.setNumberCard,
                         onValidate: _.validateNumber),
                     SizedBox(
@@ -77,7 +77,7 @@ class PaymePay extends StatelessWidget {
                         ),
                         margin(),
                         Text(
-                          "Срок\nДействия".tr,
+                          "Срок".tr + "\n" + "Действия".tr,
                         ),
                         margin(),
                         Expanded(

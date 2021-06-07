@@ -23,7 +23,7 @@ import 'package:provider/provider.dart';
 import '../Buttons.dart';
 import '../LoadingScreen.dart';
 import 'ExportExcel.dart';
-
+import 'package:get/get.dart';
 class AppBarForAccount extends StatefulWidget implements PreferredSizeWidget {
   final Widget nameBar;
   final VisibilityClass visible;
@@ -45,13 +45,13 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
   final VisibilityClass visible;
   final CheckProvider check = new CheckProvider();
   final List filters = [
-    'БЛИЖАЙШАЯ ЗАМЕНА / РЕМОНТ',
-    'НЕДАВНО ДОБАВЛЕННЫЕ',
-    'ВРУЧНУЮ ДОБАВЛЕННЫЕ'
+    'БЛИЖАЙШАЯ ЗАМЕНА / РЕМОНТ'.tr,
+    'НЕДАВНО ДОБАВЛЕННЫЕ'.tr,
+    'ВРУЧНУЮ ДОБАВЛЕННЫЕ'.tr
   ];
   final List setting = [
     [
-      'ИМПОРТ / ЭКСПОРТ ДАННЫХ В EXCEL',
+      'ИМПОРТ / ЭКСПОРТ ДАННЫХ В EXCEL'.tr,
       (context) {
         ExportExcel export = new ExportExcel();
         Future path = export.export();
@@ -67,7 +67,7 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
       }
     ],
     [
-      'ПЕРЕДАТЬ ДАННЫЕ ДРУГОМУ',
+      'ПЕРЕДАТЬ ДАННЫЕ ДРУГОМУ'.tr,
       (context) {
         final double width = MediaQuery.of(context).size.width;
         final result = CustomDialog.dialog(
@@ -82,16 +82,16 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
       }
     ],
     [
-      'ТРЕКИНГ ПОЕЗДОК',
+      'ТРЕКИНГ ПОЕЗДОК'.tr,
       (context) {
-        Navigator.popAndPushNamed(context, "/map");
+        Navigator.popAndPushNamed(context, "/track-user");
       }
-    ],
-    ['ИСТОРИЯ АВТО', (context) {
+    ] ,
+    ['ИСТОРИЯ АВТО'.tr, (context) {
         Navigator.popAndPushNamed(context, "/history");
     }],
     [
-      'ПОЛУЧИТЬ PRO ДОСТУП',
+      'ПОЛУЧИТЬ PRO ДОСТУП'.tr,
       (context) {
         Navigator.popAndPushNamed(context, "/pro_account");
       },
@@ -390,7 +390,7 @@ class ExportInExcell extends StatelessWidget {
              )),
              Visibility(
                visible: load.value,
-               child: Text("Ваша excel сохранен в"),
+               child: Text("Ваш excel сохранен в".tr),
              )
            ],
          )
@@ -418,9 +418,9 @@ class _ShareDataState extends State<ShareData> {
     selectOptionsErrorProvider.setNextPage(true);
     SingletonConnection().getTransports().then((value) {
       List items = [
-        [1, "Аккаунт передачи", "Телефон или mail", 0],
+        [1, "Аккаунт передачи".tr, "Телефон или mail".tr, 0],
       ];
-      List names = [0, "Транспорт", "Выберите Транспорт"];
+      List names = [0, "Транспорт".tr, "Выберите Транспорт".tr];
       setState(() {
         value.forEach((element) {
           accounts.add([element['nameOfTransport'], element['id']]);
@@ -453,7 +453,7 @@ class _ShareDataState extends State<ShareData> {
     final provider = Provider.of<ErrorMessageProvider>(context, listen: false);
     List errors = provider.errorsMessageWithText;
     var selected = errors
-        .where((element) => !element[1].selected && element[0] != "ТЕХ ПАСПОРТ")
+        .where((element) => !element[1].selected && element[0] != "ТЕХ ПАСПОРТ".tr)
         .map((element) => errors.indexOf(element));
     Widget list;
     if (selected.length == 0) {
@@ -468,7 +468,7 @@ class _ShareDataState extends State<ShareData> {
         if (Requests.NOT_FOUND == value) {
           selectOptionsErrorProvider.setNextPage(false);
           selectOptionsErrorProvider.errorsMessageWithText[0][1]
-              .setNameOfHelper("Пользователь с таким данными не существует");
+              .setNameOfHelper("Пользователь с таким данными не существует".tr);
           selectOptionsErrorProvider.errorsMessageWithText[0][1].setError(true);
         } else if (Requests.NO_INTERNET == value) {
           selectOptionsErrorProvider.setNextPage(false);
@@ -533,7 +533,7 @@ class _ShareDataState extends State<ShareData> {
                               child: Buttons(
                                 onPressed: (context) => share(context),
                                 hexValueOFColor: "#7FA5C9",
-                                nameOfTheButton: "Передать",
+                                nameOfTheButton: "Передать".tr,
                                 height: width * 0.8,
                               ),
                             ),
@@ -545,7 +545,7 @@ class _ShareDataState extends State<ShareData> {
                                 onPressed: (context) =>
                                     Navigator.of(context).pop(),
                                 hexValueOFColor: "#7FA5C9",
-                                nameOfTheButton: "Назад",
+                                nameOfTheButton: "Назад".tr,
                                 height: width * 0.8,
                               ),
                             ),

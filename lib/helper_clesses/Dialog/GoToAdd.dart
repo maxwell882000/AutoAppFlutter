@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:get/get.dart';
 import 'ChoiceDialog.dart';
 
 class GoToAdd {
@@ -13,7 +13,7 @@ class GoToAdd {
       context: context,
       barrierDismissible: false,
       builder: (context) => ChoiceDialog(
-          text: "Вы хотите посетить это сайт?",
+          text: "Вы хотите посетить это сайт?".tr,
         )
     );
 

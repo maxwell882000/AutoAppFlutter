@@ -40,6 +40,7 @@ class ExportExcel {
     double _initialRun;
     bool _proAccount;
     double _average = 0;
+    excel.insertRow("new one", 2);
     excel.rename("Sheet1", "AutoApp");
 
     var sheet = excel['AutoApp'];

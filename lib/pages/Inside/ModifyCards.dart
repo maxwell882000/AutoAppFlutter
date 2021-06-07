@@ -31,16 +31,16 @@ class ModifyCards extends StatelessWidget {
   final ErrorMessageProvider provider = new ErrorMessageProvider("");
 
   final ErrorMessageProvider runProvider =
-      new ErrorMessageProvider("Введите текущий пробег");
+      new ErrorMessageProvider("Введите текущий пробег".tr);
 
   final ErrorMessageProvider commentsProvider =
-      new ErrorMessageProvider("Ваш комментарий");
+      new ErrorMessageProvider("Ваш комментарий".tr);
   final ErrorMessageProvider repeatDistProvider =
-      new ErrorMessageProvider("Введите расстояние");
+      new ErrorMessageProvider("Введите расстояние".tr);
   final ErrorMessageProvider repeatTimeProvider =
-      new ErrorMessageProvider("Введите число");
+      new ErrorMessageProvider("Введите число".tr);
   final ErrorMessageProvider dateProvider =
-      new ErrorMessageProvider("Дата на момент замены");
+      new ErrorMessageProvider("Дата на момент замены".tr);
   final CheckProvider check = new CheckProvider();
   final UserProvider fee = new UserProvider();
 
@@ -54,7 +54,7 @@ class ModifyCards extends StatelessWidget {
         children: <Widget>[
           Flexible(
             child: Text(
-              "Продолжить использование карточки ?",
+              "Продолжить использование карточки ?".tr,
               style: TextStyle(
                 color: HexColor("#42424A"),
                 fontFamily: 'Montserrat',
@@ -184,7 +184,7 @@ class ModifyCards extends StatelessWidget {
                     SizedBox(
                       height: width * 0.02,
                     ),
-                    Text("Или"),
+                    Text("Или".tr),
                     SizedBox(
                       height: width * 0.02,
                     ),
@@ -313,7 +313,7 @@ class ModifyCards extends StatelessWidget {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text(
-                'Ожидание загрузки фото',
+                'Ожидание загрузки фото'.tr,
                 style: TextStyle(
                   color: HexColor("#42424A"),
                   fontFamily: 'Montserrat',
@@ -323,7 +323,7 @@ class ModifyCards extends StatelessWidget {
               ),
               actions: <Widget>[
                 TextButton(
-                  child: Text('Ок'),
+                  child: Text('Ок'.tr),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -349,7 +349,7 @@ class ModifyCards extends StatelessWidget {
             SingletonUserInformation().setRun(run);
             SingletonUserInformation().updateRun();
           } else {
-            runProvider.setNameOfHelper("Пробег всегда должен увеличиваться");
+            runProvider.setNameOfHelper("Пробег всегда должен увеличиваться".tr);
             runProvider.setError(true);
             return;
           }
@@ -420,7 +420,7 @@ class ModifyCards extends StatelessWidget {
           width: Get.width * 0.02,
         ),
         Text(
-          "Добавить",
+          "Добавить".tr,
           style: TextStyle(
             color: HexColor("#42424A"),
             fontFamily: 'Montserrat',
@@ -446,7 +446,7 @@ class ModifyCards extends StatelessWidget {
             middleChild: ListExpenses(child: addExpenses()),
             childAboveButton: [
               'assets/reload.svg',
-              "Продолжить\nиспользование\nкарточки ?".tr,
+              "Продолжить".tr + "\n" + "использование".tr+"\n" + "карточки".tr + " ?",
               choiceWidget(width, repeatDistProvider, repeatTimeProvider),
             ],
             provider: provider,

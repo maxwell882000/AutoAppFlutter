@@ -64,21 +64,7 @@ void backTask() {
       );
     }
     else {
-      NotificationService.initializeNotification('track_channel');
-      AwesomeNotifications().createNotification(
-        content: NotificationContent(
-            id: 10,
-            channelKey: 'track_channel',
-            title: 'В неетууу'.tr,
-            body: 'Задействовать режим наблюдения?'.tr),
-        actionButtons: [
-          NotificationActionButton(
-              key: ButtonNotificationKeys.TRACKING_KEY,
-              label: "Да",
-              enabled: true,
-              buttonType: ActionButtonType.Default)
-        ],
-      );
+
     }
     return Future.value(true);
   });

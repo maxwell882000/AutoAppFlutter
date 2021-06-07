@@ -2,7 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/helper_clesses/InsideOfAccount/Check.dart';
-
+import 'package:get/get.dart';
 
 import 'package:hexcolor/hexcolor.dart';
 
@@ -33,7 +33,7 @@ class CheckAgreement extends StatelessWidget {
               width: width * 0.6,
               child: Wrap(direction: Axis.horizontal, children: [
                 Text(
-                  "Я ознакомился и соглашаюсь с ",
+                  "Я ознакомился и соглашаюсь с ".tr,
                   overflow: TextOverflow.visible,
                   style: TextStyle(
                     fontFamily: "Montserrat",
@@ -44,7 +44,7 @@ class CheckAgreement extends StatelessWidget {
                 ),
                 GestureDetector(
                   child: Text(
-                    "Правилами пользования",
+                    "Правилами пользования".tr,
                     overflow: TextOverflow.visible,
                     style: TextStyle(
                       decoration: TextDecoration.underline,

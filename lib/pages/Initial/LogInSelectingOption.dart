@@ -28,11 +28,11 @@ class _LogInSelectingOptionState extends State<LogInSelectingOption> {
 
   final double moveHorizontalCar = -0.1;
 
-  final String nameButtonFacebook = "Зарегестрироваться через Facebook";
+  final String nameButtonFacebook = "Зарегестрироваться через Facebook".tr;
 
-  final String nameButtonGoogle = "Зарегестрироватьcя через Google";
+  final String nameButtonGoogle = "Зарегестрироватьcя через Google".tr;
 
-  final String nameButtonUsual = "Заргестрироваться";
+  final String nameButtonUsual = "Заргестрироваться".tr;
 
   final CheckProvider checkProvider = new CheckProvider();
 
@@ -54,7 +54,7 @@ class _LogInSelectingOptionState extends State<LogInSelectingOption> {
         _launch();
       else {
         Scaffold.of(context).showSnackBar(
-          const SnackBar(content: Text('Вы не согласились с условиями!')),
+           SnackBar(content: Text('Вы не согласились с условиями!'.tr)),
         );
       }
     };
@@ -261,7 +261,7 @@ class _LogInSelectingOptionState extends State<LogInSelectingOption> {
                       child: Column(
                         children: [
                           Text(
-                            "Уже есть аккаунт?",
+                            "Уже есть аккаунт?".tr,
                             style: TextStyle(
                               fontFamily: "Montserrat",
                               fontSize: width * 0.035,
@@ -277,7 +277,7 @@ class _LogInSelectingOptionState extends State<LogInSelectingOption> {
                             onPressed: login(() {
                               Navigator.of(context).pushNamed("/select/login");
                             }),
-                            nameOfTheButton: "Войти сейчас",
+                            nameOfTheButton: "Войти сейчас".tr,
                           ),
                         ],
                       ),

@@ -14,22 +14,22 @@ import 'package:flutter_projects/provider/ErrorMessageProvider.dart';
 
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
-
+import 'package:get/get.dart';
 class CreateCards extends StatelessWidget {
   CreateCards({Key key}) : super(key: key);
 
   final ErrorMessageProvider provider =
-      new ErrorMessageProvider("Выберите название");
+      new ErrorMessageProvider("Выберите название".tr);
   final ErrorMessageProvider runProvider =
-      new ErrorMessageProvider("Введите текущий пробег");
+      new ErrorMessageProvider("Введите текущий пробег".tr);
   final ErrorMessageProvider commentsProvider =
-      new ErrorMessageProvider("Ваш комментарий");
+      new ErrorMessageProvider("Ваш комментарий".tr);
 
   final ErrorMessageProvider repeatDistProvider =
-      new ErrorMessageProvider("Введите растояние");
+      new ErrorMessageProvider("Введите растояние".tr);
   final ErrorMessageProvider repeatTimeProvider =
-      new ErrorMessageProvider("Введите число");
-  final ErrorMessageProvider dataProvider = new ErrorMessageProvider("Введите дату");
+      new ErrorMessageProvider("Введите число".tr);
+  final ErrorMessageProvider dataProvider = new ErrorMessageProvider("Введите дату".tr);
   Function sendData() {
     return (BuildContext context) {};
   }
@@ -55,7 +55,7 @@ class CreateCards extends StatelessWidget {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text(
-                'Ожидание загрузки фото',
+                'Ожидание загрузки фото'.tr,
                 style: TextStyle(
                   color: HexColor("#42424A"),
                   fontFamily: 'Montserrat',
@@ -65,7 +65,7 @@ class CreateCards extends StatelessWidget {
               ),
               actions: <Widget>[
                 TextButton(
-                  child: Text('Ок'),
+                  child: Text('Ок'.tr),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -88,7 +88,7 @@ class CreateCards extends StatelessWidget {
             SingletonUserInformation().setRun(run);
             SingletonUserInformation().updateRun();
           } else {
-            runProvider.setNameOfHelper("Пробег всегда должен увеличиваться");
+            runProvider.setNameOfHelper("Пробег всегда должен увеличиваться".tr);
             runProvider.setError(true);
             return;
           }
@@ -198,12 +198,12 @@ class CreateCards extends StatelessWidget {
           runProvider: runProvider,
           commentsProvider: commentsProvider,
           dateProvider: dataProvider,
-          nameButton: "Готово",
-          appBarName: "Создание карточки",
+          nameButton: "Готово".tr,
+          appBarName: "Создание карточки".tr,
           recommendationFunction: recomendationCards(context),
           childAboveButton: [
             'assets/reload.svg',
-            "Заполанировать\nзамену",
+            "Заполанировать".tr + "\n" + "замену".tr,
             CardStatic.choiceWidget(width, repeatDistProvider, repeatTimeProvider)
           ],
           readyButton: ready(width),

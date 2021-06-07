@@ -58,7 +58,7 @@ class CodeVerification extends StatelessWidget {
                       Form(
                         key: _formKey,
                         child: TextFieldHelperClean(
-                          nameOfHelper: "Введите код",
+                          nameOfHelper: "Введите код".tr,
                           onSave: _.setCode,
                           onValidate:_.validateCode,
                           textInputType: TextInputType.number,

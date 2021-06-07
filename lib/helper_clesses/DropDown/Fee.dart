@@ -10,7 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
-
+import 'package:get/get.dart';
 class Fee extends StatefulWidget {
   final int id;
   final String initName;
@@ -184,7 +184,7 @@ class _FeeState extends State<Fee> {
                             fontSize: width * 0.03,
                           ),
                           decoration: new InputDecoration(
-                            hintText: "Введите Название",
+                            hintText: "Введите Название".tr,
                             border: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             enabledBorder: InputBorder.none,
@@ -219,7 +219,7 @@ class _FeeState extends State<Fee> {
                               fontWeight: FontWeight.bold,
                             ),
                             decoration: new InputDecoration(
-                              hintText: "Введите Сумму",
+                              hintText: "Введите Сумму".tr,
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,

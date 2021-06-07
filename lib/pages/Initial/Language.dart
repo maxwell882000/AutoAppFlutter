@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 class Language extends StatelessWidget {
   Language({Key key}) : super(key: key);
 
-  final List items = ["Русский Язык", "O`zbek tilli"];
+  final List items = ["Русский Язык".tr, "O`zbek tilli".tr];
 
   final ErrorMessageProvider errorsMessage =
       new ErrorMessageProvider("Выберите Язык".tr);
@@ -64,7 +64,7 @@ class Language extends StatelessWidget {
           ),
           button: Buttons(
             hexValueOFColor: "#7FA6C9",
-            nameOfTheButton: "Готово",
+            nameOfTheButton: "Готово".tr,
             onPressed: this.selectedLanguage,
             height: width,
           ),

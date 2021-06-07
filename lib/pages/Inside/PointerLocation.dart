@@ -15,7 +15,7 @@ import 'package:geolocator/geolocator.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
-
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class PointerLocation extends StatefulWidget {
@@ -200,7 +200,7 @@ class Comments extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        "Комментарий",
+                        "Комментарий".tr,
                         style: TextStyle(
                             color: HexColor("#42424A"),
                             fontFamily: 'Montserrat',
@@ -219,7 +219,7 @@ class Comments extends StatelessWidget {
                   onPressed: (context) =>
                       Navigator.of(context).pop(text.inputData),
                   hexValueOFColor: "#7FA5C9",
-                  nameOfTheButton: "Ок",
+                  nameOfTheButton: "Ок".tr,
                   height: width * 0.8,
                   width: width * 0.4,
                 ),

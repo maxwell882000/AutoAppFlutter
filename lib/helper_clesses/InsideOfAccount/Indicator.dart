@@ -5,9 +5,9 @@ import 'package:flutter_projects/Provider/UserProvider.dart';
 import 'package:flutter_projects/Singleton/SingletonConnection.dart';
 import 'package:flutter_projects/Singleton/SingletonUnits.dart';
 import 'package:flutter_projects/Singleton/SingletonUserInformation.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import "package:get/get.dart";
 import 'package:hexcolor/hexcolor.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:provider/provider.dart';
 
 class Indicator extends StatefulWidget {
@@ -241,7 +241,7 @@ class _IndicatorState extends State<Indicator> {
                   child: Align(
                     alignment: Alignment.topRight,
                     child: Text(
-                        dataTime is int || dataTime is double? "через ${dataTime.toInt()} ${SingletonUnits().convertDaysToString(dataTime.toInt())}":dataTime,
+                        dataTime is int || dataTime is double? "${"через".tr} ${dataTime.toInt()} ${SingletonUnits().convertDaysToString(dataTime.toInt())}":dataTime,
                       textAlign: TextAlign.end,
                       style: TextStyle(
                           color: HexColor("42424A"),

@@ -120,12 +120,12 @@ class _StoreCardsState extends State<StoreCards> {
                   children: [
                     textStart(
                         svg: 'assets/calendar.svg',
-                        mainText: "Дата на момент замены",
+                        mainText: "Дата на момент замены".tr,
                         secondaryText:
                             f.format(SingletonUserInformation().newCard.date)),
                     textStart(
                         svg: 'assets/car.svg',
-                        mainText: "Пробег на момент замены",
+                        mainText: "Пробег на момент замены".tr,
                         secondaryText: SingletonUserInformation()
                             .newCard
                             .change
@@ -137,7 +137,7 @@ class _StoreCardsState extends State<StoreCards> {
                       },
                         child: textStart(
                             svg: 'assets/location.svg',
-                            mainText: "Посмотреть отмеченные точки на карте")),
+                            mainText: "Посмотреть отмеченные точки на карте".tr)),
                     SizedBox(
                       height: Get.width * 0.02,
                     ),
@@ -150,7 +150,7 @@ class _StoreCardsState extends State<StoreCards> {
                     ),
                     textStart(
                         svg: 'assets/speech_bubble.svg',
-                        mainText: "Коментарий",
+                        mainText: "Коментарий".tr,
                         secondaryText:
                             SingletonUserInformation().newCard.comments),
                   ],

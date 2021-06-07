@@ -9,7 +9,7 @@ import 'package:flutter_projects/helper_clesses/InsideOfAccount/Recomendation.da
 import 'package:flutter_projects/helper_clesses/TextFlexible.dart';
 import 'package:flutter_projects/models/visibility.dart';
 import 'package:hexcolor/hexcolor.dart';
-
+import 'package:get/get.dart';
 class SingleRecomendation extends StatelessWidget {
   SingleRecomendation({Key key}) : super(key: key);
 
@@ -22,7 +22,7 @@ class SingleRecomendation extends StatelessWidget {
       ),
       nameBar: TextFlexible(
         key: key,
-        text: "Рекомендации по ${SingletonRecomendation().choosenRecommendation.mainName} для ${SingletonUserInformation().marka} ${SingletonUserInformation().model}",
+        text: "${"Рекомендации по".tr} ${SingletonRecomendation().choosenRecommendation.mainName} для ${SingletonUserInformation().marka} ${SingletonUserInformation().model}",
         numberOfCharacters: 25,
       ),
       body: Recomendation(

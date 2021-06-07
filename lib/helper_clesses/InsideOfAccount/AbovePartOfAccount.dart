@@ -4,7 +4,7 @@ import 'package:flutter_projects/Provider/UserProvider.dart';
 import 'package:flutter_projects/Singleton/SingletonUnits.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
-
+import 'package:get/get.dart';
 class AbovePartOfAccount extends StatelessWidget {
   final List informationAboutCar;
   final double width;
@@ -76,7 +76,7 @@ class AbovePartOfAccount extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Текущий пробег:",
+                  "Текущий пробег:".tr,
                   style: TextStyle(
                     fontFamily: "Montserrat",
                     fontSize: width * 0.025,
@@ -103,7 +103,7 @@ class AbovePartOfAccount extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-           "Срок Владения:",
+           "Срок Владения:".tr,
            style: TextStyle(
                  fontFamily: "Montserrat",
                  fontSize: width * 0.025,
@@ -130,7 +130,7 @@ class AbovePartOfAccount extends StatelessWidget {
                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                children: [
                  Text(
-           "Средний пробег:  ",
+           "Средний пробег:".tr + " ",
            style: TextStyle(
                  fontFamily: "Montserrat",
                  fontSize: width * 0.025,
@@ -191,7 +191,7 @@ class AbovePartOfAccount extends StatelessWidget {
                       ),
                       Flexible(
                         child: Text(
-                          "деталей нуждаются в проверке/замене",
+                          "деталей нуждаются в проверке/замене".tr,
                           style: TextStyle(
                             fontFamily: "Montserrat",
                             fontSize: width * 0.03,
@@ -225,7 +225,7 @@ class AbovePartOfAccount extends StatelessWidget {
                   children: [
                     Flexible(
                       child: Text(
-                        "Расход на детали за всё время",
+                        "Расход на детали за всё время".tr,
                         style: TextStyle(
                           fontFamily: "Montserrat",
                           fontSize: width * 0.03,
@@ -270,7 +270,7 @@ class AbovePartOfAccount extends StatelessWidget {
                   children: [
                     Flexible(
                       child: Text(
-                        "Расход на детали за этот месяц",
+                        "Расход на детали за этот месяц".tr,
                         style: TextStyle(
                           fontFamily: "Montserrat",
                           fontSize: width * 0.03,

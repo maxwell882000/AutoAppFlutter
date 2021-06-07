@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-
+import 'package:get/get.dart';
 class AlertDialogInformation extends StatelessWidget {
   final String text;
   final String title;
@@ -28,7 +28,7 @@ class AlertDialogInformation extends StatelessWidget {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text('Ок'),
+          child: Text('Ок'.tr),
           onPressed: () {
             Navigator.of(context).pop();
           },

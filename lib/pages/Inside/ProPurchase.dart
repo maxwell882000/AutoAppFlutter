@@ -14,8 +14,8 @@ import 'package:get/get.dart';
 class ProPurchase extends StatelessWidget {
   final List items = [
     "ВОЗМОЖНОСТЬ ДОБАВИТЬ БОЛЬШЕ 1 АВТО В ПРОФИЛЬ".tr,
-    "Возможность отслеживать и добавлять неограниченное количество авто деталей (в бесплатном можно отслеживать 10 и добавить 5)",
-    "НЕТ РЕКЛАМЫ",
+    "Возможность отслеживать и добавлять неограниченное количество авто деталей (в бесплатном можно отслеживать 10 и добавить 5)".tr,
+    "НЕТ РЕКЛАМЫ".tr,
   ];
   final List icons = [
     ['assets/paynet.png', () {}],
@@ -89,7 +89,7 @@ class ProPurchase extends StatelessWidget {
         ),
         nameBar: TextFlexible(
           key: key,
-          text: "Получить про доступ",
+          text: "Получить про доступ".tr,
           numberOfCharacters: 25,
         ),
         body: Container(
@@ -107,7 +107,7 @@ class ProPurchase extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    text(text: "PRO ДОСТУП ВКЛЮЧАЕТ В СЕБЯ:", width: width),
+                    text(text: "PRO ДОСТУП ВКЛЮЧАЕТ В СЕБЯ:".tr, width: width),
                     SizedBox(
                       height: width * 0.05,
                     ),
@@ -139,7 +139,7 @@ class ProPurchase extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    text(text: "PRO ДОСТУП ВКЛЮЧАЕТ В СЕБЯ:", width: width),
+                    text(text: "PRO ДОСТУП ВКЛЮЧАЕТ В СЕБЯ:".tr, width: width),
                     SizedBox(
                       height: width * 0.05,
                     ),

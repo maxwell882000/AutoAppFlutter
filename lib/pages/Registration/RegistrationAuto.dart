@@ -141,7 +141,7 @@ class RegistrationAuto extends StatelessWidget {
         value: selectOptionsErrorProvider,
         child: SelectOptions(
           icon: "assets/carfront.svg",
-          aboveText: "Регистрация Транспортного Средства",
+          aboveText: "Регистрация Транспортного Средства".tr,
           width: width,
           height: height*0.9,
           clickEvent: readyToTheNext,

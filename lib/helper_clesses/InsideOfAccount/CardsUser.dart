@@ -28,7 +28,7 @@ import '../Buttons.dart';
 import '../TextFlexible.dart';
 import 'CardsImages.dart';
 import 'MainMenu.dart';
-
+import 'package:get/get.dart';
 class CardsUser extends StatefulWidget {
   final ErrorMessageProvider provider;
   final ErrorMessageProvider runProvider;
@@ -210,7 +210,7 @@ class _CardsUserState extends State<CardsUser> {
         {
 
           setState(() {
-            provider.setNameOfHelper("Введите название");
+            provider.setNameOfHelper("Введите название".tr);
             provider.setInputData("");
             visibility = 1;
             swap = swapToText(width);
@@ -229,7 +229,7 @@ class _CardsUserState extends State<CardsUser> {
         if (visibility != 2) {
 
           setState(() {
-            provider.setNameOfHelper("Выберите название");
+            provider.setNameOfHelper("Выберите название".tr);
             provider.setInputData("");
             visibility = 2;
             swap = swapToDrop(width);
@@ -389,10 +389,10 @@ class _CardsUserState extends State<CardsUser> {
                    return Buttons(
                       hexValueOFColor: "#32BEA6",
                       width: width,
-                      nameOfTheButton: "Рекомендации по ${SingletonRecomendation()
+                      nameOfTheButton: "${"Рекомендации по".tr} ${SingletonRecomendation()
                           .chosenRecommend(provider.inputData)
                           ?.mainName ??
-                          "сервису"}  для ${SingletonUserInformation()
+                          "сервису".tr}  ${"для".tr} ${SingletonUserInformation()
                           .marka} ${SingletonUserInformation().model}",
                       height: width * 1.2,
                       onPressed: recommendationFunction,
@@ -482,7 +482,7 @@ class _CardsUserState extends State<CardsUser> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    rowSvgText("assets/clip.svg", "Прикрепить", width),
+                    rowSvgText("assets/clip.svg", "Прикрепить".tr, width),
                     Row(
                       children: [
                         GestureDetector(
@@ -527,7 +527,7 @@ class _CardsUserState extends State<CardsUser> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         rowSvgText(
-                            "assets/speech_bubble.svg", "Комментарии", width),
+                            "assets/speech_bubble.svg", "Комментарии".tr, width),
                         marginWidth(width),
                         marginWidth(width),
                         marginWidth(width),

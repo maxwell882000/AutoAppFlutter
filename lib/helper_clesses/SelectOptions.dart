@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-
+import 'package:get/get.dart';
 import 'InitialPointOfAccount/Base.dart';
 import 'Buttons.dart';
 import 'ChildAndButton.dart';
@@ -49,7 +49,7 @@ class SelectOptions extends StatelessWidget {
         button: Buttons(
           width: width * 0.4,
           hexValueOFColor: "#7FA6C9",
-          nameOfTheButton: "Готово",
+          nameOfTheButton: "Готово".tr,
           height: width,
           onPressed: clickEvent(loadToHard),
         ),

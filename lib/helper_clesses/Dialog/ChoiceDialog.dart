@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-
+import 'package:get/get.dart';
 class ChoiceDialog extends StatelessWidget {
   final String text;
   ChoiceDialog({Key key, this.text}):super(key: key);
@@ -18,13 +18,13 @@ class ChoiceDialog extends StatelessWidget {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text('Да'),
+          child: Text('Да'.tr),
           onPressed: () {
             Navigator.of(context).pop(true);
           },
         ),
         TextButton(
-          child: Text('Нет'),
+          child: Text('Нет'.tr),
           onPressed: () {
             Navigator.of(context).pop(false);
           },

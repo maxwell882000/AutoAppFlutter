@@ -19,7 +19,7 @@ class ListExpenses extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Расходы",
+                "Расходы".tr,
                 style: TextStyle(
                   color: HexColor("#42424A"),
                   fontFamily: 'Montserrat',

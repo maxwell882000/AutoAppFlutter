@@ -13,7 +13,7 @@ class DialogSaved extends StatelessWidget {
 
     return AlertDialogInformation(
       text: '${"Вы можете посмотреть в папке".tr} $text',
-      title: 'Ваши данные сохранены',
+      title: 'Ваши данные сохранены'.tr,
     );
   }
 }
