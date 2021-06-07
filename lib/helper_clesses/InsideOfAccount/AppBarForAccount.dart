@@ -15,6 +15,7 @@ import 'package:flutter_projects/helper_clesses/DropDown/ListOfDropDownItemWithT
 import 'package:flutter_projects/helper_clesses/statefull_wrapper.dart';
 import 'package:flutter_projects/models/visibility.dart';
 import 'package:flutter_projects/provider/ErrorMessageProvider.dart';
+import 'package:flutter_projects/service/notification_service.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -24,6 +25,7 @@ import '../Buttons.dart';
 import '../LoadingScreen.dart';
 import 'ExportExcel.dart';
 import 'package:get/get.dart';
+
 class AppBarForAccount extends StatefulWidget implements PreferredSizeWidget {
   final Widget nameBar;
   final VisibilityClass visible;
@@ -55,14 +57,13 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
       (context) {
         ExportExcel export = new ExportExcel();
         Future path = export.export();
+        CustomDialog.show(
+            title: "Создание excel".tr,
+            text:
+                "Создание excel началось , мы уведомим вас после окончания".tr);
+
         path.then((value) {
-            showDialog(
-                context: context,
-                builder: (context) {
-                return DialogSaved(
-                  text: value,
-                );
-              });
+          NotificationService().createNotificationExcell(path: value);
         });
       }
     ],
@@ -86,10 +87,13 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
       (context) {
         Navigator.popAndPushNamed(context, "/track-user");
       }
-    ] ,
-    ['ИСТОРИЯ АВТО'.tr, (context) {
+    ],
+    [
+      'ИСТОРИЯ АВТО'.tr,
+      (context) {
         Navigator.popAndPushNamed(context, "/history");
-    }],
+      }
+    ],
     [
       'ПОЛУЧИТЬ PRO ДОСТУП'.tr,
       (context) {
@@ -376,26 +380,24 @@ class Filtering extends StatelessWidget {
 
 class ExportInExcell extends StatelessWidget {
   final load = false.obs;
+
   @override
   Widget build(BuildContext context) {
-   return StatefulWrapper(
-     onInit: () {
-
-     },
-     child: Obx(
-         () => Stack(
-           children: [
-             Visibility(child: LoadingScreen(
-               visible: !load.value,
-             )),
-             Visibility(
-               visible: load.value,
-               child: Text("Ваш excel сохранен в".tr),
-             )
-           ],
-         )
-     ),
-   );
+    return StatefulWrapper(
+      onInit: () {},
+      child: Obx(() => Stack(
+            children: [
+              Visibility(
+                  child: LoadingScreen(
+                visible: !load.value,
+              )),
+              Visibility(
+                visible: load.value,
+                child: Text("Ваш excel сохранен в".tr),
+              )
+            ],
+          )),
+    );
   }
 }
 
@@ -453,7 +455,8 @@ class _ShareDataState extends State<ShareData> {
     final provider = Provider.of<ErrorMessageProvider>(context, listen: false);
     List errors = provider.errorsMessageWithText;
     var selected = errors
-        .where((element) => !element[1].selected && element[0] != "ТЕХ ПАСПОРТ".tr)
+        .where(
+            (element) => !element[1].selected && element[0] != "ТЕХ ПАСПОРТ".tr)
         .map((element) => errors.indexOf(element));
     Widget list;
     if (selected.length == 0) {

@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -10,14 +11,15 @@ class NotificationService extends GetxService {
     initializeNotification('usual');
     initializeNotification('press_channel');
     initializeNotification('push_channel');
+    initializeNotification('create_excell');
     requestPermission();
     setActionListener();
     return this;
   }
-
+ static NotificationService get to => Get.find<NotificationService>();
   static void initializeNotification(String channelKey) {
     AwesomeNotifications().initialize(
-      // set the icon to null if you want to use the default app icon
+        // set the icon to null if you want to use the default app icon
         null,
         [
           NotificationChannel(
@@ -28,6 +30,29 @@ class NotificationService extends GetxService {
               defaultColor: Colors.white,
               ledColor: Colors.white)
         ]);
+  }
+
+  void createNotificationExcell({String path}) {
+    createNotification(
+      channelKey: "create_excell",
+      body: '${"Вы можете посмотреть в папке".tr} $path',
+      title: 'Ваши данные сохранены'.tr,
+    );
+  }
+
+  void createNotification({
+    String channelKey,
+    String title,
+    String body,
+  }) {
+    int id = Random().nextInt(100000);
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+      id: id,
+      channelKey: channelKey,
+      title: title,
+      body: body,
+    ));
   }
 
   void requestPermission() {
@@ -42,18 +67,16 @@ class NotificationService extends GetxService {
 
   void setActionListener() {
     AwesomeNotifications().actionStream.listen((receivedNotification) {
-
       print(receivedNotification.buttonKeyPressed);
       print(receivedNotification.buttonKeyInput);
 
-
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        if (ButtonNotificationKeys.TRACKING_KEY == receivedNotification.buttonKeyPressed) {
+        if (ButtonNotificationKeys.TRACKING_KEY ==
+            receivedNotification.buttonKeyPressed) {
           Navigator.of(Get.context).pushNamed('/track-user');
         }
       });
     });
-
   }
 }
 
