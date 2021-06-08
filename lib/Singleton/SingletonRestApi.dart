@@ -17,7 +17,7 @@ class SingletonRestApi {
 
       return await http.post(Uri.parse(url), headers: headers, body: body);
     } catch (e) {
-      print("POST ERROR");
+      print("POST ERR");
       showErrorSnackBar(error);
     }
   }
