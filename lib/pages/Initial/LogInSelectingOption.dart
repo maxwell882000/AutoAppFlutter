@@ -279,6 +279,9 @@ class _LogInSelectingOptionState extends State<LogInSelectingOption> {
                             }),
                             nameOfTheButton: "Войти сейчас".tr,
                           ),
+                          SizedBox(
+                            height: width * 0.04,
+                          ),
                         ],
                       ),
                     )

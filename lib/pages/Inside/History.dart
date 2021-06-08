@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class History extends StatelessWidget {
-
   const History({Key key}) : super(key: key);
 
   Future<List<Widget>> onLoad() async {
@@ -26,6 +25,7 @@ class History extends StatelessWidget {
     }
     return [];
   }
+
   Widget getIndicators(List indicator) {
     print(indicator[4]);
     return Indicator(
@@ -35,37 +35,34 @@ class History extends StatelessWidget {
         dataPercent: indicator[1],
         dataTime: indicator[2],
         dataDistance: indicator[3],
-        id: indicator[4]
-    );
+        id: indicator[4]);
   }
 
   @override
   Widget build(BuildContext context) {
-
-      return MainMenu(
-        visible: new VisibilityClass(
-          filterVisible: false,
-          menuVisible: true,
-          settingsCross: false,
-          clearMenu: false,
-        ),
-        nameBar: TextFlexible(
-          text: "История".tr,
-        ),
-        body: Consumer<UserProvider>(
-          builder: (context, provider, child) => Container(
-            margin: EdgeInsets.symmetric(horizontal: Get.width*0.05, vertical: Get.height*0.03),
+    return MainMenu(
+      visible: new VisibilityClass(
+        filterVisible: false,
+        menuVisible: true,
+        settingsCross: false,
+        clearMenu: false,
+      ),
+      nameBar: TextFlexible(
+        text: "История".tr,
+      ),
+      body: Consumer<UserProvider>(
+        builder: (context, provider, child) => Container(
+            margin: EdgeInsets.symmetric(
+                horizontal: Get.width * 0.05, vertical: Get.height * 0.03),
             child: ListOfIndicator(
-              height: Get.height,
-              getIndicators: getIndicators,
-              onLoad: () async {
-                  List<Widget> result =  await onLoad();
+                height: double.infinity,
+                getIndicators: getIndicators,
+                onLoad: () async {
+                  List<Widget> result = await onLoad();
                   provider.setLoading(false);
                   return result;
-              },
-            ),
-          ),
-        ),
-      );
+                })),
+      ),
+    );
   }
 }

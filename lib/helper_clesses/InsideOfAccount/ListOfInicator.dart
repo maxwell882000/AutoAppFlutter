@@ -196,7 +196,7 @@ class _ListOfIndicatorState extends State<ListOfIndicator> {
           visible: !provider.loading,
           child: Container(
             width: double.infinity,
-            height:widget.height ,
+            height: widget.height ,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

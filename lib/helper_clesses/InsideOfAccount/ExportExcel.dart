@@ -5,6 +5,7 @@ import 'package:flutter_projects/Singleton/SingletonConnection.dart';
 import 'package:flutter_projects/Singleton/SingletonUnits.dart';
 
 import 'package:flutter_projects/Singleton/SingletonUserInformation.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:excel/excel.dart';
 import 'package:get/get.dart';
@@ -14,8 +15,7 @@ class ExportExcel {
   Excel excel;
 
   ExportExcel() {
-
-   this.excel =  Excel.createExcel();
+    this.excel = Excel.createExcel();
   }
 
   Future getPermission() async {
@@ -25,7 +25,8 @@ class ExportExcel {
       await Permission.storage.request();
     }
   }
-  Future getMainData() async {
+
+  Future getMainData()  {
     excel.rename("Sheet1", "Главное".tr);
     var sheet = excel['Главное'.tr];
     sheet.appendRow(
@@ -61,7 +62,8 @@ class ExportExcel {
       "${SingletonUserInformation().expenses.all_time} ${SingletonUnits().currency}"
     ]);
   }
-  Future save() async{
+
+  Future save() async {
     Directory tempDir = await DownloadsPathProvider.downloadsDirectory;
     String appDocPath = tempDir.path;
     String pathOfFile = appDocPath.split("/").last;
@@ -71,19 +73,34 @@ class ExportExcel {
       ..writeAsBytesSync(excel.encode());
     return pathOfFile;
   }
-  Future getCards() async {
 
-    SingletonUserInformation().cards.storeCards.forEach((element) { });
+  Future getCards() async {
+    SingletonUserInformation().cards.storeCards.forEach((element) {
+      getCard(element);
+    });
   }
-  Future getCard(CardUser store) async {
+
+  Future getCard(CardUser store){
+    final f = new DateFormat.yMd().add_Hm();
     var sheet = excel[store.nameOfCard];
-    sheet.appendRow(["".tr, ]);
+    sheet.appendRow(["Дата замены детали".tr, f.format(store.date)]);
+    sheet.appendRow(["Пробег на момент замены".tr, store.change.run]);
+    sheet.appendRow(["Комментарий".tr, store.comments]);
+    sheet.appendRow(["Расходы".tr]);
+    store.expense.forEach((element) {
+      sheet.appendRow([
+        element.name,
+        "${element.sum} ${SingletonUnits().currency}",
+        element.amount
+      ]);
+    });
   }
+
   Future<String> export() async {
     await SingletonUserInformation().cards.loadStoreCards();
     await getPermission();
-    await getMainData();
-
+     getMainData();
+     getCards();
     return await save();
   }
 }

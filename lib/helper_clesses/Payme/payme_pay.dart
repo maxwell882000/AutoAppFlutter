@@ -27,89 +27,96 @@ class PaymePay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Get.height*0.4,
-      margin: EdgeInsets.symmetric(horizontal: Get.width*0.1),
+      height: Get.height * 0.4,
+      margin: EdgeInsets.symmetric(horizontal: Get.width * 0.1),
       color: Colors.white,
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Colors.white,
           body: Center(
               child: Form(
-        key: _formKey,
-        child: GetBuilder<PaymeController>(
-          init: PaymeController(),
-          builder: (_) => Stack(
-            children: [
-              LoadingScreen(
-                visible: _.loading,
-                color: "#7FA6C9",
-              ),
-              Visibility(
-                visible: !_.loading,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("Номер карты".tr),
-                    SizedBox(
-                      height: Get.height * 0.01,
-                    ),
-                    TextFieldHelperClean(
-                        nameOfHelper: "Введите номер карты".tr,
-                        onSave: _.setNumberCard,
-                        onValidate: _.validateNumber),
-                    SizedBox(
-                      height: Get.height * 0.02,
-                    ),
-                    Row(
+            key: _formKey,
+            child: GetBuilder<PaymeController>(
+              init: PaymeController(),
+              builder: (_) => Stack(
+                children: [
+                  LoadingScreen(
+                    visible: _.loading,
+                    color: "#7FA6C9",
+                  ),
+                  Visibility(
+                    visible: !_.loading,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Text(
+                          "Номер карты".tr,
+                          style: TextStyle(
+                            fontFamily: "Montserrat",
+                            fontSize: Get.width * 0.038,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          height: Get.height * 0.01,
+                        ),
+                        TextFieldHelperClean(
+                            nameOfHelper: "Введите номер карты".tr,
+                            onSave: _.setNumberCard,
+                            onValidate: _.validateNumber),
+                        SizedBox(
+                          height: Get.height * 0.02,
+                        ),
+                        Row(
                           children: [
-                            Text("Powered By"),
-                            Image.asset(
-                              PAYME_ICON,
-                              fit: BoxFit.fitWidth,
-                              width: Get.width * 0.2,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Powered By"),
+                                Image.asset(
+                                  PAYME_ICON,
+                                  fit: BoxFit.fitWidth,
+                                  width: Get.width * 0.2,
+                                ),
+                              ],
                             ),
+                            margin(),
+                            Text(
+                              "Срок".tr + "\n" + "Действия".tr,
+                            ),
+                            margin(),
+                            Expanded(
+                                child: TextFieldHelperClean(
+                              nameOfHelper: "Месяц/Год".tr,
+                              onValidate: _.validateDate,
+                              onSave: _.setDate,
+                            ))
                           ],
                         ),
-                        margin(),
-                        Text(
-                          "Срок".tr + "\n" + "Действия".tr,
+                        SizedBox(
+                          height: Get.height * 0.01,
                         ),
-                        margin(),
-                        Expanded(
-                            child: TextFieldHelperClean(
-                          nameOfHelper: "Месяц/Год".tr,
-                          onValidate: _.validateDate,
-                          onSave: _.setDate,
-                        ))
+                        Align(
+                          alignment: Alignment.center,
+                          child: Buttons(
+                            nameOfTheButton: "Отправить".tr,
+                            hexValueOFColor: "#7FA6C9",
+                            height: Get.height * 0.5,
+                            width: Get.width * 0.5,
+                            onPressed: (context) {
+                              _.formSubmit(_formKey, amountId);
+                            },
+                          ),
+                        )
                       ],
                     ),
-                    SizedBox(
-                      height: Get.height * 0.01,
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Buttons(
-                        nameOfTheButton: "Отправить".tr,
-                        hexValueOFColor: "#7FA6C9",
-                        height: Get.height * 0.5,
-                        width: Get.width * 0.5,
-                        onPressed: (context) {
-                          _.formSubmit(_formKey, amountId);
-                        },
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      ))),
+            ),
+          ))),
     );
   }
 }

@@ -31,6 +31,7 @@ import 'package:flutter_projects/pages/Test.dart';
 import 'package:flutter_projects/route/go_page.dart';
 import 'package:flutter_projects/service/back_service.dart';
 import 'package:flutter_projects/service/fire_base_messaging.dart';
+import 'package:flutter_projects/service/location_service.dart';
 import 'package:flutter_projects/service/notification_service.dart';
 import 'package:flutter_projects/service/translation_service.dart';
 import 'package:geolocator/geolocator.dart';
@@ -41,12 +42,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 
 import 'Singleton/SingletonGlobal.dart';
+import 'helper_clesses/Dialog/ChoosePayment.dart';
 import 'pages/Inside/History.dart';
 
 void backTask() {
   Workmanager().executeTask((task, inputData)  async{
     await SingletonGlobal().init();
-    if (SingletonUserInformation().isAuthorized) {
+
+    bool speed = await LocationService().isSpeedMax();
+    NotificationService.initializeNotification('back_channel');
+    if (SingletonUserInformation().isAuthorized && speed) {
       NotificationService.initializeNotification('track_channel');
       AwesomeNotifications().createNotification(
         content: NotificationContent(
@@ -76,10 +81,12 @@ void initServices() async {
   await Get.putAsync(() => NotificationService().init());
   await SingletonGlobal().init();
   await Get.putAsync(() => FireBaseService().init());
+  await Get.putAsync(() => LocationService().init());
   Get.log('All services started...');
 }
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   await initServices();
   FirebaseMessaging.onBackgroundMessage(FireBaseService.backGroundTasks);
@@ -111,7 +118,7 @@ class MyApp extends StatelessWidget {
           minWidth: 480,
           defaultScale: true,
           breakpoints: [
-            ResponsiveBreakpoint.resize(480, name: MOBILE),
+            ResponsiveBreakpoint.autoScale(480, name: MOBILE),
             ResponsiveBreakpoint.autoScale(800, name: TABLET),
             ResponsiveBreakpoint.resize(1000, name: DESKTOP),
           ],
@@ -145,14 +152,13 @@ class MyApp extends StatelessWidget {
         "/pro_account": (context) => ProPurchase(),
         "/adds": (context) => Adds(),
         "/map": (context) => Map(),
-        // "/test": (context) => Test(),
+        "/service": (context) => ChoosePayment(),
         "/history": (context) => History(),
         "/date": (context) => Date(),
         "/payme": (context) => PaymePay(),
         "/code-verification": (context) => CodeVerification(),
         "/track-user": (context) => TrackUser(),
         "/store-cards":(context) => StoreCards(),
-
       },
     );
   }

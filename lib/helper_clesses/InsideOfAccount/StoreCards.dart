@@ -52,16 +52,19 @@ class _StoreCardsState extends State<StoreCards> {
                           fontWeight: FontWeight.bold,
                           color: HexColor("#42424A"),
                           fontFamily: 'Montserrat',
-                          fontSize: Get.width * 0.03),
+                          fontSize: 15),
                     ),
                   ),
-                  Flexible(
-                    child: Text(
-                      secondaryText,
-                      style: TextStyle(
-                          color: HexColor("#42424A"),
-                          fontFamily: "Roboto",
-                          fontSize: Get.width * 0.03),
+                  Visibility(
+                    visible: secondaryText.isNotEmpty,
+                    child: Flexible(
+                      child: Text(
+                        secondaryText,
+                        style: TextStyle(
+                            color: HexColor("#42424A"),
+                            fontFamily: "Roboto",
+                            fontSize: 15),
+                      ),
                     ),
                   ),
                 ],

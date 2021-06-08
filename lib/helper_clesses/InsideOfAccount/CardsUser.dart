@@ -92,7 +92,7 @@ class _CardsUserState extends State<CardsUser> {
   final ErrorMessageProvider dateProvider;
   final CheckProvider checkProvider;
   final Widget checkWidget;
-  final f = new DateFormat.yMd().add_Hm();
+    final f = new DateFormat.yMd().add_Hm();
   String name;
   List<Widget> imagesChosen = [];
   Widget swap;

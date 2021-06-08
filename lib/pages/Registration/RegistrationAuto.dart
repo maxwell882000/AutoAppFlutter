@@ -81,7 +81,8 @@ class RegistrationAuto extends StatelessWidget {
         print("REGISTER CAR");
         print(value.body);
         Map json = jsonDecode(value.body);
-        if (value) {
+        if (value.statusCode == 200) {
+
           print(json['id']);
           SingletonUserInformation().setId(json['id']);
           bool pop;

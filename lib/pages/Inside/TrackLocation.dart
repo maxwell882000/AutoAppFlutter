@@ -10,6 +10,8 @@ import 'package:flutter_projects/Singleton/SingletonUserInformation.dart';
 import 'package:flutter_projects/helper_clesses/InitialPointOfAccount/Base.dart';
 import 'package:flutter_projects/helper_clesses/LoadingScreen.dart';
 import 'package:flutter_projects/provider/ErrorMessageProvider.dart';
+import 'package:flutter_projects/service/location_service.dart';
+import 'package:flutter_projects/service/notification_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
@@ -17,6 +19,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class TrackUser extends StatefulWidget {
+
   @override
   State<TrackUser> createState() => TrackUserState();
 }
@@ -24,49 +27,15 @@ class TrackUser extends StatefulWidget {
 class TrackUserState extends State<TrackUser> {
   LatLng previous = new LatLng(0, 0);
 
-  Future<void> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permantly denied, we cannot request permissions.');
-    }
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.whileInUse &&
-          permission != LocationPermission.always) {
-        return Future.error(
-            'Location permissions are denied (actual value: $permission).');
-      }
-    }
-  }
 
   @override
   void initState() {
     super.initState();
 
-    // _determinePosition()
-    //     .then((value) =>
-    //     Timer.periodic(Duration(seconds: 10), (timer) {
-    //       print('asd');
-    //       if (mounted) {
-    //         gettinLocation();
-    //       } else {
-    //         timer.cancel();
-    //       }
-    //     })
-    // );
   }
 Future<String> startPoint () async{
-    final result =  await _determinePosition();
+   await LocationService().determinePosition();
     Timer.periodic(Duration(seconds: 10), (timer) {
       print('asd');
       if (mounted) {
@@ -78,7 +47,7 @@ Future<String> startPoint () async{
     return "success";
 }
   void gettinLocation() {
-    Geolocator.getCurrentPosition(
+    LocationService().getLocation(
       // intervalDuration: Duration(seconds: 10),
       desiredAccuracy: LocationAccuracy.best,
     ).then((event) {

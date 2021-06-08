@@ -102,7 +102,16 @@ class SingletonConnection {
       SingletonAdds().setImages(result.bodyBytes);
     }
   }
-
+  Future<List> getListForSubscribe() async {
+    final response = await SingletonRestApi.get(
+      url: "$URL/service/",
+      headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode == 200) {
+      List json = jsonDecode(utf8.decode(response.bodyBytes));
+      return json;
+    }
+  }
   Future<bool> getLocation() async {
     Location location = SingletonUserInformation().newCard.attach.location;
     print("LOCATION GET");
@@ -322,7 +331,9 @@ class SingletonConnection {
           SingletonUnits().convertDistanceForUser(e['change']['run']),
           SingletonUnits().convertDistanceForUser(e['change']['initial_run']),
           e['change']['time'],
-          e['expense'])));
+          e['expense'])
+      ))
+      ;
     }
   }
 
@@ -422,7 +433,7 @@ class SingletonConnection {
   }
 
   Future registerCar() async {
-    return SingletonRestApi.post(
+    return  SingletonRestApi.post(
         url:
             '${SingletonConnection.URL}/transport/${SingletonUserInformation().emailOrPhone}/',
         headers: <String, String>{

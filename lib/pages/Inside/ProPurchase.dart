@@ -22,18 +22,25 @@ class ProPurchase extends StatelessWidget {
     ['assets/click.png', () {
 
     }],
-    ['assets/payme.png', () {
+    ['assets/payme.png', (String amountId) {
+
     CustomDialog.dialog(
       barrierDismissible: false,
       context: Get.context,
       width: Get.width,
 
-      child: PaymePay(),
+      child: PaymePay(
+        amountId: amountId,
+      ),
       alignment: Alignment.center
     );
     }],
   ];
-
+  void makePayment(Function dialog) async{
+    final result = await Navigator.of(Get.context).pushNamed('/service');
+    if (result != null)
+      dialog(result.toString());
+  }
   Widget text({Color color, String text, double width}) {
     return Text(
       text,
@@ -152,7 +159,7 @@ class ProPurchase extends StatelessWidget {
                               iconsGet(
                                   icons: icons[position][0],
                                   width: width,
-                                  onTap: icons[position][1]
+                                  onTap:()=> makePayment(icons[position][1])
                               ),
                           separatorBuilder: (context, position) => SizedBox(
                                 width: width * 0.01,

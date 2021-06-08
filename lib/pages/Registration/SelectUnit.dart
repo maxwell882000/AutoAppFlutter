@@ -18,7 +18,7 @@ import 'package:provider/provider.dart';
 
 class SelectUnit extends StatelessWidget {
   final List items = [
-  ["Cкорость".tr,"Выберите скорость".tr ,SingletonStoreUnits().speed.KM_C,SingletonStoreUnits().speed.M_C,SingletonStoreUnits().speed.KM_H,SingletonStoreUnits().speed.M_H,SingletonStoreUnits().speed.KM_D,SingletonStoreUnits().speed.M_D,SingletonStoreUnits().speed.KM_Y,SingletonStoreUnits().speed.M_Y],
+  // ["Cкорость".tr,"Выберите скорость".tr ,SingletonStoreUnits().speed.KM_C,SingletonStoreUnits().speed.M_C,SingletonStoreUnits().speed.KM_H,SingletonStoreUnits().speed.M_H,SingletonStoreUnits().speed.KM_D,SingletonStoreUnits().speed.M_D,SingletonStoreUnits().speed.KM_Y,SingletonStoreUnits().speed.M_Y],
   ["Расстояние".tr, "Выберите растояние".tr,SingletonStoreUnits().distance.CM,SingletonStoreUnits().distance.KM,SingletonStoreUnits().distance.M,SingletonStoreUnits().distance.MM],
   ["Расход топлива".tr, "Выберите расход топлива".tr , SingletonStoreUnits().fuelConsumption.KM_L,SingletonStoreUnits().fuelConsumption.L_100KM,SingletonStoreUnits().fuelConsumption.L_KM],
   ["Валюта".tr,"Выберите валюту".tr ,  SingletonStoreUnits().currency.EUR,SingletonStoreUnits().currency.RUB,SingletonStoreUnits().currency.USD,SingletonStoreUnits().currency.UZS],
@@ -50,10 +50,14 @@ class SelectUnit extends StatelessWidget {
 
   Function getUnits(BuildContext context) {
     return (var errorMessageProvider) async {
-      SingletonUnits().setSpeed(errorMessageProvider[0][1].inputData);
-      SingletonUnits().setDistance(errorMessageProvider[1][1].inputData);
-      SingletonUnits().setFuelConsumption(errorMessageProvider[2][1].inputData);
-      SingletonUnits().setCurrency(errorMessageProvider[3][1].inputData);
+      // SingletonUnits().setSpeed(errorMessageProvider[0][1].inputData);
+      // SingletonUnits().setDistance(errorMessageProvider[1][1].inputData);
+      // SingletonUnits().setFuelConsumption(errorMessageProvider[2][1].inputData);
+      // SingletonUnits().setCurrency(errorMessageProvider[3][1].inputData);
+      SingletonUnits().setSpeed(SingletonStoreUnits().speed.KM_D);
+      SingletonUnits().setDistance(errorMessageProvider[0][1].inputData);
+      SingletonUnits().setFuelConsumption(errorMessageProvider[1][1].inputData);
+      SingletonUnits().setCurrency(errorMessageProvider[2][1].inputData);
       SingletonUnits().setToTheDisk();
       print(SingletonUserInformation().emailOrPhone);
       SingletonConnection().submitUnits();
