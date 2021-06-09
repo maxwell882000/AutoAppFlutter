@@ -22,11 +22,14 @@ class ChoosePayment extends StatelessWidget {
 
   Future<String> init() async {
     List<Subscribe> items = (await SingletonConnection().getListForSubscribe())
-        .map<Subscribe>((e) => new Subscribe(
-            id: e['id'],
-            nameSubscribe: e['name_subscribe'],
-            price: e['price'],
-            duration: e['duration']))
+        .map<Subscribe>(
+          (e) => new Subscribe(
+              id: e['id'],
+              nameSubscribe: e['name_subscribe'],
+              price: e['price'],
+              duration: e['duration'],
+              type: e['type']),
+        )
         .toList();
     provider.setItems(items);
 
