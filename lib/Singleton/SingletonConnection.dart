@@ -20,23 +20,30 @@ class SingletonConnection {
     return _instance;
   }
 
-  Future<bool> saveToken(String token) async{
-     final result = await SingletonRestApi.post(url: "$URL", body: token);
-     if (result.statusCode == 200) {
-       return true;
-     }
-     return false;
+  Future<bool> saveToken(String token) async {
+    final result = await SingletonRestApi.post(url: "$URL", body: token);
+    if (result.statusCode == 200) {
+      return true;
+    }
+    return false;
   }
-  Future<bool> registerAccount(String emailOrPhone, String provider) async{
+
+  Future<bool> registerAccount(String emailOrPhone, String provider) async {
     return await baseAuthorization(emailOrPhone, provider, '$URL/register/');
   }
-  Future<bool> loginAccount(String emailOrPhone, String provider) async{
+
+  Future<bool> loginAccount(String emailOrPhone, String provider) async {
     return await baseAuthorization(emailOrPhone, provider, '$URL/login/');
   }
-  Future  deleteIndicator(int id) async{
-    return await SingletonRestApi.delete(url: '${SingletonConnection.URL}/cards/$id/?id_cards=${SingletonUserInformation().cards.id}');
+
+  Future deleteIndicator(int id) async {
+    return await SingletonRestApi.delete(
+        url:
+            '${SingletonConnection.URL}/cards/$id/?id_cards=${SingletonUserInformation().cards.id}');
   }
-  Future<bool> baseAuthorization(String emailOrPhone, String provider, String url)  async{
+
+  Future<bool> baseAuthorization(
+      String emailOrPhone, String provider, String url) async {
     final http.Response response = await SingletonRestApi.post(
         url: url,
         headers: <String, String>{
@@ -58,19 +65,21 @@ class SingletonConnection {
     }
     return false;
   }
+
   Future<void> getAllMarkaForRegister() async {
     final items = await getAllMarka();
     jsonDecode(items.body)
         .forEach((e) => SingletonRegistrationAuto().fromJson(e));
     SingletonRegistrationAuto().finish();
   }
-  Future getAllMarka()  async{
-   return await SingletonRestApi.get(url: '$URL/marka/');
+
+  Future getAllMarka() async {
+    return await SingletonRestApi.get(url: '$URL/marka/');
   }
 
   Future<void> submitUnits() async {
     return await SingletonRestApi.put(
-        url: 'URL/units/${SingletonUserInformation().emailOrPhone}/',
+        url: '$URL/units/${SingletonUserInformation().emailOrPhone}/',
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -102,6 +111,7 @@ class SingletonConnection {
       SingletonAdds().setImages(result.bodyBytes);
     }
   }
+
   Future<List> getListForSubscribe() async {
     final response = await SingletonRestApi.get(
       url: "$URL/service/",
@@ -112,6 +122,7 @@ class SingletonConnection {
       return json;
     }
   }
+
   Future<bool> getLocation() async {
     Location location = SingletonUserInformation().newCard.attach.location;
     print("LOCATION GET");
@@ -311,6 +322,12 @@ class SingletonConnection {
     return await request.send();
   }
 
+  Future<String> getBalans() async {
+    final result = await SingletonRestApi.get(
+        url: "$URL/balance-data/?user_id=${SingletonUserInformation().userId}");
+    return utf8.decode(result.bodyBytes);
+  }
+
   Future<Map> getStoreCards(String tag, List card) async {
     final result =
         await SingletonRestApi.get(url: "${SingletonConnection.URL}/$tag");
@@ -331,9 +348,7 @@ class SingletonConnection {
           SingletonUnits().convertDistanceForUser(e['change']['run']),
           SingletonUnits().convertDistanceForUser(e['change']['initial_run']),
           e['change']['time'],
-          e['expense'])
-      ))
-      ;
+          e['expense'])));
     }
   }
 
@@ -433,9 +448,8 @@ class SingletonConnection {
   }
 
   Future registerCar() async {
-    return  SingletonRestApi.post(
-        url:
-            '${SingletonConnection.URL}/transport/${SingletonUserInformation().emailOrPhone}/',
+    return SingletonRestApi.post(
+        url: '$URL/transport/${SingletonUserInformation().emailOrPhone}/',
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

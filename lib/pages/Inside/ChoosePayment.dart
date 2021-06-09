@@ -3,17 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_projects/Singleton/SingletonConnection.dart';
 import 'package:flutter_projects/Singleton/SingletonStoreUnits.dart';
 import 'package:flutter_projects/Singleton/SingletonUnits.dart';
-import 'package:flutter_projects/helper_clesses/Buttons.dart';
-import 'package:flutter_projects/helper_clesses/DropDown/DropDownItem.dart';
+
 import 'package:flutter_projects/helper_clesses/InsideOfAccount/MainMenu.dart';
+import 'package:flutter_projects/helper_clesses/LoadingScreen.dart';
 import 'package:flutter_projects/helper_clesses/TextFlexible.dart';
 import 'package:flutter_projects/models/subscribe.dart';
 import 'package:flutter_projects/models/visibility.dart';
 import 'package:flutter_projects/provider/ErrorMessageProvider.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-
-import '../LoadingScreen.dart';
 
 class ChoosePayment extends StatelessWidget {
   ErrorMessageProvider provider =

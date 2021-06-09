@@ -5,10 +5,9 @@ import 'package:flutter_projects/Singleton/SingletonConnection.dart';
 import 'package:flutter_projects/Singleton/SingletonRestApi.dart';
 import 'package:flutter_projects/helper_clesses/Payme/errors.dart';
 
-
 class Payme {
   final String _url = "https://checkout.test.paycom.uz/api";
-  final String _id = "60a8b7bea44459bf07890f34";
+  final String _id = "5e730e8e0b852a417aa49ceb";
   final String number;
   final String CARDS_CREATE_METHOD = "cards.create";
   final String CARDS_GET_VERIFY_CODE = "cards.get_verify_code";
@@ -26,7 +25,10 @@ class Payme {
   }
 
   Map<String, String> _setHeader() {
-    return {"X-Auth": _id};
+    return {
+      "X-Auth": _id,
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
   }
 
   String body(String method, Map<String, dynamic> params) {
@@ -43,8 +45,10 @@ class Payme {
     Map<String, dynamic> params = {
       "card": {"number": number, "expire": expire, "save": true},
     };
-    final result = await SingletonRestApi.post( url: _url,
-        headers: _setHeader(), body: body(CARDS_CREATE_METHOD, params));
+    final result = await SingletonRestApi.post(
+        url: _url,
+        headers: _setHeader(),
+        body: body(CARDS_CREATE_METHOD, params));
     Map response = jsonDecode(result.body);
     print(result.body);
     if (!response.containsKey('error')) {
@@ -58,18 +62,19 @@ class Payme {
 
   Future<bool> getVerifyCode() async {
     checkTimestamp();
-    Map<String,dynamic> params = {
+    Map<String, dynamic> params = {
       'token': _token,
     };
-    final result = await SingletonRestApi.post(url: _url,
-        headers: _setHeader(), body: body(CARDS_GET_VERIFY_CODE, params));
+    final result = await SingletonRestApi.post(
+        url: _url,
+        headers: _setHeader(),
+        body: body(CARDS_GET_VERIFY_CODE, params));
     print("GET VERIFY CODE ${result.body}");
     if (result.statusCode == 200) {
       Map body = jsonDecode(result.body);
       int wait = body['result']['wait'];
       bool sent = body['result']['sent'];
-      if (!sent)
-        throw Errors.payme['not_sent_get_verify'];
+      if (!sent) throw Errors.payme['not_sent_get_verify'];
       this.wait = _getTimestamp(wait);
       return sent;
     }
@@ -89,13 +94,13 @@ class Payme {
   }
 
   Future<Map> cardsVerify(String code) async {
-    Map<String,dynamic> params = {'token': _token, 'code': code};
-    final result = await SingletonRestApi.post(url: _url,
-        headers: _setHeader(), body: body(CARDS_VERIFY, params));
+    Map<String, dynamic> params = {'token': _token, 'code': code};
+    final result = await SingletonRestApi.post(
+        url: _url, headers: _setHeader(), body: body(CARDS_VERIFY, params));
     print("CARDS VERIFY  ${result.body}");
     if (result.statusCode == 200) {
       Map body = jsonDecode(result.body);
-      if(!body.containsKey('error')) {
+      if (!body.containsKey('error')) {
         Map card = body['result']["card"];
         bool recurrent = card['recurrent'];
         bool verify = card['verify'];
@@ -109,10 +114,13 @@ class Payme {
   }
 
   Future<Map> pay() async {
-    final result = await SingletonRestApi.post(url: "${SingletonConnection.URL}/subscribe_pay/",
+    print( {'id_user': userId, 'token': _token, 'id_amount': amountId});
+    final result = await SingletonRestApi.post(
+        url: "${SingletonConnection.URL}/subscribe_pay/",
         headers: _setHeader(),
         body: jsonEncode(
             {'id_user': userId, 'token': _token, 'id_amount': amountId}));
+    print('pay');
     print(result.body);
     Map body = jsonDecode(result.body);
 

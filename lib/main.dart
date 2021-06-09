@@ -27,22 +27,20 @@ import 'package:flutter_projects/pages/Inside/User.dart';
 import 'package:flutter_projects/pages/Registration/Registration.dart';
 import 'package:flutter_projects/pages/Registration/RegistrationAuto.dart';
 import 'package:flutter_projects/pages/Registration/SelectUnit.dart';
-import 'package:flutter_projects/pages/Test.dart';
-import 'package:flutter_projects/route/go_page.dart';
-import 'package:flutter_projects/service/back_service.dart';
+
 import 'package:flutter_projects/service/fire_base_messaging.dart';
 import 'package:flutter_projects/service/location_service.dart';
 import 'package:flutter_projects/service/notification_service.dart';
 import 'package:flutter_projects/service/translation_service.dart';
-import 'package:geolocator/geolocator.dart';
+
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:responsive_framework/utils/scroll_behavior.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:workmanager/workmanager.dart';
 
 import 'Singleton/SingletonGlobal.dart';
-import 'helper_clesses/Dialog/ChoosePayment.dart';
+import 'pages/Inside/ChoosePayment.dart';
 import 'pages/Inside/History.dart';
 
 void backTask() {

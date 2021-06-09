@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_projects/Provider/UserProvider.dart';
+import 'package:flutter_projects/Singleton/SingletonConnection.dart';
+import 'package:flutter_projects/helper_clesses/Buttons.dart';
 import 'package:flutter_projects/helper_clesses/Dialog/CustomDialog.dart';
 import 'package:flutter_projects/helper_clesses/InsideOfAccount/MainMenu.dart';
+import 'package:flutter_projects/helper_clesses/LoadingScreen.dart';
 import 'package:flutter_projects/helper_clesses/Payme/payme_pay.dart';
 import 'package:flutter_projects/helper_clesses/TextFlexible.dart';
 import 'package:flutter_projects/models/visibility.dart';
+import 'package:flutter_projects/provider/ErrorMessageProvider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
@@ -14,33 +20,33 @@ import 'package:get/get.dart';
 class ProPurchase extends StatelessWidget {
   final List items = [
     "ВОЗМОЖНОСТЬ ДОБАВИТЬ БОЛЬШЕ 1 АВТО В ПРОФИЛЬ".tr,
-    "Возможность отслеживать и добавлять неограниченное количество авто деталей (в бесплатном можно отслеживать 10 и добавить 5)".tr,
+    "Возможность отслеживать и добавлять неограниченное количество авто деталей (в бесплатном можно отслеживать 10 и добавить 5)"
+        .tr,
     "НЕТ РЕКЛАМЫ".tr,
   ];
   final List icons = [
     ['assets/paynet.png', () {}],
-    ['assets/click.png', () {
-
-    }],
-    ['assets/payme.png', (String amountId) {
-
-    CustomDialog.dialog(
-      barrierDismissible: false,
-      context: Get.context,
-      width: Get.width,
-
-      child: PaymePay(
-        amountId: amountId,
-      ),
-      alignment: Alignment.center
-    );
-    }],
+    ['assets/click.png', () {}],
+    [
+      'assets/payme.png',
+      (String amountId) {
+        CustomDialog.dialog(
+            barrierDismissible: false,
+            context: Get.context,
+            width: Get.width,
+            child: PaymePay(
+              amountId: amountId,
+            ),
+            alignment: Alignment.center);
+      }
+    ],
   ];
-  void makePayment(Function dialog) async{
+
+  void makePayment(Function dialog) async {
     final result = await Navigator.of(Get.context).pushNamed('/service');
-    if (result != null)
-      dialog(result.toString());
+    if (result != null) dialog(result.toString());
   }
+
   Widget text({Color color, String text, double width}) {
     return Text(
       text,
@@ -84,95 +90,139 @@ class ProPurchase extends StatelessWidget {
     );
   }
 
+  Future<String> init() async {
+    return await SingletonConnection().getBalans();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     return ChangeNotifierProvider(
-      create: (BuildContext context) => UserProvider(),
-      child: MainMenu(
-        visible: VisibilityClass(
-          filterVisible: false,
-          settingsCross: true,
-        ),
-        nameBar: TextFlexible(
-          key: key,
-          text: "Получить про доступ".tr,
-          numberOfCharacters: 25,
-        ),
-        body: Container(
-          margin: EdgeInsets.all(width * 0.04),
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(width * 0.06),
-                height: width * 0.6,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(width * 0.02),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    text(text: "PRO ДОСТУП ВКЛЮЧАЕТ В СЕБЯ:".tr, width: width),
-                    SizedBox(
-                      height: width * 0.05,
-                    ),
-                    SizedBox(
-                      height: width * 0.35,
-                      child: ListView.separated(
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, position) =>
-                              choices(text: items[position], width: width),
-                          separatorBuilder: (context, position) => SizedBox(
+        create: (BuildContext context) => UserProvider(),
+        child: FutureBuilder(
+            future: init(),
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              // AsyncSnapshot<Your object type>
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return LoadingScreenWithScaffold(
+                  visible: true,
+                );
+              } else {
+                print(snapshot.data);
+                Map json = jsonDecode(snapshot.data);
+                return MainMenu(
+                  visible: VisibilityClass(
+                    filterVisible: false,
+                    settingsCross: true,
+                  ),
+                  nameBar: TextFlexible(
+                    key: key,
+                    text: "Получить про доступ".tr,
+                    numberOfCharacters: 25,
+                  ),
+                  body: Container(
+                    margin: EdgeInsets.all(width * 0.04),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(width * 0.06),
+                          height: width * 0.6,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(width * 0.02),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              text(
+                                  text: "PRO ДОСТУП ВКЛЮЧАЕТ В СЕБЯ".tr,
+                                  width: width),
+                              SizedBox(
                                 height: width * 0.05,
                               ),
-                          itemCount: items.length),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: width * 0.1,
-              ),
-              Container(
-                padding: EdgeInsets.all(width * 0.06),
-                height: width * 0.4,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(width * 0.02),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    text(text: "PRO ДОСТУП ВКЛЮЧАЕТ В СЕБЯ:".tr, width: width),
-                    SizedBox(
-                      height: width * 0.05,
+                              SizedBox(
+                                height: width * 0.35,
+                                child: ListView.separated(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemBuilder: (context, position) => choices(
+                                        text: items[position], width: width),
+                                    separatorBuilder: (context, position) =>
+                                        SizedBox(
+                                          height: width * 0.05,
+                                        ),
+                                    itemCount: items.length),
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: width * 0.1,
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(width * 0.06),
+                          height: width * 0.4,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(width * 0.02),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              text(
+                                  text: "Ваш баланс:".tr +
+                                      " " +
+                                      "${json['balance']}",
+                                  width: width),
+                              text(
+                                  text: "ID для пополнения баланса:".tr +
+                                      " " +
+                                      "${json['customerId']}",
+                                  width: width),
+                              SizedBox(
+                                height: width * 0.05,
+                              ),
+
+                              Align(
+                                alignment: Alignment.center,
+                                child: Buttons(
+                                  nameOfTheButton: "Получить".tr,
+                                  hexValueOFColor: "#7FA6C9",
+                                  height: Get.height * 0.5,
+                                  width: Get.width * 0.5,
+                                  onPressed: (context) async {
+                                    final result =
+                                        await Navigator.of(Get.context)
+                                            .pushNamed('/service');
+                                  },
+                                ),
+                              )
+                              // SizedBox(
+                              //   height: width * 0.1,
+                              //   child: ListView.separated(
+                              //       scrollDirection: Axis.horizontal,
+                              //       physics: NeverScrollableScrollPhysics(),
+                              //       itemBuilder: (context, position) =>
+                              //           iconsGet(
+                              //               icons: icons[position][0],
+                              //               width: width,
+                              //               onTap: () => makePayment(
+                              //                   icons[position][1])),
+                              //       separatorBuilder: (context, position) =>
+                              //           SizedBox(
+                              //             width: width * 0.01,
+                              //           ),
+                              //       itemCount: icons.length),
+                              // )
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: width * 0.1,
-                      child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, position) =>
-                              iconsGet(
-                                  icons: icons[position][0],
-                                  width: width,
-                                  onTap:()=> makePayment(icons[position][1])
-                              ),
-                          separatorBuilder: (context, position) => SizedBox(
-                                width: width * 0.01,
-                              ),
-                          itemCount: icons.length),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+                  ),
+                );
+              }
+            }));
   }
 }

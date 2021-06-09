@@ -35,11 +35,13 @@ class SingletonRestApi {
   static Future<http.Response> put(
       {String body, String url, Map<String, String> headers = const {}}) async {
     try {
-      return await http.put(Uri.parse(url),
+      final result = await http.put(Uri.parse(url),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: body);
+      print(result.body);
+      return result;
     } catch (e) {
       print("PUT ERROR");
       showErrorSnackBar(error);

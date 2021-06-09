@@ -85,6 +85,7 @@ class RegistrationAuto extends StatelessWidget {
 
           print(json['id']);
           SingletonUserInformation().setId(json['id']);
+          SingletonUserInformation().cards.setId(json['id_cards']);
           bool pop;
           if (args == MenuPOP.NEW_TRANSPORT) {
             SingletonUserInformation().cards.clean();
