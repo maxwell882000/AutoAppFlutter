@@ -1,10 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_projects/Singleton/SingletonConnection.dart';
-import 'package:flutter_projects/Singleton/SingletonGlobal.dart';
-import 'package:flutter_projects/helper_clesses/InsideOfAccount/CardsUser.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart' as http;
+
 import 'SingletonStoreToTheDiskAndLoad.dart';
 import 'package:get/get.dart';
 import 'SingletonUnits.dart';
@@ -231,9 +228,10 @@ class SingletonUserInformation {
   void averageRun() {
     final DateTime d = DateTime.parse("2021-02-04 09:45:54.925347Z");
     final now = DateTime.now();
+    print("DATESSS");
     print(_date);
     final int days = now.difference(_date).inDays;
-
+    print(days);
     if (days == 0) {
       SingletonUnits().convertSpeedForUser(0, days);
       _average = 0;

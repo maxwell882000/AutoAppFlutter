@@ -24,6 +24,7 @@ class UserProvider with ChangeNotifier {
   bool _clearMenu;
   bool _clearSettings;
   bool _NO_ACCOUNT;
+  String _json;
   UserProvider.noAccount(){
     _NO_ACCOUNT = true;
     _loading = true;
@@ -34,6 +35,7 @@ class UserProvider with ChangeNotifier {
     _changed = false;
     _clearMenu = true;
     _clearSettings = false;
+    _json = "";
   }
   UserProvider.start({double run,double average,
       int changeDetails, int allExpense, int monthExpense, bool proAccount,
@@ -62,6 +64,7 @@ class UserProvider with ChangeNotifier {
     _clearMenu = !proAccount;
     _clearSettings = clearSettings;
     _NO_ACCOUNT = false;
+    _json = "";
   }
 
   UserProvider() {
@@ -84,6 +87,7 @@ class UserProvider with ChangeNotifier {
     _clearMenu = true;
     _clearSettings = true;
     _NO_ACCOUNT = false;
+    _json = "";
   }
   bool get NO_ACCOUNT => _NO_ACCOUNT;
   bool get changed => _changed;
@@ -107,7 +111,7 @@ class UserProvider with ChangeNotifier {
   String get tenure => _tenure;
   bool get clearSettings=>_clearSettings;
   bool get clearMenu => _clearMenu;
-
+  String get json => _json;
   void updateData(double run,double average,
       int changeDetails, int allExpense, int monthExpense, bool proAccount,
       String nameOfCar,String number,
@@ -132,10 +136,15 @@ class UserProvider with ChangeNotifier {
     _clearMenu = !proAccount;
     _clearSettings = clearSettings;
     _NO_ACCOUNT = false;
+    _json = "";
     notifyListeners();
   }
   void setNO_ACCOUNT(bool NO_ACCOUNT){
     _NO_ACCOUNT = NO_ACCOUNT;
+    notifyListeners();
+  }
+  void setJson(String json) {
+    _json = json;
     notifyListeners();
   }
   void setClearMenu(bool clearMenu){

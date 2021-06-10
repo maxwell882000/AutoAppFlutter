@@ -52,9 +52,7 @@ class User extends StatelessWidget {
 
   @override
   void initState() {
-    SingletonGlobal()
-        .prefs
-        .setString('user', SingletonUserInformation().emailOrPhone);
+    SingletonGlobal().setOrMissAccount();
     Get.find<FireBaseService>().sendOrMissToken();
   }
 
@@ -119,8 +117,7 @@ class User extends StatelessWidget {
         onInit: initState,
         child: ChangeNotifierProvider.value(
           value: userProvider,
-          child:
-              Consumer<UserProvider>(builder: (context, userProvider, child) {
+          child: Consumer<UserProvider>(builder: (context, userProvider, child) {
             return MainMenu(
               visible: VisibilityClass(
                 filterVisible: true,

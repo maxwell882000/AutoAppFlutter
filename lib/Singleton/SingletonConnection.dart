@@ -102,25 +102,43 @@ class SingletonConnection {
       url: "$URL/adds/",
       headers: {'Content-Type': 'application/json'},
     );
+
     if (response.statusCode == 200) {
       Map json = jsonDecode(utf8.decode(response.bodyBytes));
       final result = await SingletonRestApi.get(
           url: "$URL/adds/${json['id']}/",
           headers: {'Content-Type': 'application/json'});
+
       SingletonAdds().setLinks(json['links']);
       SingletonAdds().setImages(result.bodyBytes);
     }
+    throw "";
   }
 
-  Future<List> getListForSubscribe() async {
+  Future<List> getListForSubscribe({int type}) async {
     final response = await SingletonRestApi.get(
-      url: "$URL/service/",
+      url: "$URL/service/?type=$type",
       headers: {'Content-Type': 'application/json'},
     );
     if (response.statusCode == 200) {
       List json = jsonDecode(utf8.decode(response.bodyBytes));
       return json;
     }
+  }
+
+  Future<bool> payForProAccount(int amountId) async {
+    final response = await SingletonRestApi.post(
+        url: "$URL/service/",
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'user_id': SingletonUserInformation().userId,
+          'amount_id': amountId
+        }));
+    print(response.body);
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
   }
 
   Future<bool> getLocation() async {
@@ -158,7 +176,9 @@ class SingletonConnection {
             'emailOrPhone': account,
             'id': id,
           }));
-
+      if (response.statusCode == 403) {
+        return Requests.FORBIDDEN;
+      }
       if (response.statusCode == 200) {
         return Requests.SUCCESSFULLY_CREATED;
       } else if (response.statusCode == 400) {

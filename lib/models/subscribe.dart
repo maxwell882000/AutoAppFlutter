@@ -8,7 +8,7 @@ class Subscribe {
 
   Subscribe(
       {this.id, this.nameSubscribe, this.price, this.duration, int type}) {
-    this.type = type == 1 ? TypeOfPayment.ONE_TIME : TypeOfPayment.SUBSCRIBE;
+    this.type = TypeOfPayment.values[type];
   }
 }
 

@@ -96,8 +96,8 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
     ],
     [
       'ПОЛУЧИТЬ PRO ДОСТУП'.tr,
-      (context) {
-        Navigator.popAndPushNamed(context, "/pro_account");
+      (context) async {
+        final result = await Navigator.popAndPushNamed(context, "/pro_account");
       },
       HexColor("#DF5867")
     ],
@@ -120,7 +120,7 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
   }
 
   void update() {
-    final provider = Provider.of<UserProvider>(context, listen: false);
+    final provider = Provider.of<UserProvider>(this.context, listen: false);
     provider.updateData(
       SingletonUserInformation().run,
       SingletonUserInformation().average,
@@ -455,8 +455,7 @@ class _ShareDataState extends State<ShareData> {
     final provider = Provider.of<ErrorMessageProvider>(context, listen: false);
     List errors = provider.errorsMessageWithText;
     var selected = errors
-        .where(
-            (element) => !element[1].selected && element[0] != "ТЕХ ПАСПОРТ".tr)
+        .where((element) => !element[1].selected)
         .map((element) => errors.indexOf(element));
     Widget list;
     if (selected.length == 0) {
@@ -473,10 +472,15 @@ class _ShareDataState extends State<ShareData> {
           selectOptionsErrorProvider.errorsMessageWithText[0][1]
               .setNameOfHelper("Пользователь с таким данными не существует".tr);
           selectOptionsErrorProvider.errorsMessageWithText[0][1].setError(true);
+        } else if (Requests.FORBIDDEN == value) {
+          CustomDialog.show(
+              title: "Невозможно".tr,
+              text: "Пользователь, которму вы хотите передать карточку, не имеет pro account и у него уже есть карточка. Пожалуйста попросите его преобрести pro account чтоб это было возможно!".tr);
+          selectOptionsErrorProvider.setNextPage(false);
         } else if (Requests.NO_INTERNET == value) {
           selectOptionsErrorProvider.setNextPage(false);
           Scaffold.of(context).showSnackBar(
-            const SnackBar(content: Text('У вас нет интернета!')),
+             SnackBar(content: Text('У вас нет интернета!'.tr)),
           );
         } else {
           if (int.parse(id) != SingletonUserInformation().id) {

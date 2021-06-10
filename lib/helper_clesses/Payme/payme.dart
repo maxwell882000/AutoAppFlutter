@@ -120,10 +120,11 @@ class Payme {
         headers: _setHeader(),
         body: jsonEncode(
             {'id_user': userId, 'token': _token, 'id_amount': amountId}));
-    print('pay');
-    print(result.body);
-    Map body = jsonDecode(result.body);
 
+    print(result.body);
+    Map body = jsonDecode(utf8.decode(result.bodyBytes));
+    print(body);
+    Errors.handleServer(body);
     return body;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/helper_clesses/Dialog/AlertDialogsInfromation.dart';
+import 'package:flutter_projects/helper_clesses/Dialog/ChoiceDialog.dart';
 import 'package:get/get.dart';
 
 class CustomDialog {
@@ -9,7 +10,8 @@ class CustomDialog {
       Widget child,
       bool barrierDismissible = true,
       Color color = Colors.white,
-      Alignment alignment = Alignment.topCenter, double height}) {
+      Alignment alignment = Alignment.topCenter,
+      double height}) {
     return showGeneralDialog(
         barrierColor: Colors.black54,
         barrierDismissible: barrierDismissible,
@@ -20,7 +22,7 @@ class CustomDialog {
             alignment: alignment,
             child: SafeArea(
               child: Container(
-                height: height,
+                  height: height,
                   margin: EdgeInsets.symmetric(
                       horizontal: width * 0.05, vertical: width * 0.2),
                   decoration: BoxDecoration(
@@ -43,4 +45,11 @@ class CustomDialog {
         });
   }
 
+  static Future showChoice({String text}) async{
+    return  showDialog(
+        context: Get.context,
+        builder: (context) {
+          return ChoiceDialog(text: text);
+        });
+  }
 }

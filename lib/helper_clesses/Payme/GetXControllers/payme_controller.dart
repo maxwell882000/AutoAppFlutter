@@ -14,7 +14,7 @@ class PaymeController extends GetxController {
 
   Payme _payme;
   void setNumberCard(String numberCard) {
-    this._numberCard = numberCard;
+    this._numberCard = numberCard.replaceAll(" ", '');
     update();
   }
   void setCode(String code) {
@@ -108,6 +108,7 @@ class PaymeController extends GetxController {
         final result = await _payme.cardsVerify(code);
       }
       catch(e){
+
         CustomDialog.show(text: e , title: "Ошибка".tr);
       }
     }

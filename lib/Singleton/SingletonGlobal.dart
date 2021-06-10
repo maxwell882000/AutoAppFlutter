@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/Singleton/SingletonConnection.dart';
 import 'package:flutter_projects/service/translation_service.dart';
@@ -14,25 +13,30 @@ class SingletonGlobal {
   List _images = [];
   List _expenses = [];
   static final SingletonGlobal _instance = SingletonGlobal._internal();
+
   factory SingletonGlobal() {
     return _instance;
   }
 
   SharedPreferences get prefs => _prefs;
+
   List get images => _images;
+
   List get expenses => _expenses;
+
   Languages get language => _language;
+
   Locale get locale {
-    String _locale = _language != Languages.UZBEK? "ru" : "uz";
+    String _locale = _language != Languages.UZBEK ? "ru" : "uz";
     return Get.find<TranslationService>().fromStringToLocale(_locale);
   }
-  void saveLanguage(){
-    prefs.setInt(
-        'language', _language == Languages.UZBEK ? 1 : 0);
+
+  void saveLanguage() {
+    prefs.setInt('language', _language == Languages.UZBEK ? 1 : 0);
     Get.updateLocale(locale);
   }
 
-  void getLocale(){
+  void getLocale() {
     int language = prefs.getInt('language') ?? -1;
 
     if (language == -1) {
@@ -40,29 +44,34 @@ class SingletonGlobal {
     } else {
       SingletonGlobal().setLanguage(language);
     }
-
   }
+
   void setLanguageSecond(Languages languages) {
     this._language = languages;
   }
+
   void setLanguage(int language) {
-    this._language =  language == 0 ? Languages.RUSSIAN : Languages.UZBEK;
+    this._language = language == 0 ? Languages.RUSSIAN : Languages.UZBEK;
   }
-  void setImages(List images){
-    _images =images;
+
+  void setImages(List images) {
+    _images = images;
   }
-  void setExpenses(List expenses){
+
+  void setExpenses(List expenses) {
     _expenses = expenses;
   }
-  Future init() async{
+
+  Future init() async {
     setPrefs(await SharedPreferences.getInstance());
     await authorizeUser();
   }
-  Future<bool> authorizeUser() async{
-    String user = prefs.getString('user')?? "";
+
+  Future<bool> authorizeUser() async {
+    String user = prefs.getString('user') ?? "";
     if (user.isNotEmpty) {
       SingletonUserInformation().setEmailOrPhone(user);
-      if(await SingletonConnection().authorizedData()){
+      if (await SingletonConnection().authorizedData()) {
         SingletonUserInformation().setPop(true);
       }
       return true;
@@ -70,14 +79,24 @@ class SingletonGlobal {
     return false;
   }
 
-  void setPrefs(SharedPreferences prefs){
+  void setOrMissAccount() {
+    if (!(prefs.containsKey('user') ||
+        prefs.getString('user') == SingletonUserInformation().emailOrPhone)) {
+      SingletonGlobal()
+          .prefs
+          .setString('user', SingletonUserInformation().emailOrPhone);
+    }
+  }
+
+  void setPrefs(SharedPreferences prefs) {
     _prefs = prefs;
     getLocale();
   }
 
   SingletonGlobal._internal();
 }
-enum MenuPOP{
+
+enum MenuPOP {
   POP,
   NEW_TRANSPORT,
   CHANGE_TRANSPORT,
@@ -89,9 +108,4 @@ enum Languages {
   RUSSIAN,
 }
 
-enum Requests{
-  SUCCESSFULLY_CREATED,
-  NOT_FOUND,
-  BAD_REQUEST,
-  NO_INTERNET
-}
+enum Requests { SUCCESSFULLY_CREATED, NOT_FOUND, BAD_REQUEST, NO_INTERNET , FORBIDDEN }

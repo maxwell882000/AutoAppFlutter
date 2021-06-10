@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +8,7 @@ import 'package:flutter_projects/Singleton/SingletonGlobal.dart';
 import 'package:flutter_projects/Singleton/SingletonRegistrationAuto.dart';
 import 'package:flutter_projects/Singleton/SingletonUnits.dart';
 import 'package:flutter_projects/Singleton/SingletonUserInformation.dart';
+import 'package:flutter_projects/helper_clesses/Dialog/CustomDialog.dart';
 import 'package:flutter_projects/helper_clesses/Dialog/DataNotSave.dart';
 import 'package:flutter_projects/helper_clesses/DropDown/ListOfDropDownItemWithText.dart';
 import 'package:flutter_projects/helper_clesses/SelectOptions.dart';
@@ -16,6 +16,7 @@ import 'package:flutter_projects/provider/ErrorMessageProvider.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
+
 class RegistrationAuto extends StatelessWidget {
   RegistrationAuto({Key key}) : super(key: key);
   final ErrorMessageProvider selectOptionsErrorProvider =
@@ -25,9 +26,10 @@ class RegistrationAuto extends StatelessWidget {
     return (BuildContext context) {
       var errors = selectOptionsErrorProvider.errorsMessageWithText;
       var selected = errors
-          .where(
-              (element) => !element[1].selected && element[0] != "ТЕХ ПАСПОРТ".tr)
-          .map((element) => errors.indexOf(element)).toList();
+          .where((element) =>
+              !element[1].selected && element[0] != "ТЕХ ПАСПОРТ".tr)
+          .map((element) => errors.indexOf(element))
+          .toList();
       print(selected);
       if (selected.length == 0) {
         // selectOptionsErrorProvider.setNextPage(true);
@@ -80,17 +82,27 @@ class RegistrationAuto extends StatelessWidget {
       response.then((value) {
         print("REGISTER CAR");
         print(value.body);
+        print(value.statusCode);
+        if (value.statusCode == 403 && args == MenuPOP.NEW_TRANSPORT) {
+          Navigator.of(context).pop();
+          CustomDialog.show(
+              text:
+              "Пожалуйста преобретите pro account , чтоб иметь больше карточек"
+                  .tr,
+              title: "Ошибка".tr);
+          return;
+        }
         Map json = jsonDecode(value.body);
         if (value.statusCode == 200) {
-
           print(json['id']);
           SingletonUserInformation().setId(json['id']);
           SingletonUserInformation().cards.setId(json['id_cards']);
           bool pop;
           if (args == MenuPOP.NEW_TRANSPORT) {
             SingletonUserInformation().cards.clean();
+            SingletonUserInformation().cards.setId(json['id_cards']);
             pop = true;
-            Navigator.of(context).popAndPushNamed("/authorized",result: pop);
+            Navigator.of(context).popAndPushNamed("/authorized", result: pop);
             return;
           }
           SingletonRegistrationAuto().clean();
@@ -102,6 +114,7 @@ class RegistrationAuto extends StatelessWidget {
             Navigator.of(context).popAndPushNamed("/authorized");
           });
         } else {
+
           errors[0][1].setNameOfHelper(json['error']);
           errors[0][1].setError(true);
           selectOptionsErrorProvider.setNextPage(false);
@@ -130,8 +143,8 @@ class RegistrationAuto extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     double additional = 0.8;
-    if (height> 850){
-      additional +=0.4;
+    if (height > 850) {
+      additional += 0.4;
     }
     final MenuPOP args = ModalRoute.of(context).settings.arguments;
 
@@ -145,13 +158,13 @@ class RegistrationAuto extends StatelessWidget {
           icon: "assets/carfront.svg",
           aboveText: "Регистрация Транспортного Средства".tr,
           width: width,
-          height: height*0.9,
+          height: height * 0.9,
           clickEvent: readyToTheNext,
           loadToHard: getInformationCar(context, args),
           child: ListOfDropDownItemWithText(
             itemWithTextField: selectOptionsErrorProvider.items,
-            disabledHeightOfItem: width*0.11,
-            enabledHeightOfItem: width*0.25,
+            disabledHeightOfItem: width * 0.11,
+            enabledHeightOfItem: width * 0.25,
             width: width,
             heightOfDropDownItems: width * additional,
             provider: selectOptionsErrorProvider,

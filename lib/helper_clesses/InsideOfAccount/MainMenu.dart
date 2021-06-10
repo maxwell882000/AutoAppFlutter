@@ -32,6 +32,7 @@ class MainMenu extends StatelessWidget {
       return ChangeNotifierProvider(
         create:(BuildContext context) => UserProvider() ,
         child: Scaffold(
+
           resizeToAvoidBottomInset: false,
           appBar: AppBarForAccount(
             nameBar: this.nameBar,

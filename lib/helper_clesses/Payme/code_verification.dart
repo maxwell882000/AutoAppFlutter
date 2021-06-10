@@ -24,6 +24,7 @@ class CodeVerification extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: Get.height*0.4,
+      width: Get.width*0.7,
       margin: EdgeInsets.symmetric(horizontal: Get.width*0.1),
       color: Colors.white,
       child: Scaffold(
@@ -44,12 +45,25 @@ class CodeVerification extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      Align(
+                        child: Text(
+                          "Подтвердите".tr,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        alignment: Alignment.center,
+                      ),
                       Text(
                         "Код подтверждения отправлен на ваш телефон. Пожалуйста введите его!"
                             .tr,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 15,
+                          fontFamily: 'Roboto',
                         ),
                       ),
                       SizedBox(

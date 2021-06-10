@@ -16,12 +16,13 @@ import 'package:provider/provider.dart';
 class ChoosePayment extends StatelessWidget {
   ErrorMessageProvider provider =
       new ErrorMessageProvider("Выберите предложение".tr);
-  final List item = ['s', 's'];
 
   ChoosePayment({Key key}) : super(key: key);
 
-  Future<String> init() async {
-    List<Subscribe> items = (await SingletonConnection().getListForSubscribe())
+  Future<String> init({TypeOfPayment type}) async {
+    List<Subscribe> items = (await SingletonConnection().getListForSubscribe(
+      type: type.index
+    ))
         .map<Subscribe>(
           (e) => new Subscribe(
               id: e['id'],
@@ -48,10 +49,11 @@ class ChoosePayment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TypeOfPayment type = ModalRoute.of(context).settings.arguments;
     return ChangeNotifierProvider.value(
       value: provider,
       child: FutureBuilder(
-        future: init(),
+        future: init(type: type),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           // AsyncSnapshot<Your object type>
           final provider = Provider.of<ErrorMessageProvider>(context);
@@ -77,7 +79,7 @@ class ChoosePayment extends StatelessWidget {
                       Subscribe obj = provider.items[index];
                       return GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pop(obj.id);
+                          Navigator.of(context).pop(obj);
                         },
                         child: Container(
                             padding: EdgeInsets.all(Get.width * 0.03),
