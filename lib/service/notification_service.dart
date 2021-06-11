@@ -11,6 +11,7 @@ class NotificationService extends GetxService {
     initializeNotification('usual');
     initializeNotification('press_channel');
     initializeNotification('push_channel');
+    NotificationService.initializeNotification('back_channel');
     initializeNotification('create_excell');
     requestPermission();
     setActionListener();

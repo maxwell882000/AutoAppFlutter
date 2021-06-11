@@ -28,7 +28,7 @@ class SingletonUserInformation {
   double _run;
   String _techPassport;
   double _initialRun;
-  bool _proAccount;
+  bool _proAccount = false;
   double _average = 0;
 
   final Expenses _expenses = new Expenses();
@@ -61,7 +61,7 @@ class SingletonUserInformation {
     _NO_ACCOUNT = false;
     _pop = false;
     _isAuthorized = false;
-
+    _proAccount = false;
   }
 
   bool get pop => _pop;
@@ -78,7 +78,7 @@ class SingletonUserInformation {
 
   double get average => _average;
 
-  String get nameOfTransport => _nameOfTransport;
+  String get nameOfTransport => _nameOfTransport ?? "";
 
   String get emailOrPhone => _emailOrPhone;
 
@@ -289,6 +289,9 @@ class SingletonUserInformation {
       done = done > total ? total : done;
 
       double percantage = done / total;
+      if (percantage.isNaN){
+        percantage = 0;
+      }
       return [
         element.nameOfCard,
         percantage,
@@ -360,11 +363,12 @@ class SingletonUserInformation {
   }
 
   String tenure() {
+    if (!_NO_ACCOUNT){
     final int year = DateTime.now().year;
-
     final int yearOfPurchase = int.parse(_yearOfPurchase);
     final int tenure = year - yearOfPurchase;
     return tenure.toString();
+    }
   }
 
   void updateRun() {
@@ -404,7 +408,9 @@ class Expenses {
   void setInThisMonth(int inThisMonth) {
     _inThisMonth = inThisMonth;
   }
-
+  void setId(int id){
+    _id = id;
+  }
   Map<String, dynamic> toJson() => {
         "all_time": all_time,
         "in_this_month": in_this_month,

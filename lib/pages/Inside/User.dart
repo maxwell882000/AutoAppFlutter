@@ -68,12 +68,13 @@ class User extends StatelessWidget {
       if (SingletonUserInformation().pop) {
         response = false;
       }
+      SingletonGlobal().prefs.remove("user");
+      SingletonGlobal().prefs.remove("token");
+      FireBaseService().deleteToken();
       SingletonUserInformation().clean();
       SingletonRecomendation().clean();
       SingletonRegistrationAuto().clean();
       if (!response) {
-        SingletonGlobal().prefs.remove("user");
-        SingletonGlobal().prefs.remove("token");
         Navigator.of(Get.context).popAndPushNamed("/select");
       }
     }
@@ -117,7 +118,8 @@ class User extends StatelessWidget {
         onInit: initState,
         child: ChangeNotifierProvider.value(
           value: userProvider,
-          child: Consumer<UserProvider>(builder: (context, userProvider, child) {
+          child:
+              Consumer<UserProvider>(builder: (context, userProvider, child) {
             return MainMenu(
               visible: VisibilityClass(
                 filterVisible: true,

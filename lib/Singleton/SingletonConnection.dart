@@ -20,14 +20,19 @@ class SingletonConnection {
     return _instance;
   }
 
-  Future<bool> saveToken(String token) async {
-    final result = await SingletonRestApi.post(url: "$URL", body: token);
+  Future<int> saveToken(String token) async {
+    final result = await SingletonRestApi.post(url: "$URL/notification/", body: token,);
+    print("TOKEN SAVED");
+    print(result.body);
     if (result.statusCode == 200) {
-      return true;
+      Map unique_id = jsonDecode(result.body);
+      return unique_id['device_id'];
     }
-    return false;
+    throw "";
   }
-
+  Future deleteToken({String user_id, String device_id}) async{
+   return await SingletonRestApi.delete(url: "$URL/notification/?user_id=$user_id&device_id=$device_id");
+  }
   Future<bool> registerAccount(String emailOrPhone, String provider) async {
     return await baseAuthorization(emailOrPhone, provider, '$URL/register/');
   }

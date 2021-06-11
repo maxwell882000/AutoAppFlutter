@@ -3,7 +3,7 @@ import 'package:flutter_projects/Singleton/SingletonConnection.dart';
 import 'package:flutter_projects/service/translation_service.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import'dart:io' show Platform;
 import 'SingletonUserInformation.dart';
 
 class SingletonGlobal {
@@ -66,6 +66,15 @@ class SingletonGlobal {
     setPrefs(await SharedPreferences.getInstance());
     await authorizeUser();
   }
+
+  int typeDevice() {
+    if (Platform.isAndroid) {
+      return 1;
+    } else if (Platform.isIOS) {
+      return 0;
+    }
+  }
+
 
   Future<bool> authorizeUser() async {
     String user = prefs.getString('user') ?? "";

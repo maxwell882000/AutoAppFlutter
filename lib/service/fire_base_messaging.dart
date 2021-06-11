@@ -27,12 +27,12 @@ class FireBaseService extends GetxService {
 
     AwesomeNotifications().createNotification(
         content: NotificationContent(
-            id: 10,
-            channelKey: 'push_channel',
-            title: message.data['title'],
-            body: message.data['body'],
-            notificationLayout: NotificationLayout.Messaging,
-            ));
+      id: 10,
+      channelKey: 'push_channel',
+      title: message.data['title'],
+      body: message.data['body'],
+      notificationLayout: NotificationLayout.Messaging,
+    ));
   }
 
   void listenStreamOnMessage() {
@@ -59,19 +59,35 @@ class FireBaseService extends GetxService {
 
   Future sendOrMissToken() async {
     SingletonGlobal service = SingletonGlobal();
-    print('SEND OR MISS TOKEN');
-    service.prefs.remove('token');
+    // print('SEND OR MISS TOKEN');
+    // service.prefs.remove('token');
     if (!service.prefs.containsKey('token') &&
         SingletonUserInformation().isAuthorized) {
       // await messaging.deleteToken();
       String token = await messaging.getToken();
       print(token);
-      bool result =
-          await SingletonConnection().saveToken(jsonEncode({'token': token}));
-      if (result) {
+      try {
+        int result = await SingletonConnection().saveToken(jsonEncode({
+          'token': token,
+          'id': SingletonUserInformation().userId,
+          'type': service.typeDevice(),
+        }));
         service.prefs.setString('token', token);
-      }
+        service.prefs.setInt('device_id', result);
+      } catch (e) {}
     }
+  }
+
+  Future deleteToken() async {
+    print("DELETEING TOKEN");
+    print( SingletonUserInformation().userId.toString());
+    print( SingletonGlobal().prefs.getInt('device_id').toString());
+    final result = await SingletonConnection().deleteToken(
+        user_id: SingletonUserInformation().userId.toString(),
+        device_id: SingletonGlobal().prefs.getInt('device_id').toString());
+    print("DELETE TOKEN");
+    print(result.body);
+    SingletonGlobal().prefs.remove("device_id");
   }
 
   Future requestPermission() async {
