@@ -370,6 +370,8 @@ class ModifyCards extends StatelessWidget {
                 .setTime(int.parse(repeatTimeProvider.inputData));
             SingletonUserInformation().newCard.change.setRun(0);
           }
+        }else {
+          SingletonUserInformation().newCard.change.setRun(SingletonUserInformation().run);
         }
 
         SingletonUserInformation().newCard.setExpense([]);
