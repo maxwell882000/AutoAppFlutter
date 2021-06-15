@@ -36,9 +36,9 @@ class ModifyCards extends StatelessWidget {
   final ErrorMessageProvider commentsProvider =
       new ErrorMessageProvider("Ваш комментарий".tr);
   final ErrorMessageProvider repeatDistProvider =
-      new ErrorMessageProvider("Введите расстояние".tr);
+      new ErrorMessageProvider("Введите пробег".tr);
   final ErrorMessageProvider repeatTimeProvider =
-      new ErrorMessageProvider("Введите число".tr);
+      new ErrorMessageProvider("Введите количество дней".tr);
   final ErrorMessageProvider dateProvider =
       new ErrorMessageProvider("Дата на момент замены".tr);
   final CheckProvider check = new CheckProvider();
@@ -448,7 +448,7 @@ class ModifyCards extends StatelessWidget {
             middleChild: ListExpenses(child: addExpenses()),
             childAboveButton: [
               'assets/reload.svg',
-              "Продолжить".tr + "\n" + "использование".tr+"\n" + "карточки".tr + " ?",
+              "Повторить".tr + "\n" + "действие".tr+"\n" + "карточки через".tr,
               choiceWidget(width, repeatDistProvider, repeatTimeProvider),
             ],
             provider: provider,

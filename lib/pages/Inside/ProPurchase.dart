@@ -253,6 +253,7 @@ class ProPurchase extends StatelessWidget {
                                               onPay: paymeSubscribe,
                                               balans: balans);
                                         }),
+                                    flex: 2,
                                   ),
                                   SizedBox(
                                     width: Get.width * 0.04,

@@ -365,7 +365,7 @@ class SingletonUserInformation {
   String tenure() {
     if (!_NO_ACCOUNT){
     final int year = DateTime.now().year;
-    final int yearOfPurchase = int.parse(_yearOfPurchase);
+    final int yearOfPurchase = int.parse(_yearOfPurchase.isNotEmpty?_yearOfPurchase : 0);
     final int tenure = year - yearOfPurchase;
     return tenure.toString();
     }

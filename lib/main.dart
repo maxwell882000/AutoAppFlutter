@@ -98,7 +98,7 @@ void main() async {
       inputData: {
         "auth": SingletonUserInformation().isAuthorized,
       },
-      frequency: Duration(seconds: 1));
+      frequency: Duration(days: 1));
   runApp(MyApp());
 }
 

@@ -60,7 +60,7 @@ class _AddsState extends State<Adds> {
   @override
   void initState() {
     super.initState();
-    if (!SingletonUserInformation().proAccount) {
+
       SingletonConnection().loadAdds().then((value) {
         double width = MediaQuery.of(context).size.width;
         setState(() {
@@ -70,7 +70,7 @@ class _AddsState extends State<Adds> {
       }, onError: (value){
 
       });
-    }
+
   }
 
   @override
