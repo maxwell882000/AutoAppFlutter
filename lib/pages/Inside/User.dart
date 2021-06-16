@@ -71,6 +71,7 @@ class User extends StatelessWidget {
       SingletonGlobal().prefs.remove("user");
       SingletonGlobal().prefs.remove("token");
       FireBaseService().deleteToken();
+      SingletonUserInformation().setEmailOrPhone("");
       SingletonUserInformation().clean();
       SingletonRecomendation().clean();
       SingletonRegistrationAuto().clean();
@@ -220,7 +221,6 @@ class User extends StatelessWidget {
                         jsonDecode(value.body).forEach(
                             (e) => SingletonRegistrationAuto().fromJson(e));
                         SingletonRegistrationAuto().finish();
-
                         final results = await Navigator.of(context).pushNamed(
                             "/registration_auto",
                             arguments: MenuPOP.NO_ACCOUNT);

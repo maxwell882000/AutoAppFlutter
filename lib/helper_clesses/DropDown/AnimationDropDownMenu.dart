@@ -1,6 +1,9 @@
 
 
+
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../AnimatedContainerBorder.dart';
 
@@ -26,29 +29,28 @@ class AnimationDropDownMenu extends StatelessWidget {
     this.error,
   }) : super(key: key);
   final ScrollController scroll = new ScrollController();
+  void pressedScroll() {
+    if(scroll.hasClients){
+      if(pressed == false)
+        scroll.animateTo(scroll.initialScrollOffset, duration: Duration(milliseconds: 400), curve: Curves.linear);
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: visibility,
-      child: AnimatedContainerBorder(
-        duration:pressed ? 1000 : 600,
-        height: pressed ? enabledHeight : disabledHeight,
-        child: Scrollbar(
-          radius: Radius.circular(width*0.3),
-          controller: scroll,
-          isAlwaysShown: scrolling == 1
-              ? true
-              : false,
-          child: SingleChildScrollView(
-              controller: scroll,
-              physics: scrolling == 1
+    pressedScroll();
+    return AnimatedContainerBorder(
+      duration:pressed ? 1000 : 600,
+      height: pressed ? null : Get.width * 0.12,
+      child: ListView(
+        padding: EdgeInsets.zero,
+        shrinkWrap: true,
+        controller: scroll,
+          physics: scrolling == 1
                   ? AlwaysScrollableScrollPhysics()
                   : NeverScrollableScrollPhysics(),
-              child: Column(
-                children: dropDownWidget.toList(),
-              )),
-        ),
+        children: dropDownWidget.toList(),
       ),
     );
   }
 }
+

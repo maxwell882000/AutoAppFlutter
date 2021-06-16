@@ -212,27 +212,36 @@ class _DropDownItemState extends State<DropDownItem> {
     provider = provider==null?Provider.of<ErrorMessageProvider>(context):provider;
     toGetList();
 
-    return Stack(
-      children: [
-        AnimationDropDownMenu(
-          pressed: pressed,
-          enabledHeight: enabledHeight,
-          width: width,
-          disabledHeight: disabledHeight,
-          dropDownWidget: dropDownWidget,
-          scrolling: scrolling,
-          visibility: visibility,
-        ),
-        AnimationDropDownMenu(
-          pressed: pressed,
-          enabledHeight: enabledHeight,
-          width: width,
-          disabledHeight: disabledHeight,
-          dropDownWidget: dropDownWidget,
-          scrolling: scrolling,
-          visibility: !visibility,
-        ),
-      ],
+    return AnimationDropDownMenu(
+      pressed: pressed,
+      enabledHeight: enabledHeight,
+      width: width,
+      disabledHeight: disabledHeight,
+      dropDownWidget: dropDownWidget,
+      scrolling: scrolling,
+      visibility: !visibility,
     );
+    //  Stack(
+    //   children: [
+    //     AnimationDropDownMenu(
+    //       pressed: pressed,
+    //       enabledHeight: enabledHeight,
+    //       width: width,
+    //       disabledHeight: disabledHeight,
+    //       dropDownWidget: dropDownWidget,
+    //       scrolling: scrolling,
+    //       visibility: visibility,
+    //     ),
+    //     AnimationDropDownMenu(
+    //       pressed: pressed,
+    //       enabledHeight: enabledHeight,
+    //       width: width,
+    //       disabledHeight: disabledHeight,
+    //       dropDownWidget: dropDownWidget,
+    //       scrolling: scrolling,
+    //       visibility: !visibility,
+    //     ),
+    //   ],
+    // );
   }
 }

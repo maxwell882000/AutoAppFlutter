@@ -9,6 +9,7 @@ import 'package:flutter_projects/Singleton/SingletonRecomendation.dart';
 import 'package:flutter_projects/Singleton/SingletonRegistrationAuto.dart';
 import 'package:flutter_projects/Singleton/SingletonUserInformation.dart';
 import 'package:flutter_projects/helper_clesses/Dialog/ChoiceDialog.dart';
+import 'package:flutter_projects/helper_clesses/Dialog/CustomDialog.dart';
 import 'package:flutter_projects/helper_clesses/InsideOfAccount/MainMenu.dart';
 import 'package:flutter_projects/helper_clesses/LoadingScreen.dart';
 import 'package:flutter_projects/helper_clesses/TextFlexible.dart';
@@ -29,16 +30,17 @@ class _MenuState extends State<Menu> {
   List items = [];
   final initialHeight = 0.14;
   final UserProvider userProvider = new UserProvider.start(
-   run: SingletonUserInformation().run,
-   average: SingletonUserInformation().average,
-      changeDetails:  SingletonUserInformation().cards.changeDetails,
+    run: SingletonUserInformation().run,
+    average: SingletonUserInformation().average,
+    changeDetails: SingletonUserInformation().cards.changeDetails,
     allExpense: SingletonUserInformation().expenses.all_time,
-    monthExpense:SingletonUserInformation().expenses.in_this_month,
-      proAccount:  SingletonUserInformation().proAccount,
-    nameOfCar:  "${SingletonUserInformation().marka} ${SingletonUserInformation().model}",
-      number:"${SingletonUserInformation().number}",
-      techPassport:   "${SingletonUserInformation().techPassport}",
-   tenure: "${SingletonUserInformation().tenure()} лет",
+    monthExpense: SingletonUserInformation().expenses.in_this_month,
+    proAccount: SingletonUserInformation().proAccount,
+    nameOfCar:
+        "${SingletonUserInformation().marka} ${SingletonUserInformation().model}",
+    number: "${SingletonUserInformation().number}",
+    techPassport: "${SingletonUserInformation().techPassport}",
+    tenure: "${SingletonUserInformation().tenure()} лет",
     clearSettings: false,
   );
   double height = 0;
@@ -71,7 +73,6 @@ class _MenuState extends State<Menu> {
       if (mounted) {
         setState(() {
           print(value);
-
           value
               .where(
                   (element) => element['id'] != SingletonUserInformation().id)
@@ -86,59 +87,85 @@ class _MenuState extends State<Menu> {
     });
   }
 
-  Widget choices(String text, var id, double width) {
+  Widget delete(String id) {
+
+    return GestureDetector(
+      onTap: () async {
+        bool result = await CustomDialog.showChoice(
+            text: "Вы уверены что хотите удалить машину?".tr);
+        if (result == true) {
+          print(id);
+          Requests result =
+              await SingletonConnection().deleteTransport(id_transport: id);
+          Navigator.of(context).pop(result);
+        }
+      },
+      child: SvgPicture.asset(
+        'assets/cross.svg',
+        width: Get.width * 0.08,
+      ),
+    );
+  }
+
+  Widget choices(String text, int id, double width) {
     return SizedBox(
       height: width * 0.15,
-      child: TextButton(
-          style: TextButton.styleFrom(
-            padding:
-                EdgeInsets.symmetric(horizontal: 0, vertical: width * 0.01),
-          ),
-          onPressed: () {
-            _scrollController.animateTo(
-              _scrollController.position.minScrollExtent,
-              duration: Duration(seconds: 1),
-              curve: Curves.fastOutSlowIn,
-            );
-            final Future response = showDialog(
-              context: _scaffoldKey.currentContext,
-              barrierDismissible: false,
-              builder: (context) => ChoiceDialog(
-                text: "Вы уверены что хотите сменить карточку ?".tr,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          TextButton(
+              style: TextButton.styleFrom(
+                padding:
+                    EdgeInsets.symmetric(horizontal: 0, vertical: width * 0.01),
               ),
-            );
-            response.then((value) {
-              setState(() {
-                loading = true;
-                userProvider.setClearMenu(true);
-                userProvider.setClearSettings(true);
-              });
+              onPressed: () {
+                _scrollController.animateTo(
+                  _scrollController.position.minScrollExtent,
+                  duration: Duration(seconds: 1),
+                  curve: Curves.fastOutSlowIn,
+                );
+                final Future response = showDialog(
+                  context: _scaffoldKey.currentContext,
+                  barrierDismissible: false,
+                  builder: (context) => ChoiceDialog(
+                    text: "Вы уверены что хотите сменить карточку ?".tr,
+                  ),
+                );
+                response.then((value) {
+                  setState(() {
+                    loading = true;
+                    userProvider.setClearMenu(true);
+                    userProvider.setClearSettings(true);
+                  });
 
-              if (value) {
-                SingletonRecomendation().clean();
-                SingletonRegistrationAuto().clean();
-                SingletonUserInformation().cards.clean();
-                SingletonConnection()
-                    .authorizedData(
-                        text:
-                            "${SingletonUserInformation().emailOrPhone}/?id_cards=$id")
-                    .then((value) {
-                  loading = false;
+                  if (value) {
+                    SingletonRecomendation().clean();
+                    SingletonRegistrationAuto().clean();
+                    SingletonUserInformation().cards.clean();
+                    SingletonConnection()
+                        .authorizedData(
+                            text:
+                                "${SingletonUserInformation().emailOrPhone}/?id_cards=$id")
+                        .then((value) {
+                      loading = false;
 
-                  Navigator.of(_scaffoldKey.currentContext)
-                      .pop(MenuPOP.CHANGE_TRANSPORT);
+                      Navigator.of(_scaffoldKey.currentContext)
+                          .pop(MenuPOP.CHANGE_TRANSPORT);
+                    });
+                  } else {
+                    setState(() {
+                      loading = false;
+                      check = true;
+                      userProvider.setClearMenu(false);
+                      userProvider.setClearSettings(false);
+                    });
+                  }
                 });
-              } else {
-                setState(() {
-                  loading = false;
-                  check = true;
-                  userProvider.setClearMenu(false);
-                  userProvider.setClearSettings(false);
-                });
-              }
-            });
-          },
-          child: this.text(text: text, width: width)),
+              },
+              child: this.text(text: text, width: width)),
+          delete(id.toString())
+        ],
+      ),
     );
   }
 
@@ -226,6 +253,7 @@ class _MenuState extends State<Menu> {
                                 text:
                                     "${SingletonUserInformation().nameOfTransport}",
                                 color: HexColor("#42424A")),
+                            delete(SingletonUserInformation().id.toString())
                             // SvgPicture.asset("assets/arrow_down.svg"),
                           ],
                         ),

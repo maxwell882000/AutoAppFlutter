@@ -44,7 +44,7 @@ class SingletonUnits {
   }
 
   Map<String, dynamic> toJson() => {
-        'speedUnit': _speed,
+        'speedUnit': SingletonStoreUnits().speed.KM_D,
         'distanseUnit': _distance,
         'fuelConsumption': _fuelConsumption,
         'volume': _currency,

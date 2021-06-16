@@ -10,27 +10,30 @@ class TextFieldHelper extends StatelessWidget {
   final Widget suffixIcon;
   final Widget prefixIcon;
   final bool onlyInteger;
+  final Function validate;
+  final Function onTap;
 
-  TextFieldHelper({Key key, this.suffixIcon, this.prefixIcon, this.onlyInteger = false})
+  TextFieldHelper(
+      {Key key,
+      this.validate = _validate,
+      this.suffixIcon,
+      this.prefixIcon,
+      this.onTap = _onTag,
+      this.onlyInteger = false})
       : super(key: key);
-
-
-
   final controller = TextEditingController();
 
-
-
+  static _validate(text) {}
+  static _onTag() {}
   ErrorMessageProvider provider;
 
   int maxLength = 40;
 
-
-
-
   void controllerListener(context) {
     controller.addListener(() {
       String text = "";
-      final provider = Provider.of<ErrorMessageProvider>(context, listen: false);
+      final provider =
+          Provider.of<ErrorMessageProvider>(context, listen: false);
       if (controller.text.length <= maxLength) {
         text = controller.text;
       } else {
@@ -50,13 +53,10 @@ class TextFieldHelper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double width = MediaQuery.of(context).size.width;
 
     return StatefulWrapper(
-      onInit: ()=>controllerListener(context),
+      onInit: () => controllerListener(context),
       child: Container(
         margin: EdgeInsets.zero,
         decoration: BoxDecoration(
@@ -64,65 +64,66 @@ class TextFieldHelper extends StatelessWidget {
         ),
         width: double.infinity,
         padding: EdgeInsets.zero,
-        child: Consumer<ErrorMessageProvider>(
-          builder: (context, provider, child) {
-            return TextField(
-              scrollPhysics: AlwaysScrollableScrollPhysics(),
-              controller: controller,
-              cursorColor: Color.fromRGBO(66, 66, 74, 1),
-              cursorHeight: width * 0.045,
-              textAlign: TextAlign.left,
-              autocorrect: false,
-              maxLines: 1,
-              style: TextStyle(
-                fontSize: width * 0.04,
+        child:
+            Consumer<ErrorMessageProvider>(builder: (context, provider, child) {
+          return TextFormField(
+            scrollPhysics: AlwaysScrollableScrollPhysics(),
+            controller: controller,
+            cursorColor: Color.fromRGBO(66, 66, 74, 1),
+            cursorHeight: width * 0.045,
+            textAlign: TextAlign.left,
+            autocorrect: false,
+            onTap: onTap,
+            validator: (text) => validate(controller),
+            maxLines: 1,
+            style: TextStyle(
+              fontSize: width * 0.04,
+              fontFamily: "Roboto",
+              color: Color.fromRGBO(66, 66, 74, 1),
+            ),
+            decoration: new InputDecoration(
+              suffixIcon: provider.recommendations != null
+                  ? provider.inputData.isNotEmpty
+                      ? null
+                      : provider.recommendations
+                  : suffixIcon,
+              prefixIcon: prefixIcon,
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              counterText: '',
+              fillColor: Colors.white,
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: width * 0.02, vertical: width * 0.035),
+              labelText: provider.nameOfHelper,
+              labelStyle: TextStyle(
+                fontSize: width * 0.03,
                 fontFamily: "Roboto",
                 color: Color.fromRGBO(66, 66, 74, 1),
               ),
-              decoration: new InputDecoration(
-
-                suffixIcon: provider.recommendations != null
-                    ? provider.inputData.isNotEmpty ? null : provider
-                    .recommendations
-                    : suffixIcon,
-                prefixIcon: prefixIcon,
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                counterText: '',
-                fillColor: Colors.white,
-                contentPadding: EdgeInsets.symmetric(
-                    horizontal: width * 0.02, vertical: width * 0.035),
-                labelText: provider.nameOfHelper,
-                labelStyle: TextStyle(
-                  fontSize: width * 0.03,
-                  fontFamily: "Roboto",
-                  color: Color.fromRGBO(66, 66, 74, 1),
-                ),
-                filled: true,
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: !provider.error
-                          ? Color.fromRGBO(127, 165, 201, 1)
-                          : Color.fromRGBO(223, 88, 103, 1),
-                      width: 1),
-                  borderRadius: BorderRadius.all(Radius.circular(width * 0.02)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: !provider.error
-                          ? Color.fromRGBO(127, 165, 201, 1)
-                          : Color.fromRGBO(223, 88, 103, 1),
-                      width: 1),
-                  borderRadius: BorderRadius.all(Radius.circular(width * 0.02)),
-                ),
+              filled: true,
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: !provider.error
+                        ? Color.fromRGBO(127, 165, 201, 1)
+                        : Color.fromRGBO(223, 88, 103, 1),
+                    width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(width * 0.02)),
               ),
-              keyboardType: onlyInteger ? TextInputType.number : TextInputType
-                  .text,
-              inputFormatters: onlyInteger ? <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
-              ] : [],
-            );
-          }
-        ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: !provider.error
+                        ? Color.fromRGBO(127, 165, 201, 1)
+                        : Color.fromRGBO(223, 88, 103, 1),
+                    width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(width * 0.02)),
+              ),
+            ),
+            keyboardType:
+                onlyInteger ? TextInputType.number : TextInputType.text,
+            inputFormatters: onlyInteger
+                ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
+                : [],
+          );
+        }),
       ),
     );
   }

@@ -58,19 +58,20 @@ class RegistrationAuto extends StatelessWidget {
       SingletonUserInformation().setNumber(errors[5][1].inputData);
       SingletonUserInformation().setRun(double.parse(errors[6][1].inputData));
       SingletonUserInformation().setTechPassport(errors[7][1].inputData);
+      SingletonUserInformation().setTypeOfCar(errors[8][1].inputData);
       SingletonUserInformation()
-          .setNumberOfTank(int.parse(errors[8][1].inputData));
-      SingletonUserInformation().setFirstTankType(errors[9][1].inputData);
+          .setNumberOfTank(int.parse(errors[9][1].inputData));
+      SingletonUserInformation().setFirstTankType(errors[10][1].inputData);
       SingletonUserInformation()
-          .setFirstTankVolume(int.parse(errors[10][1].inputData));
+          .setFirstTankVolume(int.parse(errors[11][1].inputData));
       SingletonUserInformation().setInitialRun(SingletonUserInformation().run);
       print("Run ${SingletonUserInformation().run}");
       print(
           "Run after ${SingletonUnits().convertDistanceForDB(SingletonUserInformation().run)}");
       if (SingletonUserInformation().numberOfTank == 2) {
-        SingletonUserInformation().setSecondTankType(errors[11][1].inputData);
+        SingletonUserInformation().setSecondTankType(errors[12][1].inputData);
         SingletonUserInformation()
-            .setSecondTankVolume(int.parse(errors[12][1].inputData));
+            .setSecondTankVolume(int.parse(errors[13][1].inputData));
       } else {
         SingletonUserInformation().setSecondTankType("");
         SingletonUserInformation().setSecondTankVolume(0);

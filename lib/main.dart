@@ -46,23 +46,21 @@ import 'pages/Inside/History.dart';
 void backTask() {
   Workmanager().executeTask((task, inputData)  async{
     await SingletonGlobal().init();
-
-    bool speed = await LocationService().isSpeedMax();
     NotificationService.initializeNotification('back_channel');
-    if (SingletonUserInformation().isAuthorized && speed) {
+    if (SingletonUserInformation().isAuthorized) {
       NotificationService.initializeNotification('track_channel');
       AwesomeNotifications().createNotification(
         content: NotificationContent(
             id: 10,
             channelKey: 'track_channel',
-            title: 'В режим наблюдения'.tr,
-            body: 'Задействовать режим наблюдения?'.tr),
+            title: "Обновить пробег!".tr,
+            body: 'Хотите обновить ваш пробег ?'.tr),
         actionButtons: [
           NotificationActionButton(
               key: ButtonNotificationKeys.TRACKING_KEY,
               label: "Да",
               enabled: true,
-              buttonType: ActionButtonType.Default)
+              buttonType: ActionButtonType.InputField)
         ],
       );
     }

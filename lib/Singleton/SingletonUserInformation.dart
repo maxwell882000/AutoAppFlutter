@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter_projects/Singleton/SingletonConnection.dart';
+import 'package:flutter_projects/Singleton/SingletonGlobal.dart';
 
 import 'SingletonStoreToTheDiskAndLoad.dart';
 import 'package:get/get.dart';
 import 'SingletonUnits.dart';
+
+enum TypeOfCar { MECH, AUTO }
 
 class SingletonUserInformation {
   bool _pop = false;
@@ -30,7 +33,7 @@ class SingletonUserInformation {
   double _initialRun;
   bool _proAccount = false;
   double _average = 0;
-
+  TypeOfCar _typeOfCar = TypeOfCar.MECH;
   final Expenses _expenses = new Expenses();
   final Cards _cards = new Cards();
   CardUser _newCard = new CardUser.newCard();
@@ -106,7 +109,7 @@ class SingletonUserInformation {
 
   String get techPassport => _techPassport;
 
-  DateTime get date => _date;
+  DateTime get date => _date ?? "";
 
   double get initialRun => _initialRun;
 
@@ -116,9 +119,30 @@ class SingletonUserInformation {
 
   bool get isAuthorized => _isAuthorized;
 
+  int getTypeOfCarToBack() {
+    return _typeOfCar.index + 1;
+  }
+
+  void setTypeOfCarBack(int typeOfCar) {
+    if (typeOfCar == 1) {
+      _typeOfCar = TypeOfCar.MECH;
+    } else if (typeOfCar == 2) {
+      _typeOfCar = TypeOfCar.AUTO;
+    }
+  }
+
+  void setTypeOfCar(String typeOfCar) {
+    if (typeOfCar == "Механика".tr) {
+      _typeOfCar = TypeOfCar.MECH;
+    } else if (typeOfCar == "Автомат".tr) {
+      _typeOfCar = TypeOfCar.AUTO;
+    }
+  }
+
   void setIsAthorized(bool isAuthorized) {
     _isAuthorized = isAuthorized;
   }
+
   void setUserId(int id) {
     this._userId = id;
   }
@@ -145,7 +169,8 @@ class SingletonUserInformation {
 
   void setNewCard(int id) {
     _newCard = _cards.card.firstWhere((element) => element.id == id,
-        orElse: () => _cards.storeCards.firstWhere((element) => element.id == id));
+        orElse: () =>
+            _cards.storeCards.firstWhere((element) => element.id == id));
   }
 
   void setInitialRun(double initialRun) {
@@ -229,8 +254,8 @@ class SingletonUserInformation {
     final DateTime d = DateTime.parse("2021-02-04 09:45:54.925347Z");
     final now = DateTime.now();
     print("DATESSS");
-    print(_date);
-    final int days = now.difference(_date).inDays;
+    print(date);
+    final int days = now.difference(date).inDays;
     print(days);
     if (days == 0) {
       SingletonUnits().convertSpeedForUser(0, days);
@@ -289,7 +314,7 @@ class SingletonUserInformation {
       done = done > total ? total : done;
 
       double percantage = done / total;
-      if (percantage.isNaN){
+      if (percantage.isNaN) {
         percantage = 0;
       }
       return [
@@ -322,6 +347,7 @@ class SingletonUserInformation {
         'run': SingletonUnits().convertDistanceForDB(_run),
         'tech_passport': _techPassport,
         'expenses': expenses.toJson(),
+        'type_car': getTypeOfCarToBack(),
       };
 
   void fromJson(Map<String, dynamic> json) {
@@ -340,6 +366,7 @@ class SingletonUserInformation {
     _run = SingletonUnits().convertDistanceForUser(json['run']);
     _techPassport = json['tech_passport'];
     _initialRun = SingletonUnits().convertDistanceForUser(json['initial_run']);
+    setTypeOfCarBack(json['type_car']);
     expenses.fromJson(json['expenses']);
     if (json['cards_user'] != null)
       cards.fromJson(json['cards_user']);
@@ -363,17 +390,21 @@ class SingletonUserInformation {
   }
 
   String tenure() {
-    if (!_NO_ACCOUNT){
-    final int year = DateTime.now().year;
-    final int yearOfPurchase = int.parse(_yearOfPurchase.isNotEmpty?_yearOfPurchase : 0);
-    final int tenure = year - yearOfPurchase;
-    return tenure.toString();
+    if (!_NO_ACCOUNT) {
+      final int year = DateTime.now().year;
+      final int yearOfPurchase =
+          _yearOfPurchase != null && _yearOfPurchase.isNotEmpty
+              ? int.parse(_yearOfPurchase)
+              : 0;
+      final int tenure = year - yearOfPurchase;
+      return tenure.toString();
     }
   }
 
   void updateRun() {
-   SingletonConnection().updateRunOfUser(id, run);
+    SingletonConnection().updateRunOfUser(id, run);
   }
+
 
 
   SingletonUserInformation._internal();
@@ -408,9 +439,11 @@ class Expenses {
   void setInThisMonth(int inThisMonth) {
     _inThisMonth = inThisMonth;
   }
-  void setId(int id){
+
+  void setId(int id) {
     _id = id;
   }
+
   Map<String, dynamic> toJson() => {
         "all_time": all_time,
         "in_this_month": in_this_month,
@@ -489,7 +522,6 @@ class CardUser {
     _date = DateTime.now();
     _comments = "";
     _nameOfCard = "";
-
   }
 
   void cleanFully() {

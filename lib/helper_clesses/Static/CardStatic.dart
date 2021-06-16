@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter_projects/Singleton/SingletonRecomendation.dart';
@@ -6,17 +5,23 @@ import 'package:flutter_projects/Singleton/SingletonUnits.dart';
 import 'package:flutter_projects/Singleton/SingletonUserInformation.dart';
 import 'package:flutter_projects/helper_clesses/TextInput/TextFieldHelper.dart';
 import 'package:flutter_projects/provider/ErrorMessageProvider.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
-class CardStatic{
-   static Function choiceWidget(double width, ErrorMessageProvider repeatDistProvider, ErrorMessageProvider repeatTimeProvider) {
+class CardStatic {
+  static Function choiceWidget(
+      double width,
+      ErrorMessageProvider repeatDistProvider,
+      ErrorMessageProvider repeatTimeProvider,
+      GlobalKey<FormState> destForm,
+      GlobalKey<FormState> timeForm) {
     return (context) {
       final ErrorMessageProvider provider =
-      Provider.of<ErrorMessageProvider>(context);
+          Provider.of<ErrorMessageProvider>(context);
 
       final double run =
-      SingletonRecomendation().recommendationProbeg(provider.inputData);
+          SingletonRecomendation().recommendationProbeg(provider.inputData);
 
       if (run != null) {
         repeatDistProvider.setError(false);
@@ -54,6 +59,7 @@ class CardStatic{
         days =
             SingletonUnits().translateTimeToDays(SingletonUnits().time, time);
       }
+      // tells approximate time when card needs change
       print("RUN $run");
       print("Days $days");
       repeatTimeProvider.setRecommendations(
@@ -68,8 +74,8 @@ class CardStatic{
                     run == null
                         ? ""
                         : days != null
-                        ? "$days ${SingletonUnits().convertDaysToString(days)}"
-                        : "",
+                            ? "$days ${SingletonUnits().convertDaysToString(days)}"
+                            : "",
                     style: TextStyle(
                       color: HexColor("#42424A"),
                       fontFamily: 'Roboto',
@@ -88,21 +94,39 @@ class CardStatic{
           children: [
             ChangeNotifierProvider.value(
               value: repeatDistProvider,
-              child: TextFieldHelper(
-                onlyInteger: true,
+              child: Form(
+                key: destForm,
+                child: TextFieldHelper(
+                  onlyInteger: true,
+                  onTap: () {
+                    timeForm.currentState.validate();
+                  },
+                  validate: (TextEditingController text) {
+                    text.clear();
+                  },
+                ),
               ),
             ),
             SizedBox(
               height: width * 0.02,
             ),
-            Text("Или"),
+            Text("Или".tr),
             SizedBox(
               height: width * 0.02,
             ),
             ChangeNotifierProvider.value(
               value: repeatTimeProvider,
-              child: TextFieldHelper(
-                onlyInteger: true,
+              child: Form(
+                key: timeForm,
+                child: TextFieldHelper(
+                  onlyInteger: true,
+                  onTap: () {
+                    destForm.currentState.validate();
+                  },
+                  validate: (TextEditingController text) {
+                    text.clear();
+                  },
+                ),
               ),
             ),
           ],
@@ -110,4 +134,4 @@ class CardStatic{
       );
     };
   }
-    }
+}

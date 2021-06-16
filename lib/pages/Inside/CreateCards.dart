@@ -28,7 +28,9 @@ class CreateCards extends StatelessWidget {
   final ErrorMessageProvider repeatDistProvider =
       new ErrorMessageProvider("Введите растояние".tr);
   final ErrorMessageProvider repeatTimeProvider =
-      new ErrorMessageProvider("Введите число".tr);
+      new ErrorMessageProvider("Введите количество дней".tr);
+  final GlobalKey<FormState> _destForm = new GlobalKey<FormState>();
+  final GlobalKey<FormState> _timeForm = new GlobalKey<FormState>();
   final ErrorMessageProvider dataProvider = new ErrorMessageProvider("Введите дату".tr);
   Function sendData() {
     return (BuildContext context) {};
@@ -141,50 +143,6 @@ class CreateCards extends StatelessWidget {
     };
   }
 
-  // Function finish(double width) {
-  //   return (BuildContext context) {
-  //     final ErrorMessageProvider provider =
-  //         Provider.of<ErrorMessageProvider>(context);
-  //     print(provider.inputData.isEmpty);
-  //     final double run =
-  //         SingletonRecomendation().recommendationProbeg(provider.inputData);
-  //     print(run);
-  //     if (run != null) finishProvider.setError(false);
-  //     finishProvider.setRecommendations(
-  //       SizedBox(
-  //           height: width * 0.1,
-  //           child: Container(
-  //             margin: EdgeInsets.only(right: width * 0.03),
-  //             child: Column(
-  //               mainAxisAlignment: MainAxisAlignment.center,
-  //               children: [
-  //                 Text(
-  //                   run == null ? "" : "$run ${SingletonUnits().distance}",
-  //                   style: TextStyle(
-  //                     color: HexColor("#42424A"),
-  //                     fontFamily: 'Roboto',
-  //                     fontSize: width * 0.035,
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           )),
-  //     );
-  //     if (run != null)
-  //       SingletonUserInformation()
-  //           .newCard
-  //           .change
-  //           .setRun(run + SingletonUserInformation().run);
-  //     return Expanded(
-  //       child: ChangeNotifierProvider.value(
-  //         value: finishProvider,
-  //         child: TextFieldHelper(
-  //           onlyInteger: true,
-  //         ),
-  //       ),
-  //     );
-  //   };
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +162,7 @@ class CreateCards extends StatelessWidget {
           childAboveButton: [
             'assets/reload.svg',
             "Заполанировать".tr + "\n" + "замену".tr,
-            CardStatic.choiceWidget(width, repeatDistProvider, repeatTimeProvider)
+            CardStatic.choiceWidget(width, repeatDistProvider, repeatTimeProvider,_destForm, _timeForm)
           ],
           readyButton: ready(width),
         ),

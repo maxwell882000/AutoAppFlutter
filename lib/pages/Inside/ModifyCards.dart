@@ -39,6 +39,8 @@ class ModifyCards extends StatelessWidget {
       new ErrorMessageProvider("Введите пробег".tr);
   final ErrorMessageProvider repeatTimeProvider =
       new ErrorMessageProvider("Введите количество дней".tr);
+  final GlobalKey<FormState> _destForm = new GlobalKey<FormState>();
+  final GlobalKey<FormState> _timeForm = new GlobalKey<FormState>();
   final ErrorMessageProvider dateProvider =
       new ErrorMessageProvider("Дата на момент замены".tr);
   final CheckProvider check = new CheckProvider();
@@ -117,8 +119,7 @@ class ModifyCards extends StatelessWidget {
         days =
             SingletonUnits().translateTimeToDays(SingletonUnits().time, time);
       }
-      print("RUN $run");
-      print("Days $days");
+
       repeatTimeProvider.setRecommendations(
         SizedBox(
             height: width * 0.1,
@@ -169,7 +170,7 @@ class ModifyCards extends StatelessWidget {
               ),
               Consumer<CheckProvider>(
                 builder: (context, provider, child) {
-                  return Visibility(visible: provider.checked, child: child);
+                  return Visibility(visible: provider.checked, maintainState: true, child: child);
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -177,8 +178,17 @@ class ModifyCards extends StatelessWidget {
                   children: [
                     ChangeNotifierProvider.value(
                       value: repeatDistProvider,
-                      child: TextFieldHelper(
-                        onlyInteger: true,
+                      child: Form(
+                        key: _destForm,
+                        child: TextFieldHelper(
+                          onlyInteger: true,
+                          onTap: () {
+                            _timeForm.currentState.validate();
+                          },
+                          validate: (TextEditingController text) {
+                            text.clear();
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -190,8 +200,17 @@ class ModifyCards extends StatelessWidget {
                     ),
                     ChangeNotifierProvider.value(
                       value: repeatTimeProvider,
-                      child: TextFieldHelper(
-                        onlyInteger: true,
+                      child: Form(
+                        key: _timeForm,
+                        child: TextFieldHelper(
+                          onlyInteger: true,
+                          onTap: () {
+                            _destForm.currentState.validate();
+                          },
+                          validate: (TextEditingController text) {
+                            text.clear();
+                          },
+                        ),
                       ),
                     ),
                   ],

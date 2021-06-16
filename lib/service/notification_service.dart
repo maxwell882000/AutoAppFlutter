@@ -3,6 +3,8 @@ import 'dart:ui';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/Singleton/SingletonConnection.dart';
+import 'package:flutter_projects/Singleton/SingletonUserInformation.dart';
 import 'package:flutter_projects/route/go_page.dart';
 import 'package:get/get.dart';
 
@@ -17,10 +19,12 @@ class NotificationService extends GetxService {
     setActionListener();
     return this;
   }
- static NotificationService get to => Get.find<NotificationService>();
+
+  static NotificationService get to => Get.find<NotificationService>();
+
   static void initializeNotification(String channelKey) {
     AwesomeNotifications().initialize(
-        // set the icon to null if you want to use the default app icon
+      // set the icon to null if you want to use the default app icon
         null,
         [
           NotificationChannel(
@@ -49,11 +53,11 @@ class NotificationService extends GetxService {
     int id = Random().nextInt(100000);
     AwesomeNotifications().createNotification(
         content: NotificationContent(
-      id: id,
-      channelKey: channelKey,
-      title: title,
-      body: body,
-    ));
+          id: id,
+          channelKey: channelKey,
+          title: title,
+          body: body,
+        ));
   }
 
   void requestPermission() {
@@ -69,12 +73,19 @@ class NotificationService extends GetxService {
   void setActionListener() {
     AwesomeNotifications().actionStream.listen((receivedNotification) {
       print(receivedNotification.buttonKeyPressed);
-      print(receivedNotification.buttonKeyInput);
-
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         if (ButtonNotificationKeys.TRACKING_KEY ==
             receivedNotification.buttonKeyPressed) {
-          Navigator.of(Get.context).pushNamed('/track-user');
+          double new_run = double.parse(receivedNotification.buttonKeyInput);
+          if (SingletonUserInformation().run < new_run) {
+            SingletonUserInformation().setRun(new_run);
+            SingletonUserInformation().updateRun();
+          }
+          else {
+            createNotification(channelKey: 'track_channel',
+                title: "ОШИБКА".tr,
+                body: "Пробег всегда должен увеличиваться".tr);
+          }
         }
       });
     });
@@ -83,4 +94,5 @@ class NotificationService extends GetxService {
 
 class ButtonNotificationKeys {
   static String TRACKING_KEY = "tracking_key";
+
 }

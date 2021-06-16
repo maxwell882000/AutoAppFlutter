@@ -15,6 +15,7 @@ class ErrorMessageProvider with ChangeNotifier {
   List _errorsMessageWithText;
   List _items;
   bool _dispose = false;
+  bool _cleanTextField = false;
   ErrorMessageProvider _errorMessageProvider;
   Widget _swapWidget;
   Widget _recommendations;
@@ -49,11 +50,16 @@ class ErrorMessageProvider with ChangeNotifier {
   bool get nextPage => _nextPage;
   String get inputData => _inputData;
   bool get textField => _textField;
+  bool get cleanTextField => _cleanTextField;
   List get items => _items;
   Widget get swapWidget => _swapWidget;
+  ErrorMessageProvider get   errorMessageProvider => _errorMessageProvider;
   void addItems(var items){
     _items.add(items);
     notifyListeners();
+  }
+  void setCleanTextField(bool cleanTextField){
+    _cleanTextField = cleanTextField;
   }
   void setRecommendations(Widget recommendations){
     this._recommendations = recommendations;
@@ -76,6 +82,10 @@ class ErrorMessageProvider with ChangeNotifier {
   void setErrorsMessageWithText(List errorsMessageWithText) {
     this._errorsMessageWithText.add(errorsMessageWithText);
 
+  }
+  void setErrorMessageProvider(ErrorMessageProvider provider){
+    _errorMessageProvider = provider;
+    notifyListeners();
   }
   ErrorMessageProvider newErrorMessageProvider(String nameOfHelper){
     this._errorMessageProvider = new ErrorMessageProvider(nameOfHelper);

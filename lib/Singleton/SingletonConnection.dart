@@ -21,7 +21,10 @@ class SingletonConnection {
   }
 
   Future<int> saveToken(String token) async {
-    final result = await SingletonRestApi.post(url: "$URL/notification/", body: token,);
+    final result = await SingletonRestApi.post(
+      url: "$URL/notification/",
+      body: token,
+    );
     print("TOKEN SAVED");
     print(result.body);
     if (result.statusCode == 200) {
@@ -30,9 +33,12 @@ class SingletonConnection {
     }
     throw "";
   }
-  Future deleteToken({String user_id, String device_id}) async{
-   return await SingletonRestApi.delete(url: "$URL/notification/?user_id=$user_id&device_id=$device_id");
+
+  Future deleteToken({String user_id, String device_id}) async {
+    return await SingletonRestApi.delete(
+        url: "$URL/notification/?user_id=$user_id&device_id=$device_id");
   }
+
   Future<bool> registerAccount(String emailOrPhone, String provider) async {
     return await baseAuthorization(emailOrPhone, provider, '$URL/register/');
   }
@@ -72,6 +78,7 @@ class SingletonConnection {
   }
 
   Future<void> getAllMarkaForRegister() async {
+    SingletonRegistrationAuto().clean();
     final items = await getAllMarka();
     jsonDecode(items.body)
         .forEach((e) => SingletonRegistrationAuto().fromJson(e));
@@ -103,19 +110,23 @@ class SingletonConnection {
   }
 
   Future<void> loadAdds() async {
+    if (SingletonUserInformation().proAccount) {
+      throw "";
+    }
     final response = await SingletonRestApi.get(
       url: "$URL/adds/",
       headers: {'Content-Type': 'application/json'},
     );
-
     if (response.statusCode == 200) {
       Map json = jsonDecode(utf8.decode(response.bodyBytes));
       final result = await SingletonRestApi.get(
           url: "$URL/adds/${json['id']}/",
           headers: {'Content-Type': 'application/json'});
 
+      print(result.bodyBytes);
       SingletonAdds().setLinks(json['links']);
       SingletonAdds().setImages(result.bodyBytes);
+      return;
     }
     throw "";
   }
@@ -171,6 +182,21 @@ class SingletonConnection {
     return false;
   }
 
+  Future<Requests> deleteTransport({String id_transport}) async {
+    print("THERE");
+    String emailOrPhone = SingletonUserInformation().emailOrPhone;
+    final result = await SingletonRestApi.delete(
+        url: "$URL/transport/$emailOrPhone/?id_transport=$id_transport");
+    print("BODY");
+    print(result.body);
+    print(result.statusCode);
+    if (result.statusCode == 200) {
+      return Requests.SUCCESSFULLY_CREATED;
+    } else if (result.statusCode == 400) {
+      return Requests.NO_MORE_ACCOUNT;
+    }
+  }
+
   Future<Requests> shareTransport(String account, String id) async {
     bool internet = await checkConnection();
     if (internet) {
@@ -187,7 +213,7 @@ class SingletonConnection {
       if (response.statusCode == 200) {
         return Requests.SUCCESSFULLY_CREATED;
       } else if (response.statusCode == 400) {
-        return Requests.BAD_REQUEST;
+        return Requests.NO_MORE_ACCOUNT;
       } else if (response.statusCode == 404) {
         return Requests.NOT_FOUND;
       }
@@ -357,23 +383,24 @@ class SingletonConnection {
     final result =
         await SingletonRestApi.get(url: "${SingletonConnection.URL}/$tag");
     print(result.body);
-    List json = jsonDecode(utf8.decode(result.bodyBytes));
-
-    print(json);
-    if (json.isNotEmpty) {
-      json.forEach((e) => card.add(new CardUser(
-          e['id'],
-          e['name_of_card'],
-          DateTime.parse(e['date']),
-          e['comments'],
-          e['attach']['id'],
-          e['attach']['location'],
-          e['attach']['image'],
-          e['change']['id'],
-          SingletonUnits().convertDistanceForUser(e['change']['run']),
-          SingletonUnits().convertDistanceForUser(e['change']['initial_run']),
-          e['change']['time'],
-          e['expense'])));
+    if (result.statusCode == 200) {
+      List json = jsonDecode(utf8.decode(result.bodyBytes));
+      print(json);
+      if (json.isNotEmpty) {
+        json.forEach((e) => card.add(new CardUser(
+            e['id'],
+            e['name_of_card'],
+            DateTime.parse(e['date']),
+            e['comments'],
+            e['attach']['id'],
+            e['attach']['location'],
+            e['attach']['image'],
+            e['change']['id'],
+            SingletonUnits().convertDistanceForUser(e['change']['run']),
+            SingletonUnits().convertDistanceForUser(e['change']['initial_run']),
+            e['change']['time'],
+            e['expense'])));
+      }
     }
   }
 

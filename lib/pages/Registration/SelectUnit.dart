@@ -49,6 +49,7 @@ class SelectUnit extends StatelessWidget {
   }
 
   Function getUnits(BuildContext context) {
+    print("PRESSING");
     return (var errorMessageProvider) async {
       // SingletonUnits().setSpeed(errorMessageProvider[0][1].inputData);
       // SingletonUnits().setDistance(errorMessageProvider[1][1].inputData);
@@ -61,6 +62,7 @@ class SelectUnit extends StatelessWidget {
       SingletonUnits().setToTheDisk();
       print(SingletonUserInformation().emailOrPhone);
       SingletonConnection().submitUnits();
+      selectOptionsErrorProvider.setNextPage(true);
      await SingletonConnection().getAllMarkaForRegister();
       Navigator.of(context).popAndPushNamed("/registration_auto");
     };

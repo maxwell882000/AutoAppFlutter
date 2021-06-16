@@ -197,7 +197,7 @@ class AppBarForAccount extends GetView<AppBarController>
                       provider.setNextPage(false);
                       update();
                     });
-                  } else if (value == Requests.BAD_REQUEST) {
+                  } else if (value == Requests.NO_MORE_ACCOUNT) {
                     SingletonUserInformation().clean();
                     provider.setNO_ACCOUNT(true);
                     provider.setClearMenu(true);

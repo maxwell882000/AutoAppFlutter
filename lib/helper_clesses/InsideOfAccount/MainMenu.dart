@@ -14,11 +14,13 @@ class MainMenu extends StatelessWidget {
   final Widget nameBar;
   final VisibilityClass visible;
   final int menu;
+  final bool bottomInset;
   MainMenu({Key key,
     this.body,
     this.floatingActionButton,
     this.nameBar,
    this.visible,
+    this.bottomInset = false,
   this.menu = -10})
       : super(key: key);
 
@@ -33,7 +35,7 @@ class MainMenu extends StatelessWidget {
         create:(BuildContext context) => UserProvider() ,
         child: Scaffold(
 
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: bottomInset,
           appBar: AppBarForAccount(
             nameBar: this.nameBar,
             visible: visible,
@@ -46,7 +48,7 @@ class MainMenu extends StatelessWidget {
       );
     }
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: bottomInset,
         appBar: AppBarForAccount(
           nameBar: this.nameBar,
           visible: visible,

@@ -9,9 +9,10 @@ class SingletonRegistrationAuto {
     [1, "НОМЕР".tr, "Введите номер".tr, 0],
     [1, "ПРОБЕГ".tr, "Введите пробег".tr, 2],
     [1, "ТЕХ ПАСПОРТ".tr, "Введите тех паспорт".tr, 0],
-
+    [0, "ВИД МАШИНЫ".tr, "Выберите тип машины".tr, "Механика".tr, "Автомат".tr],
     [0, "КОЛИЧЕСТВО БАКОВ".tr, "Выберите количество баков".tr, "1", "2"],
   ];
+
   List _marka = [0, "МАРКА".tr, "Выберите марку".tr];
   List _additionalTank = [
     [
@@ -64,6 +65,7 @@ class SingletonRegistrationAuto {
       [1, "НОМЕР".tr, "Введите номер".tr, 0],
       [1, "ПРОБЕГ".tr, "Введите пробег".tr, 2],
       [1, "ТЕХ ПАСПОРТ".tr, "Введите тех паспорт".tr, 0],
+      [0, "ВИД МАШИНЫ".tr, "Выберите тип машины".tr, "Механика".tr, "Автомат".tr],
       [0, "КОЛИЧЕСТВО БАКОВ".tr, "Выберите количество баков".tr, "1", "2"],
     ];
     _marka = [0, "МАРКА".tr, "Выберите марку".tr];
@@ -120,9 +122,9 @@ class SingletonRegistrationAuto {
   }
 
   void fromJson(Map<String, dynamic> json) {
-    clean();
     List tempAll = [];
     List storeElements = [0, "МОДЕЛЬ".tr, "Выберите модель".tr];
+    print(json);
     json.forEach((key, value) => {
           if (key == "name_of_marka")
             {_marka.add(value)}
@@ -138,11 +140,11 @@ class SingletonRegistrationAuto {
     tempAll.add("МОДЕЛЬ".tr);
     tempAll.add(1);
     _additionalTank.add(tempAll);
-    _item.insert(1, _marka);
+    // _item.insert(1, _marka);
   }
 
   void finish() {
-    // _item.insert(1, _marka);
+    _item.insert(1, _marka);
   }
 
   SingletonRegistrationAuto._internal();

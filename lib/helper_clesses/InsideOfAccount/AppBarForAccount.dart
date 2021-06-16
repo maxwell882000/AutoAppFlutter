@@ -33,7 +33,8 @@ class AppBarForAccount extends StatefulWidget implements PreferredSizeWidget {
   const AppBarForAccount({this.nameBar, this.visible});
 
   @override
-  _AppBarForAccountState createState() => _AppBarForAccountState(
+  _AppBarForAccountState createState() =>
+      _AppBarForAccountState(
         nameBar: nameBar,
         visible: visible,
       );
@@ -54,13 +55,13 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
   final List setting = [
     [
       'ИМПОРТ / ЭКСПОРТ ДАННЫХ В EXCEL'.tr,
-      (context) {
+          (context) {
         ExportExcel export = new ExportExcel();
         Future path = export.export();
         CustomDialog.show(
             title: "Создание excel".tr,
             text:
-                "Создание excel началось , мы уведомим вас после окончания".tr);
+            "Создание excel началось , мы уведомим вас после окончания".tr);
 
         path.then((value) {
           NotificationService().createNotificationExcell(path: value);
@@ -69,34 +70,37 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
     ],
     [
       'ПЕРЕДАТЬ ДАННЫЕ ДРУГОМУ'.tr,
-      (context) {
-        final double width = MediaQuery.of(context).size.width;
+          (context) {
+        final double width = MediaQuery
+            .of(context)
+            .size
+            .width;
         final result = CustomDialog.dialog(
             width: width,
             context: context,
             barrierDismissible: false,
             child:
-                WillPopScope(onWillPop: () async => false, child: ShareData()));
+            WillPopScope(onWillPop: () async => false, child: ShareData()));
         result.then((value) {
           Navigator.of(context).pop(value);
         });
       }
     ],
-    [
-      'ТРЕКИНГ ПОЕЗДОК'.tr,
-      (context) {
-        Navigator.popAndPushNamed(context, "/track-user");
-      }
-    ],
+    // [
+    //   'ТРЕКИНГ ПОЕЗДОК'.tr,
+    //   (context) {
+    //     Navigator.popAndPushNamed(context, "/track-user");
+    //   }
+    // ],
     [
       'ИСТОРИЯ АВТО'.tr,
-      (context) {
+          (context) {
         Navigator.popAndPushNamed(context, "/history");
       }
     ],
     [
       'ПОЛУЧИТЬ PRO ДОСТУП'.tr,
-      (context) async {
+          (context) async {
         final result = await Navigator.popAndPushNamed(context, "/pro_account");
       },
       HexColor("#DF5867")
@@ -147,13 +151,16 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
     final provider = Provider.of<UserProvider>(context);
 
     return AppBar(
       backgroundColor: Colors.white,
       leading: Visibility(
-        visible: true && visible.clearMenu,
+        visible: true && visible.clearMenu && !provider.NO_ACCOUNT,
         //!provider.clearMenu
         maintainSize: true,
         maintainAnimation: true,
@@ -166,6 +173,11 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
               response.then((value) {
                 if (value == MenuPOP.CHANGE_TRANSPORT) {
                   update();
+                }
+                else if (value == Requests.NO_MORE_ACCOUNT) {
+                  SingletonUserInformation().clean();
+                  provider.setNO_ACCOUNT(true);
+                  provider.setClearMenu(true);
                 }
               });
             } else {
@@ -202,18 +214,17 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
                 final result = CustomDialog.dialog(
                     width: width,
                     context: context,
-                    child: SizedBox(
-                      height: width * 0.7,
-                      child: ListView.builder(
-                        itemBuilder: (context, position) => Settings(
-                          pop: setting[position][1],
-                          text: setting[position][0],
-                          color: setting[position].length >= 3
-                              ? setting[position][2]
-                              : null,
-                        ),
-                        itemCount: setting.length,
-                      ),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemBuilder: (context, position) =>
+                          Settings(
+                            pop: setting[position][1],
+                            text: setting[position][0],
+                            color: setting[position].length >= 3
+                                ? setting[position][2]
+                                : null,
+                          ),
+                      itemCount: setting.length,
                     ));
                 result.then((value) {
                   setState(() {
@@ -227,7 +238,7 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
                       provider.setNextPage(false);
                       update();
                     });
-                  } else if (value == Requests.BAD_REQUEST) {
+                  } else if (value == Requests.NO_MORE_ACCOUNT) {
                     SingletonUserInformation().clean();
                     provider.setNO_ACCOUNT(true);
                     provider.setClearMenu(true);
@@ -256,8 +267,8 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
               final result = CustomDialog.dialog(
                 width: width,
                 child: SizedBox(
-                  height: width * 0.5,
                   child: ListView.builder(
+                    shrinkWrap: true,
                     itemBuilder: (context, position) {
                       check.items.add(new CheckProvider());
                       return ChangeNotifierProvider.value(
@@ -304,6 +315,8 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
   }
 }
 
+
+
 class Settings extends StatelessWidget {
   final Function pop;
   final String text;
@@ -313,7 +326,10 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Container(
       margin: EdgeInsets.all(width * 0.02),
       child: TextButton(
@@ -342,7 +358,10 @@ class Filtering extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery
+        .of(context)
+        .size
+        .width;
     final provider = Provider.of<CheckProvider>(context);
     return Container(
       child: Row(
@@ -385,12 +404,13 @@ class ExportInExcell extends StatelessWidget {
   Widget build(BuildContext context) {
     return StatefulWrapper(
       onInit: () {},
-      child: Obx(() => Stack(
+      child: Obx(() =>
+          Stack(
             children: [
               Visibility(
                   child: LoadingScreen(
-                visible: !load.value,
-              )),
+                    visible: !load.value,
+                  )),
               Visibility(
                 visible: load.value,
                 child: Text("Ваш excel сохранен в".tr),
@@ -408,7 +428,7 @@ class ShareData extends StatefulWidget {
 
 class _ShareDataState extends State<ShareData> {
   final ErrorMessageProvider selectOptionsErrorProvider =
-      new ErrorMessageProvider("");
+  new ErrorMessageProvider("");
   bool loading = true;
   final List accounts = [];
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
@@ -432,7 +452,10 @@ class _ShareDataState extends State<ShareData> {
         selectOptionsErrorProvider.setItems(items);
         loading = false;
         selectOptionsErrorProvider.setNextPage(false);
-        double width = MediaQuery.of(context).size.width;
+        double width = MediaQuery
+            .of(context)
+            .size
+            .width;
         list = ListOfDropDownItemWithText(
           itemWithTextField: items,
           disabledHeightOfItem: width * 0.12,
@@ -475,12 +498,13 @@ class _ShareDataState extends State<ShareData> {
         } else if (Requests.FORBIDDEN == value) {
           CustomDialog.show(
               title: "Невозможно".tr,
-              text: "Пользователь, которму вы хотите передать карточку, не имеет pro account и у него уже есть карточка. Пожалуйста попросите его преобрести pro account чтоб это было возможно!".tr);
+              text: "Пользователь, которму вы хотите передать карточку, не имеет pro account и у него уже есть карточка. Пожалуйста попросите его преобрести pro account чтоб это было возможно!"
+                  .tr);
           selectOptionsErrorProvider.setNextPage(false);
         } else if (Requests.NO_INTERNET == value) {
           selectOptionsErrorProvider.setNextPage(false);
           Scaffold.of(context).showSnackBar(
-             SnackBar(content: Text('У вас нет интернета!'.tr)),
+            SnackBar(content: Text('У вас нет интернета!'.tr)),
           );
         } else {
           if (int.parse(id) != SingletonUserInformation().id) {
@@ -501,7 +525,10 @@ class _ShareDataState extends State<ShareData> {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery
+        .of(context)
+        .size
+        .width;
     return ChangeNotifierProvider.value(
       value: selectOptionsErrorProvider,
       child: Container(
@@ -513,7 +540,7 @@ class _ShareDataState extends State<ShareData> {
           backgroundColor: Colors.transparent,
           body: Container(
             decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(width * 0.2)),
+            BoxDecoration(borderRadius: BorderRadius.circular(width * 0.2)),
             margin: EdgeInsets.symmetric(
                 horizontal: width * 0.05, vertical: width * 0.05),
             child: Builder(builder: (context) {

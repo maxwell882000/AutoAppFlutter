@@ -350,6 +350,7 @@ class _CardsUserState extends State<CardsUser> {
     double width = MediaQuery.of(context).size.width;
 
     return  MainMenu(
+      bottomInset: true,
       visible: VisibilityClass(
         filterVisible: false,
         menuVisible: true,

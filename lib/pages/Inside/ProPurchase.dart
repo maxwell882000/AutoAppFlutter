@@ -162,7 +162,6 @@ class ProPurchase extends StatelessWidget {
         child: GetBuilder<ProAccountController>(
             init: ProAccountController(),
             builder: (_) {
-
               if (!_.isLoaded) {
                 return LoadingScreenWithScaffold(
                   visible: true,
@@ -219,6 +218,24 @@ class ProPurchase extends StatelessWidget {
                         SizedBox(
                           height: width * 0.1,
                         ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: button(
+                                  text: "Оформить подписку".tr,
+                                  submit: (context) {
+                                    pay(
+                                        type: TypeOfPayment.SUBSCRIBE,
+                                        onPay: paymeSubscribe,
+                                        balans: balans);
+                                  }),
+                              flex: 2,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: width * 0.1,
+                        ),
                         Container(
                           padding: EdgeInsets.all(width * 0.06),
                           height: width * 0.4,
@@ -243,22 +260,16 @@ class ProPurchase extends StatelessWidget {
                               ),
 
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
                                   Expanded(
-                                    child: button(
-                                        text: "Оформить подписку".tr,
-                                        submit: (context) {
-                                          pay(
-                                              type: TypeOfPayment.SUBSCRIBE,
-                                              onPay: paymeSubscribe,
-                                              balans: balans);
-                                        }),
-                                    flex: 2,
-                                  ),
+                                      child: text(
+                                          text: "Вы можете пополнить ваш баланс в Paynet! Вам всего лишь нужно вести ваш ID!".tr, width: width)),
                                   SizedBox(
-                                    width: Get.width * 0.04,
+                                    width: Get.width*0.02,
                                   ),
-                                  Expanded(
+
+                                  Flexible(
                                     child: button(
                                         text: "Купить тариф".tr,
                                         submit: (context) {
@@ -267,7 +278,8 @@ class ProPurchase extends StatelessWidget {
                                               onPay: paynetPay,
                                               balans: balans);
                                         }),
-                                  )
+                                  ),
+
                                 ],
                               )
                               // SizedBox(

@@ -97,7 +97,7 @@ class UserProvider with ChangeNotifier {
   bool get sortChange => _sortChange;
   bool get nextPage => _nextPage;
   bool get loading => _loading;
-  double get run => _run;
+  double get run => _run ?? 0.0;
   double get averageRun => _averageRun;
   int get changeDetail => _changeDetail;
   int get expenseAll => _expenseAll;

@@ -55,7 +55,7 @@ class _DateState extends State<Date> {
       child: TextButton(
         style: TextButton.styleFrom(minimumSize: Size.infinite),
         onPressed: () {
-          CustomDialog.dialog(
+         final result  = CustomDialog.dialog(
               width: width,
               context: context,
               child: Container(
@@ -108,6 +108,7 @@ class _DateState extends State<Date> {
                 _scrollController.jumpToItem(select);
             });
           });
+
         },
         child: Align(
           alignment: Alignment.centerLeft,
