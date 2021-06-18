@@ -23,22 +23,19 @@ import 'package:flutter_projects/pages/Inside/ProPurchase.dart';
 import 'package:flutter_projects/pages/Inside/RecomendationService.dart';
 import 'package:flutter_projects/pages/Inside/SingleRecomendation.dart';
 import 'package:flutter_projects/pages/Inside/TrackLocation.dart';
+import 'package:flutter_projects/pages/Inside/UpdateRun.dart';
 import 'package:flutter_projects/pages/Inside/User.dart';
 import 'package:flutter_projects/pages/Registration/Registration.dart';
 import 'package:flutter_projects/pages/Registration/RegistrationAuto.dart';
 import 'package:flutter_projects/pages/Registration/SelectUnit.dart';
-
 import 'package:flutter_projects/service/fire_base_messaging.dart';
 import 'package:flutter_projects/service/location_service.dart';
 import 'package:flutter_projects/service/notification_service.dart';
 import 'package:flutter_projects/service/translation_service.dart';
-
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:responsive_framework/utils/scroll_behavior.dart';
-
 import 'package:workmanager/workmanager.dart';
-
 import 'Singleton/SingletonGlobal.dart';
 import 'pages/Inside/ChoosePayment.dart';
 import 'pages/Inside/History.dart';
@@ -58,9 +55,9 @@ void backTask() {
         actionButtons: [
           NotificationActionButton(
               key: ButtonNotificationKeys.TRACKING_KEY,
-              label: "Да",
+              label: "Да, хочу обновить!",
               enabled: true,
-              buttonType: ActionButtonType.InputField)
+          )
         ],
       );
     }
@@ -155,6 +152,7 @@ class MyApp extends StatelessWidget {
         "/code-verification": (context) => CodeVerification(),
         "/track-user": (context) => TrackUser(),
         "/store-cards":(context) => StoreCards(),
+        "/update-run" :(context) => UpdateRun()
       },
     );
   }

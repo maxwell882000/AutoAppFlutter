@@ -219,7 +219,7 @@ class _FeeState extends State<Fee> {
                               fontWeight: FontWeight.bold,
                             ),
                             decoration: new InputDecoration(
-                              hintText: "Количество".tr,
+                              hintText: "Сумма".tr,
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,

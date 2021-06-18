@@ -1,13 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/Singleton/SingletonUserInformation.dart';
 import 'package:flutter_projects/provider/FeeProvider.dart';
 
-
-
 class ErrorMessageProvider with ChangeNotifier {
   String _nameOfHelper;
   String _inputData;
+  String initialData;
   bool _error;
   bool _selected;
   bool _nextPage;
@@ -19,19 +17,23 @@ class ErrorMessageProvider with ChangeNotifier {
   ErrorMessageProvider _errorMessageProvider;
   Widget _swapWidget;
   Widget _recommendations;
+
   itemsFill() {
     SingletonUserInformation().newCard.expense.forEach((element) {
       addItems(new FeeProvider.downloaded(element.id, element.name,
           element.sum.toString(), element.amount.toString()));
     });
   }
-  ErrorMessageProvider.zero(){
+
+  ErrorMessageProvider.zero() {
     this._nextPage = false;
   }
-  ErrorMessageProvider.cards({String nameOfHelper, String inputData}){
+
+  ErrorMessageProvider.cards({String nameOfHelper, String inputData}) {
     this._nameOfHelper = nameOfHelper;
     this._inputData = inputData;
   }
+
   ErrorMessageProvider(String nameOfHelper) {
     this._nameOfHelper = nameOfHelper;
     this._error = false;
@@ -42,34 +44,53 @@ class ErrorMessageProvider with ChangeNotifier {
     this._errorsMessageWithText = [];
     this._items = [];
   }
+
   List get errorsMessageWithText => _errorsMessageWithText;
+
   Widget get recommendations => _recommendations;
+
   bool get error => _error;
+
   String get nameOfHelper => _nameOfHelper;
+
   bool get selected => _selected;
+
   bool get nextPage => _nextPage;
+
   String get inputData => _inputData;
+
   bool get textField => _textField;
+
   bool get cleanTextField => _cleanTextField;
+
   List get items => _items;
+
   Widget get swapWidget => _swapWidget;
-  ErrorMessageProvider get   errorMessageProvider => _errorMessageProvider;
-  void addItems(var items){
+
+
+
+
+
+  void addItems(var items) {
     _items.add(items);
     notifyListeners();
   }
-  void setCleanTextField(bool cleanTextField){
+
+  void setCleanTextField(bool cleanTextField) {
     _cleanTextField = cleanTextField;
   }
-  void setRecommendations(Widget recommendations){
+
+  void setRecommendations(Widget recommendations) {
     this._recommendations = recommendations;
     notifyListeners();
   }
-  void setSwapWidget(Widget swapWidget){
+
+  void setSwapWidget(Widget swapWidget) {
     _swapWidget = swapWidget;
     notifyListeners();
   }
-  void setItems(List items){
+
+  void setItems(List items) {
     this._items = items;
     notifyListeners();
   }
@@ -81,20 +102,23 @@ class ErrorMessageProvider with ChangeNotifier {
 
   void setErrorsMessageWithText(List errorsMessageWithText) {
     this._errorsMessageWithText.add(errorsMessageWithText);
-
   }
-  void setErrorMessageProvider(ErrorMessageProvider provider){
+
+  void setErrorMessageProvider(ErrorMessageProvider provider) {
     _errorMessageProvider = provider;
     notifyListeners();
   }
-  ErrorMessageProvider newErrorMessageProvider(String nameOfHelper){
+
+  ErrorMessageProvider newErrorMessageProvider(String nameOfHelper) {
     this._errorMessageProvider = new ErrorMessageProvider(nameOfHelper);
     return _errorMessageProvider;
   }
+
   void setNextPage(bool nextPage) {
     this._nextPage = nextPage;
     notifyListeners();
   }
+
   void setTextField(bool textField) {
     this._textField = textField;
     notifyListeners();
@@ -106,7 +130,6 @@ class ErrorMessageProvider with ChangeNotifier {
   }
 
   void setNameOfHelper(String nameOfHelper) {
-
     this._nameOfHelper = nameOfHelper;
     notifyListeners();
   }
@@ -115,11 +138,13 @@ class ErrorMessageProvider with ChangeNotifier {
     this._selected = selected;
     notifyListeners();
   }
+
   @override
   void dispose() {
     _dispose = true;
     super.dispose();
   }
+
   @override
   void notifyListeners() {
     if (!_dispose) {

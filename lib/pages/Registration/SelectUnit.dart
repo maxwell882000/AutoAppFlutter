@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_projects/Singleton/SingletonConnection.dart';
@@ -16,36 +15,69 @@ import 'package:flutter_projects/provider/ErrorMessageProvider.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
-class SelectUnit extends StatelessWidget {
+class SelectUnit extends StatefulWidget {
+  SelectUnit({Key key}) : super(key: key);
+
+  @override
+  _SelectUnitState createState() => _SelectUnitState();
+}
+
+class _SelectUnitState extends State<SelectUnit> {
   final List items = [
-  // ["Cкорость".tr,"Выберите скорость".tr ,SingletonStoreUnits().speed.KM_C,SingletonStoreUnits().speed.M_C,SingletonStoreUnits().speed.KM_H,SingletonStoreUnits().speed.M_H,SingletonStoreUnits().speed.KM_D,SingletonStoreUnits().speed.M_D,SingletonStoreUnits().speed.KM_Y,SingletonStoreUnits().speed.M_Y],
-  ["Расстояние".tr, "Выберите растояние".tr,SingletonStoreUnits().distance.CM,SingletonStoreUnits().distance.KM,SingletonStoreUnits().distance.M,SingletonStoreUnits().distance.MM],
-  ["Расход топлива".tr, "Выберите расход топлива".tr , SingletonStoreUnits().fuelConsumption.KM_L,SingletonStoreUnits().fuelConsumption.L_100KM,SingletonStoreUnits().fuelConsumption.L_KM],
-  ["Валюта".tr,"Выберите валюту".tr ,  SingletonStoreUnits().currency.EUR,SingletonStoreUnits().currency.RUB,SingletonStoreUnits().currency.USD,SingletonStoreUnits().currency.UZS],
+    // ["Cкорость".tr,"Выберите скорость".tr ,SingletonStoreUnits().speed.KM_C,SingletonStoreUnits().speed.M_C,SingletonStoreUnits().speed.KM_H,SingletonStoreUnits().speed.M_H,SingletonStoreUnits().speed.KM_D,SingletonStoreUnits().speed.M_D,SingletonStoreUnits().speed.KM_Y,SingletonStoreUnits().speed.M_Y],
+    [
+      "Расстояние".tr,
+      "Выберите растояние".tr,
+      SingletonStoreUnits().distance.CM,
+      SingletonStoreUnits().distance.KM,
+      SingletonStoreUnits().distance.M,
+      SingletonStoreUnits().distance.MM
+    ],
+    [
+      "Расход топлива".tr,
+      "Выберите расход топлива".tr,
+      SingletonStoreUnits().fuelConsumption.KM_L,
+      SingletonStoreUnits().fuelConsumption.L_100KM,
+      SingletonStoreUnits().fuelConsumption.L_KM
+    ],
+    [
+      "Валюта".tr,
+      "Выберите валюту".tr,
+      SingletonStoreUnits().currency.EUR,
+      SingletonStoreUnits().currency.RUB,
+      SingletonStoreUnits().currency.USD,
+      SingletonStoreUnits().currency.UZS
+    ],
   ];
 
+  ErrorMessageProvider selectOptionsErrorProvider;
 
-  SelectUnit({Key key}) : super(key: key);
-  final ErrorMessageProvider selectOptionsErrorProvider =
-  new ErrorMessageProvider("");
+  @override
+  void initState() {
+    super.initState();
+    selectOptionsErrorProvider = new ErrorMessageProvider("");
+  }
 
-  Function readyToTheNext( Function loadToHard){
-  return (BuildContext context) {
-    var errors = selectOptionsErrorProvider.errorsMessageWithText;
-    var selected = errors
-        .where((element) => !element[1].selected)
-        .map((element) => errors.indexOf(element));
-    if (selected.length == 0) {
-      selectOptionsErrorProvider.setNextPage(true);
-      loadToHard(errors);
-    } else {
-      selected.forEach((element) {
-        var error = errors[element];
-        error[1].setError(true);
-        error[1].setNameOfHelper("Здесь ничего не выбрано".tr);
-      });
-    }
-  };
+  Function readyToTheNext(Function loadToHard) {
+    return (BuildContext context) {
+      print("SADSAD");
+      var errors = selectOptionsErrorProvider.errorsMessageWithText;
+      var selected = errors
+          .where((element) => !element[1].selected)
+          .map((element) => errors.indexOf(element));
+      print(selected);
+      if (selected.length == 0) {
+        selectOptionsErrorProvider.setNextPage(true);
+        loadToHard(errors);
+      } else {
+        selected.forEach((element) {
+          print(element);
+          var error = errors[element];
+          error[1].setError(true);
+          error[1].setNameOfHelper("Здесь ничего не выбрано".tr);
+        });
+      }
+    };
   }
 
   Function getUnits(BuildContext context) {
@@ -61,25 +93,22 @@ class SelectUnit extends StatelessWidget {
       SingletonUnits().setCurrency(errorMessageProvider[2][1].inputData);
       SingletonUnits().setToTheDisk();
       print(SingletonUserInformation().emailOrPhone);
-      SingletonConnection().submitUnits();
       selectOptionsErrorProvider.setNextPage(true);
-     await SingletonConnection().getAllMarkaForRegister();
+      await SingletonConnection().submitUnits();
+      await SingletonConnection().getAllMarkaForRegister();
       Navigator.of(context).popAndPushNamed("/registration_auto");
     };
   }
 
-  Function _onWillPop(BuildContext context)  {
-
-    return  () async{
-
+  Function _onWillPop(BuildContext context) {
+    return () async {
       final bool response = await showDialog(
           context: context,
-        barrierDismissible: false,
-        builder: (context) => DataNotSave()
-      );
+          barrierDismissible: false,
+          builder: (context) => DataNotSave());
       print("SADADASDASDD");
       print(response);
-      if(response){
+      if (response) {
         SingletonRegistrationAuto().clean();
         SingletonConnection().deleteUser();
       }
@@ -102,11 +131,11 @@ class SelectUnit extends StatelessWidget {
           aboveText: "Выбор единицы измерения".tr,
           child: ListOfDropDownItemWithText(
             item: items,
-            disabledHeightOfItem: width*0.11,
-            enabledHeightOfItem: width*0.25,
+            disabledHeightOfItem: width * 0.11,
+            enabledHeightOfItem: width * 0.25,
             width: width,
-            heightOfDropDownItems: width*0.66,
-            provider:selectOptionsErrorProvider,
+            heightOfDropDownItems: width * 0.66,
+            provider: selectOptionsErrorProvider,
           ),
           loadToHard: getUnits(context),
           clickEvent: readyToTheNext,
@@ -117,4 +146,3 @@ class SelectUnit extends StatelessWidget {
     );
   }
 }
-

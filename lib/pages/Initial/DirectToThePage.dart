@@ -49,7 +49,6 @@ class _DirectToThePageState extends State<DirectToThePage> {
     if (SingletonUserInformation().isAuthorized) {
       final res = Navigator.of(context).popAndPushNamed('/authorized');
       res.then((value) {
-
         SingletonUserInformation().clean();
         SingletonRecomendation().clean();
       });

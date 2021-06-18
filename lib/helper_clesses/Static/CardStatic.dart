@@ -10,15 +10,18 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
 class CardStatic {
+  static void cleanTextField(TextEditingController text, ErrorMessageProvider provider) {
+    text.clear();
+    provider.setRecommendations(SizedBox());
+  }
   static Function choiceWidget(
       double width,
       ErrorMessageProvider repeatDistProvider,
       ErrorMessageProvider repeatTimeProvider,
       GlobalKey<FormState> destForm,
       GlobalKey<FormState> timeForm) {
-    return (context) {
-      final ErrorMessageProvider provider =
-          Provider.of<ErrorMessageProvider>(context);
+    return (provider) {
+
 
       final double run =
           SingletonRecomendation().recommendationProbeg(provider.inputData);
@@ -30,6 +33,8 @@ class CardStatic {
             .change
             .setRun(run + SingletonUserInformation().run);
       }
+      print(repeatTimeProvider.inputData);
+
       repeatDistProvider.setRecommendations(
         SizedBox(
             height: width * 0.1,
@@ -62,6 +67,7 @@ class CardStatic {
       // tells approximate time when card needs change
       print("RUN $run");
       print("Days $days");
+
       repeatTimeProvider.setRecommendations(
         SizedBox(
             height: width * 0.1,
@@ -101,9 +107,7 @@ class CardStatic {
                   onTap: () {
                     timeForm.currentState.validate();
                   },
-                  validate: (TextEditingController text) {
-                    text.clear();
-                  },
+                  validate: cleanTextField,
                 ),
               ),
             ),
@@ -123,9 +127,7 @@ class CardStatic {
                   onTap: () {
                     destForm.currentState.validate();
                   },
-                  validate: (TextEditingController text) {
-                    text.clear();
-                  },
+                  validate: cleanTextField,
                 ),
               ),
             ),

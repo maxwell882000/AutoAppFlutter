@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_projects/Singleton/SingletonConnection.dart';
 import 'package:flutter_projects/Singleton/SingletonGlobal.dart';
+import 'package:flutter_projects/Singleton/SingletonRecomendation.dart';
 import 'package:flutter_projects/Singleton/SingletonRegistrationAuto.dart';
 import 'package:flutter_projects/Singleton/SingletonUnits.dart';
 import 'package:flutter_projects/Singleton/SingletonUserInformation.dart';
@@ -17,14 +18,21 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 
-class RegistrationAuto extends StatelessWidget {
+class RegistrationAuto extends StatefulWidget {
   RegistrationAuto({Key key}) : super(key: key);
+
+  @override
+  _RegistrationAutoState createState() => _RegistrationAutoState();
+}
+
+class _RegistrationAutoState extends State<RegistrationAuto> {
   final ErrorMessageProvider selectOptionsErrorProvider =
       new ErrorMessageProvider("");
 
   Function readyToTheNext(Function loadToHard) {
     return (BuildContext context) {
       var errors = selectOptionsErrorProvider.errorsMessageWithText;
+      print(errors);
       var selected = errors
           .where((element) =>
               !element[1].selected && element[0] != "ТЕХ ПАСПОРТ".tr)
@@ -100,16 +108,21 @@ class RegistrationAuto extends StatelessWidget {
           SingletonUserInformation().cards.setId(json['id_cards']);
           SingletonUserInformation().expenses.setId(json['id_expenses']);
           bool pop;
+
           if (args == MenuPOP.NEW_TRANSPORT) {
             SingletonUserInformation().cards.clean();
             SingletonUserInformation().cards.setId(json['id_cards']);
             pop = true;
+            SingletonConnection().recommendData().then((value) {
             Navigator.of(context).popAndPushNamed("/authorized", result: pop);
+            });
             return;
           }
           SingletonRegistrationAuto().clean();
           if (args == MenuPOP.NO_ACCOUNT) {
+            SingletonConnection().recommendData().then((value) {
             Navigator.of(context).pop(true);
+            });
             return;
           }
           SingletonConnection().recommendData().then((value) {

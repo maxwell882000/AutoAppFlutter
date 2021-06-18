@@ -12,9 +12,11 @@ import 'package:flutter_projects/helper_clesses/TextInput/TextInputForum.dart';
 import 'package:flutter_projects/provider/ErrorMessageProvider.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 class LogIn extends StatelessWidget {
  LogIn({Key key}) : super(key: key);
-
+ final ErrorMessageProvider errorMessageProvider =
+ new ErrorMessageProvider("Введите Email или Номер телефона".tr);
  Function clickLogin(BuildContext context) {
    return (String emailOrPhone, String provider,
        ErrorMessageProvider prov) async {
@@ -42,11 +44,15 @@ class LogIn extends StatelessWidget {
   Widget build(BuildContext context) {
 
 
-    return TextInputForum(
-      svgPicture:"assets/registration.svg",
-      aboveText: "Войти в аккаунт".tr,
-      nameOfButton: "Войти".tr,
-      connectDataBase: clickLogin(context),
+    return ChangeNotifierProvider.value(
+      value: errorMessageProvider,
+      child: TextInputForum(
+        svgPicture:"assets/registration.svg",
+        aboveText: "Войти в аккаунт".tr,
+        nameOfButton: "Войти".tr,
+        connectDataBase: clickLogin(context),
+        errorMessageProvider: errorMessageProvider,
+      ),
     );
   }
 }

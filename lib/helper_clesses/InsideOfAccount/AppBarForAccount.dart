@@ -33,8 +33,7 @@ class AppBarForAccount extends StatefulWidget implements PreferredSizeWidget {
   const AppBarForAccount({this.nameBar, this.visible});
 
   @override
-  _AppBarForAccountState createState() =>
-      _AppBarForAccountState(
+  _AppBarForAccountState createState() => _AppBarForAccountState(
         nameBar: nameBar,
         visible: visible,
       );
@@ -55,13 +54,13 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
   final List setting = [
     [
       'ИМПОРТ / ЭКСПОРТ ДАННЫХ В EXCEL'.tr,
-          (context) {
+      (context) {
         ExportExcel export = new ExportExcel();
         Future path = export.export();
         CustomDialog.show(
             title: "Создание excel".tr,
             text:
-            "Создание excel началось , мы уведомим вас после окончания".tr);
+                "Создание excel началось , мы уведомим вас после окончания".tr);
 
         path.then((value) {
           NotificationService().createNotificationExcell(path: value);
@@ -70,20 +69,24 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
     ],
     [
       'ПЕРЕДАТЬ ДАННЫЕ ДРУГОМУ'.tr,
-          (context) {
-        final double width = MediaQuery
-            .of(context)
-            .size
-            .width;
+      (context) {
+        final double width = MediaQuery.of(context).size.width;
         final result = CustomDialog.dialog(
             width: width,
             context: context,
             barrierDismissible: false,
             child:
-            WillPopScope(onWillPop: () async => false, child: ShareData()));
+                WillPopScope(onWillPop: () async => false, child: ShareData()));
         result.then((value) {
           Navigator.of(context).pop(value);
         });
+      }
+    ],
+    [
+      'ОБНОВИТЬ ПРОБЕГ'.tr,
+      (context) async {
+        await Navigator.pushNamed(context, "/update-run");
+        Navigator.of(context).pop(Requests.UPDATE_RUN);
       }
     ],
     // [
@@ -94,13 +97,13 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
     // ],
     [
       'ИСТОРИЯ АВТО'.tr,
-          (context) {
+      (context) {
         Navigator.popAndPushNamed(context, "/history");
       }
     ],
     [
       'ПОЛУЧИТЬ PRO ДОСТУП'.tr,
-          (context) async {
+      (context) async {
         final result = await Navigator.popAndPushNamed(context, "/pro_account");
       },
       HexColor("#DF5867")
@@ -151,16 +154,13 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double width = MediaQuery.of(context).size.width;
     final provider = Provider.of<UserProvider>(context);
 
     return AppBar(
       backgroundColor: Colors.white,
       leading: Visibility(
-        visible: true && visible.clearMenu && !provider.NO_ACCOUNT,
+        visible: visible.clearMenu && !provider.NO_ACCOUNT,
         //!provider.clearMenu
         maintainSize: true,
         maintainAnimation: true,
@@ -173,9 +173,8 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
               response.then((value) {
                 if (value == MenuPOP.CHANGE_TRANSPORT) {
                   update();
-                }
-                else if (value == Requests.NO_MORE_ACCOUNT) {
-                  SingletonUserInformation().clean();
+                } else if (value == Requests.NO_MORE_ACCOUNT) {
+                  SingletonUserInformation().cleanTransport();
                   provider.setNO_ACCOUNT(true);
                   provider.setClearMenu(true);
                 }
@@ -216,14 +215,13 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
                     context: context,
                     child: ListView.builder(
                       shrinkWrap: true,
-                      itemBuilder: (context, position) =>
-                          Settings(
-                            pop: setting[position][1],
-                            text: setting[position][0],
-                            color: setting[position].length >= 3
-                                ? setting[position][2]
-                                : null,
-                          ),
+                      itemBuilder: (context, position) => Settings(
+                        pop: setting[position][1],
+                        text: setting[position][0],
+                        color: setting[position].length >= 3
+                            ? setting[position][2]
+                            : null,
+                      ),
                       itemCount: setting.length,
                     ));
                 result.then((value) {
@@ -239,9 +237,16 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
                       update();
                     });
                   } else if (value == Requests.NO_MORE_ACCOUNT) {
-                    SingletonUserInformation().clean();
+                    SingletonUserInformation().cleanTransport();
                     provider.setNO_ACCOUNT(true);
                     provider.setClearMenu(true);
+                  }
+                  else if (value == Requests.UPDATE_RUN) {
+                    provider.setRun(SingletonUserInformation().run);
+                    SingletonUserInformation().averageRun();
+                    provider.setAverageRun(SingletonUserInformation().average);
+                    provider.setIndicators(SingletonUserInformation().indicators());
+                    provider.setChanged(true);
                   }
                 });
               } else {
@@ -258,7 +263,7 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
           width: width * 0.05,
         ),
         Visibility(
-          visible: visible.filterVisible == true,
+          visible: visible.filterVisible == true && !provider.NO_ACCOUNT,
           child: GestureDetector(
             onTap: () {
               setState(() {
@@ -315,8 +320,6 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
   }
 }
 
-
-
 class Settings extends StatelessWidget {
   final Function pop;
   final String text;
@@ -326,10 +329,7 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final double width = MediaQuery.of(context).size.width;
     return Container(
       margin: EdgeInsets.all(width * 0.02),
       child: TextButton(
@@ -358,10 +358,7 @@ class Filtering extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final double width = MediaQuery.of(context).size.width;
     final provider = Provider.of<CheckProvider>(context);
     return Container(
       child: Row(
@@ -404,13 +401,12 @@ class ExportInExcell extends StatelessWidget {
   Widget build(BuildContext context) {
     return StatefulWrapper(
       onInit: () {},
-      child: Obx(() =>
-          Stack(
+      child: Obx(() => Stack(
             children: [
               Visibility(
                   child: LoadingScreen(
-                    visible: !load.value,
-                  )),
+                visible: !load.value,
+              )),
               Visibility(
                 visible: load.value,
                 child: Text("Ваш excel сохранен в".tr),
@@ -428,7 +424,7 @@ class ShareData extends StatefulWidget {
 
 class _ShareDataState extends State<ShareData> {
   final ErrorMessageProvider selectOptionsErrorProvider =
-  new ErrorMessageProvider("");
+      new ErrorMessageProvider("");
   bool loading = true;
   final List accounts = [];
   final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
@@ -452,10 +448,7 @@ class _ShareDataState extends State<ShareData> {
         selectOptionsErrorProvider.setItems(items);
         loading = false;
         selectOptionsErrorProvider.setNextPage(false);
-        double width = MediaQuery
-            .of(context)
-            .size
-            .width;
+        double width = MediaQuery.of(context).size.width;
         list = ListOfDropDownItemWithText(
           itemWithTextField: items,
           disabledHeightOfItem: width * 0.12,
@@ -498,8 +491,9 @@ class _ShareDataState extends State<ShareData> {
         } else if (Requests.FORBIDDEN == value) {
           CustomDialog.show(
               title: "Невозможно".tr,
-              text: "Пользователь, которму вы хотите передать карточку, не имеет pro account и у него уже есть карточка. Пожалуйста попросите его преобрести pro account чтоб это было возможно!"
-                  .tr);
+              text:
+                  "Пользователь, которму вы хотите передать карточку, не имеет pro account и у него уже есть карточка. Пожалуйста попросите его преобрести pro account чтоб это было возможно!"
+                      .tr);
           selectOptionsErrorProvider.setNextPage(false);
         } else if (Requests.NO_INTERNET == value) {
           selectOptionsErrorProvider.setNextPage(false);
@@ -525,10 +519,7 @@ class _ShareDataState extends State<ShareData> {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final double width = MediaQuery.of(context).size.width;
     return ChangeNotifierProvider.value(
       value: selectOptionsErrorProvider,
       child: Container(
@@ -540,7 +531,7 @@ class _ShareDataState extends State<ShareData> {
           backgroundColor: Colors.transparent,
           body: Container(
             decoration:
-            BoxDecoration(borderRadius: BorderRadius.circular(width * 0.2)),
+                BoxDecoration(borderRadius: BorderRadius.circular(width * 0.2)),
             margin: EdgeInsets.symmetric(
                 horizontal: width * 0.05, vertical: width * 0.05),
             child: Builder(builder: (context) {

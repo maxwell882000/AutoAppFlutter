@@ -15,23 +15,35 @@ import 'package:flutter_projects/provider/ErrorMessageProvider.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
-class CreateCards extends StatelessWidget {
+class CreateCards extends StatefulWidget {
   CreateCards({Key key}) : super(key: key);
 
+  @override
+  _CreateCardsState createState() => _CreateCardsState();
+}
+
+class _CreateCardsState extends State<CreateCards> {
   final ErrorMessageProvider provider =
       new ErrorMessageProvider("Выберите название".tr);
+
   final ErrorMessageProvider runProvider =
       new ErrorMessageProvider("Введите текущий пробег".tr);
+
   final ErrorMessageProvider commentsProvider =
       new ErrorMessageProvider("Ваш комментарий".tr);
 
   final ErrorMessageProvider repeatDistProvider =
       new ErrorMessageProvider("Введите растояние".tr);
+
   final ErrorMessageProvider repeatTimeProvider =
       new ErrorMessageProvider("Введите количество дней".tr);
+
   final GlobalKey<FormState> _destForm = new GlobalKey<FormState>();
+
   final GlobalKey<FormState> _timeForm = new GlobalKey<FormState>();
+
   final ErrorMessageProvider dataProvider = new ErrorMessageProvider("Введите дату".tr);
+
   Function sendData() {
     return (BuildContext context) {};
   }
@@ -111,10 +123,13 @@ class CreateCards extends StatelessWidget {
               .setTime(int.parse(repeatTimeProvider.inputData));
           SingletonUserInformation().newCard.change.setRun(0);
         }
+
         Navigator.of(context).pop(true);
       }
     };
   }
+
+
 
   Function _onWillPop(BuildContext context) {
     return () async {
@@ -123,10 +138,7 @@ class CreateCards extends StatelessWidget {
           barrierDismissible: false,
           builder: (context) => DataNotSave());
       if (response) {
-        List image = SingletonUserInformation().newCard.attach.uploadedImage;
-        image.forEach((element) {
-          SingletonConnection().deleteImage(element);
-        });
+        SingletonConnection().cleanTemp();
       }
       return response;
     };
@@ -142,7 +154,6 @@ class CreateCards extends StatelessWidget {
       }
     };
   }
-
 
   @override
   Widget build(BuildContext context) {

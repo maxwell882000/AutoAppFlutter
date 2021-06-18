@@ -214,7 +214,7 @@ class User extends StatelessWidget {
                   onPressed: () {
                     if (userProvider.NO_ACCOUNT) {
                       userProvider.setNextPage(true);
-                      userProvider.setClearSettings(true);
+                        // userProvider.setClearSettings(true);
                       SingletonRegistrationAuto().clean();
                       final items = SingletonConnection().getAllMarka();
                       items.then((value) async {
@@ -255,6 +255,7 @@ class User extends StatelessWidget {
                                 SingletonUserInformation().average);
                             userProvider.setChanged(true);
                             userProvider.setLoading(false);
+
                           });
                         }
                         userProvider.setNextPage(false);

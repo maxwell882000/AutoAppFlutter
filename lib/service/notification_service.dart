@@ -76,16 +76,17 @@ class NotificationService extends GetxService {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         if (ButtonNotificationKeys.TRACKING_KEY ==
             receivedNotification.buttonKeyPressed) {
-          double new_run = double.parse(receivedNotification.buttonKeyInput);
-          if (SingletonUserInformation().run < new_run) {
-            SingletonUserInformation().setRun(new_run);
-            SingletonUserInformation().updateRun();
-          }
-          else {
-            createNotification(channelKey: 'track_channel',
-                title: "ОШИБКА".tr,
-                body: "Пробег всегда должен увеличиваться".tr);
-          }
+          Navigator.of(Get.context).pushNamed('/update-run');
+          // double new_run = double.parse(receivedNotification.buttonKeyInput);
+          // if (SingletonUserInformation().run < new_run) {
+          //   SingletonUserInformation().setRun(new_run);
+          //   SingletonUserInformation().updateRun();
+          // }
+          // else {
+          //   createNotification(channelKey: 'track_channel',
+          //       title: "ОШИБКА".tr,
+          //       body: "Пробег всегда должен увеличиваться".tr);
+          // }
         }
       });
     });

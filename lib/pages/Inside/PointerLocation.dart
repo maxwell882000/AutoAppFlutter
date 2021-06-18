@@ -1,7 +1,5 @@
 import 'dart:async';
 
-
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_projects/Singleton/SingletonConnection.dart';
@@ -150,16 +148,29 @@ class PointerLocationState extends State<PointerLocation> {
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
                 },
-                onLongPress: isStore? (lat) {}: _handleTap),
+                onLongPress: isStore ? (lat) {} : _handleTap),
           ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: isStore? () {
-          Navigator.of(context).pop();
-        } : _goToPoint,
-        child: Icon(Icons.save_alt_outlined),
+      floatingActionButton: TextButton(
+        onPressed: isStore
+            ? () {
+                Navigator.of(context).pop();
+              }
+            : _goToPoint,
+        child: Container(
+            padding: EdgeInsets.all(15),
+            decoration: BoxDecoration(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.circular(10)),
+            child: Text(
+              "Сохранить точку".tr,
+              style: TextStyle(
+                  fontFamily: "Montserrat",
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            )),
       ),
     );
   }
@@ -167,10 +178,15 @@ class PointerLocationState extends State<PointerLocation> {
   Future<void> _goToPoint() async {
     Location location = SingletonUserInformation().newCard.attach.location;
     location.setComments(comments);
-    location.setLatitude(tapped.latitude);
-    location.setLongitude(tapped.longitude);
-    print("Exit pointer ${location.toJson()}");
-    Navigator.of(context).pop();
+    if (tapped != null) {
+      location.setLatitude(tapped.latitude);
+      location.setLongitude(tapped.longitude);
+      print("Exit pointer ${location.toJson()}");
+      Navigator.of(context).pop();
+    }
+    else {
+      CustomDialog.show(title: "Ошибка".tr, text: "Пожалуйста отметьте точку чтоб сохранить!".tr);
+    }
   }
 }
 

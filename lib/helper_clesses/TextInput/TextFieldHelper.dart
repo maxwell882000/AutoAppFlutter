@@ -23,7 +23,7 @@ class TextFieldHelper extends StatelessWidget {
       : super(key: key);
   final controller = TextEditingController();
 
-  static _validate(text) {}
+  static _validate(text, provider) {}
   static _onTag() {}
   ErrorMessageProvider provider;
 
@@ -68,13 +68,14 @@ class TextFieldHelper extends StatelessWidget {
             Consumer<ErrorMessageProvider>(builder: (context, provider, child) {
           return TextFormField(
             scrollPhysics: AlwaysScrollableScrollPhysics(),
+
             controller: controller,
             cursorColor: Color.fromRGBO(66, 66, 74, 1),
             cursorHeight: width * 0.045,
             textAlign: TextAlign.left,
             autocorrect: false,
             onTap: onTap,
-            validator: (text) => validate(controller),
+            validator: (text) => validate(controller, provider),
             maxLines: 1,
             style: TextStyle(
               fontSize: width * 0.04,

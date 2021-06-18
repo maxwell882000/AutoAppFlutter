@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/helper_clesses/ListExpenses.dart';
+import 'package:flutter_projects/helper_clesses/Static/CardStatic.dart';
 import 'package:flutter_projects/helper_clesses/statefull_wrapper.dart';
 import 'package:get/get.dart';
 import 'package:flutter_projects/Provider/CheckProvider.dart';
@@ -20,7 +21,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
-class ModifyCards extends StatelessWidget {
+class ModifyCards extends StatefulWidget {
   final String appBarName;
   final CardUser card;
   final Widget child;
@@ -28,6 +29,11 @@ class ModifyCards extends StatelessWidget {
   ModifyCards({Key key, this.appBarName, this.child, this.card})
       : super(key: key);
 
+  @override
+  _ModifyCardsState createState() => _ModifyCardsState();
+}
+
+class _ModifyCardsState extends State<ModifyCards> {
   final ErrorMessageProvider provider = new ErrorMessageProvider("");
 
   final ErrorMessageProvider runProvider =
@@ -35,15 +41,22 @@ class ModifyCards extends StatelessWidget {
 
   final ErrorMessageProvider commentsProvider =
       new ErrorMessageProvider("Ваш комментарий".tr);
+
   final ErrorMessageProvider repeatDistProvider =
       new ErrorMessageProvider("Введите пробег".tr);
+
   final ErrorMessageProvider repeatTimeProvider =
       new ErrorMessageProvider("Введите количество дней".tr);
+
   final GlobalKey<FormState> _destForm = new GlobalKey<FormState>();
+
   final GlobalKey<FormState> _timeForm = new GlobalKey<FormState>();
+
   final ErrorMessageProvider dateProvider =
       new ErrorMessageProvider("Дата на момент замены".tr);
+
   final CheckProvider check = new CheckProvider();
+
   final UserProvider fee = new UserProvider();
 
   Widget checkWidget(BuildContext context) {
@@ -76,9 +89,7 @@ class ModifyCards extends StatelessWidget {
 
   Function choiceWidget(double width, ErrorMessageProvider repeatDistProvider,
       ErrorMessageProvider repeatTimeProvider) {
-    return (context) {
-      final ErrorMessageProvider provider =
-          Provider.of<ErrorMessageProvider>(context);
+    return (provider) {
 
       final double run =
           SingletonRecomendation().recommendationProbeg(provider.inputData);
@@ -185,9 +196,7 @@ class ModifyCards extends StatelessWidget {
                           onTap: () {
                             _timeForm.currentState.validate();
                           },
-                          validate: (TextEditingController text) {
-                            text.clear();
-                          },
+                          validate: CardStatic.cleanTextField
                         ),
                       ),
                     ),
@@ -207,9 +216,7 @@ class ModifyCards extends StatelessWidget {
                           onTap: () {
                             _destForm.currentState.validate();
                           },
-                          validate: (TextEditingController text) {
-                            text.clear();
-                          },
+                          validate: CardStatic.cleanTextField,
                         ),
                       ),
                     ),
@@ -233,10 +240,10 @@ class ModifyCards extends StatelessWidget {
       }
     };
   }
-
+  @override
   void initState() {
-    provider.setNameOfHelper(appBarName);
-    provider.setInputData(appBarName);
+    provider.setNameOfHelper(widget.appBarName);
+    provider.setInputData(widget.appBarName);
     SingletonUserInformation().newCard.expense.forEach((element) {
       provider.addItems(new FeeProvider.downloaded(element.id, element.name,
           element.sum.toString(), element.amount.toString()));
@@ -373,6 +380,7 @@ class ModifyCards extends StatelessWidget {
             return;
           }
         }
+        if (commentsProvider.inputData.isNotEmpty)
         SingletonUserInformation()
             .newCard
             .setComments(commentsProvider.inputData);
@@ -412,14 +420,7 @@ class ModifyCards extends StatelessWidget {
         barrierDismissible: false,
         builder: (context) => DataNotSave());
     if (response) {
-      List expense = SingletonUserInformation().newCard.uploadedExpense;
-      List image = SingletonUserInformation().newCard.attach.uploadedImage;
-      expense.forEach((element) {
-        SingletonConnection().deleteExpense(element);
-      });
-      image.forEach((element) {
-        SingletonConnection().deleteImage(element);
-      });
+     SingletonConnection().cleanTemp();
     }
     return response;
   }
@@ -457,27 +458,24 @@ class ModifyCards extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return WillPopScope(
       onWillPop: _onWillPop,
-      child: StatefulWrapper(
-        onInit: initState,
-        child: ChangeNotifierProvider.value(
-          value: provider,
-          child: CardsUser(
-            recommendationFunction: recomendationCards(context),
-            secondChild: child,
-            middleChild: ListExpenses(child: addExpenses()),
-            childAboveButton: [
-              'assets/reload.svg',
-              "Повторить".tr + "\n" + "действие".tr+"\n" + "карточки через".tr,
-              choiceWidget(width, repeatDistProvider, repeatTimeProvider),
-            ],
-            provider: provider,
-            runProvider: runProvider,
-            commentsProvider: commentsProvider,
-            nameButton: "Сохранить".tr,
-            dateProvider: dateProvider,
-            appBarName: "Редактирование карточки".tr + " " + appBarName,
-            readyButton: ready(width),
-          ),
+      child: ChangeNotifierProvider.value(
+        value: provider,
+        child: CardsUser(
+          recommendationFunction: recomendationCards(context),
+          secondChild: widget.child,
+          middleChild: ListExpenses(child: addExpenses()),
+          childAboveButton: [
+            'assets/reload.svg',
+            "Повторить".tr + "\n" + "действие".tr+"\n" + "карточки через".tr,
+            choiceWidget(width, repeatDistProvider, repeatTimeProvider),
+          ],
+          provider: provider,
+          runProvider: runProvider,
+          commentsProvider: commentsProvider,
+          nameButton: "Сохранить".tr,
+          dateProvider: dateProvider,
+          appBarName: "Редактирование карточки".tr + " " + widget.appBarName,
+          readyButton: ready(width),
         ),
       ),
     );

@@ -105,9 +105,15 @@ class ProPurchase extends StatelessWidget {
   }
 
   void success() {
-    CustomDialog.show(
-        title: "Успешно".tr, text: "Вы преобрели про аккаунт!".tr);
-    SingletonUserInformation().setProAccount(true);
+    if (!SingletonUserInformation().proAccount) {
+      CustomDialog.show(
+          title: "Успешно".tr, text: "Вы преобрели про аккаунт!".tr);
+      SingletonUserInformation().setProAccount(true);
+    }
+    else {
+      CustomDialog.show(
+          title: "Успешно".tr, text: "Вы продлили ваш про аккаунт!".tr);
+    }
   }
 
   Future paynetPay(Subscribe subscribe, int balans) async {

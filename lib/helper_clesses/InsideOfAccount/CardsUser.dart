@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -29,10 +28,13 @@ import '../TextFlexible.dart';
 import 'CardsImages.dart';
 import 'MainMenu.dart';
 import 'package:get/get.dart';
+
 class CardsUser extends StatefulWidget {
   final ErrorMessageProvider provider;
   final ErrorMessageProvider runProvider;
   final ErrorMessageProvider commentsProvider;
+  final ErrorMessageProvider dateProvider;
+
   final Function recommendationFunction;
   final Function readyButton;
   final String nameButton;
@@ -42,7 +44,7 @@ class CardsUser extends StatefulWidget {
   final Widget secondChild;
   final String appBarName;
   final Widget checkWidget;
-  final ErrorMessageProvider dateProvider;
+
   CardsUser(
       {Key key,
       this.provider,
@@ -72,8 +74,8 @@ class CardsUser extends StatefulWidget {
         middleChild: middleChild,
         appBarName: appBarName,
         childAboveButton: childAboveButton,
-        dateProvider:dateProvider,
-    checkProvider:checkProvider,
+        dateProvider: dateProvider,
+        checkProvider: checkProvider,
       );
 }
 
@@ -92,29 +94,30 @@ class _CardsUserState extends State<CardsUser> {
   final ErrorMessageProvider dateProvider;
   final CheckProvider checkProvider;
   final Widget checkWidget;
-    final f = new DateFormat.yMd().add_Hm();
+  final f = new DateFormat.yMd().add_Hm();
   String name;
   List<Widget> imagesChosen = [];
   Widget swap;
-  String chosenDate= "";
+  String chosenDate = "";
   int visibility = 0;
 
-  _CardsUserState({
-    this.provider,
-    this.commentsProvider,
-    this.runProvider,
-    this.recommendationFunction,
-    this.readyButton,
-    this.nameButton,
-    this.childAboveButton,
-    this.middleChild,
-    this.secondChild,
-    this.appBarName,
-    this.dateProvider,
-    this.checkProvider,
-    this.checkWidget
-  });
+  _CardsUserState(
+      {this.provider,
+      this.commentsProvider,
+      this.runProvider,
+      this.recommendationFunction,
+      this.readyButton,
+      this.nameButton,
+      this.childAboveButton,
+      this.middleChild,
+      this.secondChild,
+      this.appBarName,
+      this.dateProvider,
+      this.checkProvider,
+      this.checkWidget});
+
   final _picker = ImagePicker();
+
   _imgFromGallery(double width) async {
     PickedFile image = await _picker.getImage(
       source: ImageSource.gallery,
@@ -126,22 +129,30 @@ class _CardsUserState extends State<CardsUser> {
           imagesChosen.add(CardsImages(
             key: UniqueKey(),
             path: image.path,
-            delete:(int id){
-              SingletonUserInformation().newCard.attach.updatedImage.remove(image.path);
-              SingletonUserInformation().newCard.attach.uploadedImage.remove(id);
+            delete: (int id) {
+              SingletonUserInformation()
+                  .newCard
+                  .attach
+                  .updatedImage
+                  .remove(image.path);
+              SingletonUserInformation()
+                  .newCard
+                  .attach
+                  .uploadedImage
+                  .remove(id);
             },
             child: Image.file(
               File(image.path),
-              fit:BoxFit.fill,
+              fit: BoxFit.fill,
             ),
           ));
         });
       }
     });
   }
-  void deleteImage(Widget, String path){
 
-  }
+  void deleteImage(Widget, String path) {}
+
   _imgFromCamera(double width) async {
     PickedFile image = await _picker.getImage(
       source: ImageSource.camera,
@@ -152,19 +163,28 @@ class _CardsUserState extends State<CardsUser> {
         setState(() {
           imagesChosen.add(CardsImages(
             path: image.path,
-            delete:(int id){
-              SingletonUserInformation().newCard.attach.updatedImage.remove(image.path);
-              SingletonUserInformation().newCard.attach.uploadedImage.remove(id);
+            delete: (int id) {
+              SingletonUserInformation()
+                  .newCard
+                  .attach
+                  .updatedImage
+                  .remove(image.path);
+              SingletonUserInformation()
+                  .newCard
+                  .attach
+                  .uploadedImage
+                  .remove(id);
             },
             child: Image.file(
               File(image.path),
-              fit:BoxFit.fill,
+              fit: BoxFit.fill,
             ),
           ));
         });
       }
     });
   }
+
   Widget swapToDrop(double width) {
     return DropDownItem(
       items: SingletonRecomendation().choicesCreateCard(),
@@ -185,30 +205,29 @@ class _CardsUserState extends State<CardsUser> {
     swap = AnimatedContainerBorder(
       duration: 600,
       child: Container(
-        margin: EdgeInsets.all(width*0.03),
+        margin: EdgeInsets.all(width * 0.03),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(provider.inputData,
-          style: TextStyle(
-              color: HexColor("#42424A"),
-              fontFamily: "Roboto",
-              fontSize: width * 0.03),
+            Text(
+              provider.inputData,
+              style: TextStyle(
+                  color: HexColor("#42424A"),
+                  fontFamily: "Roboto",
+                  fontSize: width * 0.03),
             ),
             pencil(width),
           ],
         ),
       ),
     );
-    return  swap;
+    return swap;
   }
 
   Widget pencil(double width) {
     return GestureDetector(
       onTap: () {
-        if (visibility!=1)
-        {
-
+        if (visibility != 1) {
           setState(() {
             provider.setNameOfHelper("Введите название".tr);
             provider.setInputData("");
@@ -227,7 +246,6 @@ class _CardsUserState extends State<CardsUser> {
     return GestureDetector(
       onTap: () {
         if (visibility != 2) {
-
           setState(() {
             provider.setNameOfHelper("Выберите название".tr);
             provider.setInputData("");
@@ -291,15 +309,17 @@ class _CardsUserState extends State<CardsUser> {
       width: width * 0.01,
     );
   }
-  Widget imagesAttach(double width){
+
+  Widget imagesAttach(double width) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children:imagesChosen,
+        children: imagesChosen,
       ),
     );
   }
+
   Widget rowSvgText(String svg, String text, double width) {
     return Row(
       children: [
@@ -329,27 +349,28 @@ class _CardsUserState extends State<CardsUser> {
 
   @override
   void initState() {
-
     super.initState();
     SingletonConnection().cleanTemp();
 
-   chosenDate = f.format(SingletonUserInformation().newCard.date);
-   dateProvider.setInputData(SingletonUserInformation().newCard.date.toString());
-   List image = SingletonUserInformation().newCard.attach.image;
-   if (image.isNotEmpty)
-    image.forEach((element) {
-      imagesChosen.add(CardsImages(
-        unique: element,
-      ));
-    });
+    chosenDate = f.format(SingletonUserInformation().newCard.date);
+    dateProvider
+        .setInputData(SingletonUserInformation().newCard.date.toString());
+    List image = SingletonUserInformation().newCard.attach.image;
+    if (image.isNotEmpty)
+      image.forEach((element) {
+        imagesChosen.add(CardsImages(
+          unique: element,
+        ));
+      });
   }
+
 
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
-    return  MainMenu(
+    return MainMenu(
       bottomInset: true,
       visible: VisibilityClass(
         filterVisible: false,
@@ -373,9 +394,7 @@ class _CardsUserState extends State<CardsUser> {
                 secondChild != null
                     ? Column(
                         children: [
-                          swap != null
-                              ? swap
-                              : textStart(width),
+                          swap != null ? swap : textStart(width),
                           marginHeight(width),
                           secondChild,
                         ],
@@ -386,57 +405,59 @@ class _CardsUserState extends State<CardsUser> {
                 marginHeight(width),
                 Consumer<ErrorMessageProvider>(
                     builder: (context, provider, child) {
-                      // _.setName(SingletonGetX().nameOfCards.value);
-                   return Buttons(
-                      hexValueOFColor: "#32BEA6",
-                      width: width,
-                      nameOfTheButton: "${"Рекомендации по".tr} ${SingletonRecomendation()
-                          .chosenRecommend(provider.inputData)
-                          ?.mainName ??
-                          "сервису".tr}  ${"для".tr} ${SingletonUserInformation()
-                          .marka} ${SingletonUserInformation().model}",
-                      height: width * 1.2,
-                      onPressed: recommendationFunction,
-                    );
-                  }
-                ),
+                  // _.setName(SingletonGetX().nameOfCards.value);
+                  return Buttons(
+                    hexValueOFColor: "#32BEA6",
+                    width: width,
+                    nameOfTheButton:
+                        "${"Рекомендации по".tr} ${SingletonRecomendation().chosenRecommend(provider.inputData)?.mainName ?? "сервису".tr}  ${"для".tr} ${SingletonUserInformation().marka} ${SingletonUserInformation().model}",
+                    height: width * 1.2,
+                    onPressed: recommendationFunction,
+                  );
+                }),
                 marginHeight(width),
                 marginHeight(width),
-               dateProvider==null?SizedBox():ChangeNotifierProvider.value(
-                  value: dateProvider,
-                  child: GestureDetector(
-                    onTap: () {
-                      DatePicker.showDateTimePicker(context,
-                          showTitleActions: true, onConfirm: (date) {
-                        setState(() {
-                          dateProvider.setInputData(date.toString());
-                          chosenDate = f.format(date);
-                        });
-                      }, currentTime: SingletonUserInformation().newCard.date, locale: LocaleType.ru);
-                    },
-                    child: Dates(
-                        width,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/calendar.svg',
-                              width: width * 0.05,
-                            ),
-                            marginWidth(width),
-                            Text(
-                              "${dateProvider.nameOfHelper}",
-                                  style: TextStyle(
-                                    color: HexColor("#42424A"),
-                                    fontFamily: 'Montserrat',
-                                    fontSize: width * 0.035,
-                                    fontWeight: FontWeight.bold,
+                dateProvider == null
+                    ? SizedBox()
+                    : ChangeNotifierProvider.value(
+                        value: dateProvider,
+                        child: GestureDetector(
+                          onTap: () {
+                            DatePicker.showDateTimePicker(context,
+                                showTitleActions: true, onConfirm: (date) {
+                              setState(() {
+                                dateProvider.setInputData(date.toString());
+                                chosenDate = f.format(date);
+                              });
+                            },
+                                currentTime:
+                                    SingletonUserInformation().newCard.date,
+                                locale: LocaleType.ru);
+                          },
+                          child: Dates(
+                              width,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/calendar.svg',
+                                    width: width * 0.05,
                                   ),
-                            ),
-                          ],
-                        )),
-                  ),
-                ),
+                                  marginWidth(width),
+                                  Text(
+                                    "${dateProvider.nameOfHelper}",
+                                    style: TextStyle(
+                                      color: HexColor("#42424A"),
+                                      fontFamily: 'Montserrat',
+                                      fontSize: width * 0.035,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ),
+                      ),
                 marginHeight(width),
                 ChangeNotifierProvider.value(
                   value: runProvider,
@@ -461,12 +482,13 @@ class _CardsUserState extends State<CardsUser> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("${SingletonUserInformation().run} ${SingletonUnits().distance}",
-                                  style: TextStyle(
-                                    color: HexColor("#42424A"),
-                                    fontFamily: 'Roboto',
-                                    fontSize: width * 0.035,
-                                  ),
+                              Text(
+                                "${SingletonUserInformation().run} ${SingletonUnits().distance}",
+                                style: TextStyle(
+                                  color: HexColor("#42424A"),
+                                  fontFamily: 'Roboto',
+                                  fontSize: width * 0.035,
+                                ),
                               ),
                             ],
                           ),
@@ -487,7 +509,7 @@ class _CardsUserState extends State<CardsUser> {
                     Row(
                       children: [
                         GestureDetector(
-                         onTap: ()=> _imgFromGallery(width),
+                          onTap: () => _imgFromGallery(width),
                           child: SvgPicture.asset(
                             'assets/gallery.svg',
                             width: sizeSvg(width),
@@ -507,7 +529,9 @@ class _CardsUserState extends State<CardsUser> {
                           width: width * 0.05,
                         ),
                         GestureDetector(
-                          onTap: (){ Navigator.of(context).pushNamed("/location");},
+                          onTap: () {
+                            Navigator.of(context).pushNamed("/location");
+                          },
                           child: SvgPicture.asset(
                             'assets/location.svg',
                             width: width * 0.03,
@@ -527,8 +551,8 @@ class _CardsUserState extends State<CardsUser> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        rowSvgText(
-                            "assets/speech_bubble.svg", "Комментарии".tr, width),
+                        rowSvgText("assets/speech_bubble.svg", "Комментарии".tr,
+                            width),
                         marginWidth(width),
                         marginWidth(width),
                         marginWidth(width),
@@ -542,34 +566,37 @@ class _CardsUserState extends State<CardsUser> {
                       ]),
                 ),
                 childAboveButton != null
-                    ? Column(children: [
-                        marginHeight(width),
-                        marginHeight(width),
-                        marginHeight(width),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            rowSvgText(childAboveButton[0],
-                                childAboveButton[1], width),
-                            marginWidth(width),
-                            marginWidth(width),
-                            marginWidth(width),
-                            childAboveButton[2](context),
-                          ],
-                        )
-                      ])
+                    ? Consumer<ErrorMessageProvider>(
+                        builder: (context, provider, child) {
+                          return Column(children: [
+                            marginHeight(width),
+                            marginHeight(width),
+                            marginHeight(width),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                rowSvgText(childAboveButton[0],
+                                    childAboveButton[1], width),
+                                marginWidth(width),
+                                marginWidth(width),
+                                marginWidth(width),
+                                childAboveButton[2](provider),
+                              ],
+                            )
+                          ]);
+                        },
+                      )
                     : marginHeight(width),
                 marginHeight(width),
                 Center(
                   child: SizedBox(
                     width: width * 0.42,
                     child: Buttons(
-                      hexValueOFColor: "#7FA5C9",
-                      nameOfTheButton: nameButton,
-                      height: width,
-                      onPressed: readyButton
-                    ),
+                        hexValueOFColor: "#7FA5C9",
+                        nameOfTheButton: nameButton,
+                        height: width,
+                        onPressed: readyButton),
                   ),
                 )
               ],

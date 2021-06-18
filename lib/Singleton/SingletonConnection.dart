@@ -90,6 +90,7 @@ class SingletonConnection {
   }
 
   Future<void> submitUnits() async {
+    print(SingletonUnits().toJson());
     return await SingletonRestApi.put(
         url: '$URL/units/${SingletonUserInformation().emailOrPhone}/',
         headers: <String, String>{
@@ -98,7 +99,7 @@ class SingletonConnection {
         body: jsonEncode(SingletonUnits().toJson()));
   }
 
-  Future<void> updateRunOfUser(int id, double run) {
+  Future<void> updateRunOfUser(int id, double run) async {
     SingletonRestApi.put(
         body: jsonEncode({'run': SingletonUnits().convertDistanceForDB(run)}),
         url: "$URL/transport/$id/");
@@ -327,6 +328,7 @@ class SingletonConnection {
   }
 
   Future<void> recommendData() async {
+    SingletonRecomendation().clean();
     final response = await SingletonRestApi.post(
         url: '$URL/recomendations/',
         headers: <String, String>{
@@ -407,6 +409,7 @@ class SingletonConnection {
   Future<void> modifyCard() async {
     CardUser card = SingletonUserInformation().newCard;
     Map<String, dynamic> json = card.toJson();
+
     json.addAll({"user_id": SingletonUserInformation().userId});
     if (card.attach.uploadedImage.isNotEmpty) {
       json.addAll({"images_list": card.attach.uploadedImage});
@@ -432,6 +435,8 @@ class SingletonConnection {
 
     if (card.uploadedExpense.isNotEmpty)
       json.addAll({'expense_list': card.uploadedExpense});
+
+    print(json);
     final result = await SingletonRestApi.put(
         url: '$URL/cards/${card.id}/',
         headers: <String, String>{
@@ -464,7 +469,7 @@ class SingletonConnection {
       });
     }
 
-    Map got;
+     Map got;
     print("ASDASDASD");
     print(json);
     if (SingletonUserInformation().cards.id != null &&
@@ -476,6 +481,7 @@ class SingletonConnection {
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(json));
+      print(response.body);
       if (response.statusCode == 200) got = jsonDecode(response.body);
     } else {
       final response = await SingletonRestApi.post(
@@ -484,6 +490,7 @@ class SingletonConnection {
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(json));
+      print("RESULT");
       print(response.body);
       if (response.statusCode == 200) {
         got = jsonDecode(response.body);

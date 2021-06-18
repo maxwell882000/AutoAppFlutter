@@ -166,7 +166,10 @@ class _ListOfIndicatorState extends State<ListOfIndicator> {
       } else if (provider.sortRecent) {
         sortRecent(provider);
       } else if (provider.sortOfUser) {
-        sortUser(provider);
+        sortRecent(provider);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          provider.setSortOfUser(false);
+        });
       }
     }
     if (provider.changed) {
