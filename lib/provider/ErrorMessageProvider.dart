@@ -10,7 +10,7 @@ class ErrorMessageProvider with ChangeNotifier {
   bool _selected;
   bool _nextPage;
   bool _textField;
-  List _errorsMessageWithText;
+  List _errorsMessageWithText = [];
   List _items;
   bool _dispose = false;
   bool _cleanTextField = false;

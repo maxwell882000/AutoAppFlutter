@@ -1,7 +1,12 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_projects/Singleton/SingletonConnection.dart';
 import 'package:flutter_projects/Singleton/SingletonGlobal.dart';
+import 'package:flutter_projects/Singleton/SingletonRecomendation.dart';
+import 'package:flutter_projects/Singleton/SingletonRegistrationAuto.dart';
+import 'package:flutter_projects/helper_clesses/Dialog/ChoiceDialog.dart';
+import 'package:flutter_projects/service/fire_base_messaging.dart';
 
 import 'SingletonStoreToTheDiskAndLoad.dart';
 import 'package:get/get.dart';
@@ -338,7 +343,31 @@ class SingletonUserInformation {
   factory SingletonUserInformation() {
     return _instance;
   }
+  Future<bool> LOGOUT() async{
+    bool response = await showDialog(
+      context: Get.context,
+      barrierDismissible: false,
+      builder: (context) => ChoiceDialog(
+        text: "Вы уверены что хотите выйти ?".tr,
+      ),
+    );
+    if (response) {
 
+      if (SingletonUserInformation().pop) {
+        response = false;
+      }
+      SingletonGlobal().prefs.remove("user");
+      SingletonGlobal().prefs.remove("token");
+      FireBaseService().deleteToken();
+      SingletonUserInformation().setEmailOrPhone("");
+      SingletonUserInformation().clean();
+      SingletonRecomendation().clean();
+      SingletonRegistrationAuto().clean();
+      if (!response) {
+        Navigator.of(Get.context).popAndPushNamed("/select");
+      }
+    }
+  }
   Map<String, dynamic> toJson() =>
       {
         'nameOfTransport': _nameOfTransport,

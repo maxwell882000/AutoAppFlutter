@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/helper_clesses/Dialog/CustomDialog.dart';
 import 'package:get/get.dart';
 import 'package:flutter_projects/Singleton/SingletonConnection.dart';
 import 'package:flutter_projects/Singleton/SingletonRegistrationAuto.dart';
@@ -59,16 +60,20 @@ class _SelectUnitState extends State<SelectUnit> {
   }
 
   Function readyToTheNext(Function loadToHard) {
-    return (BuildContext context) {
+    return (BuildContext context) async {
       print("SADSAD");
-      var errors = selectOptionsErrorProvider.errorsMessageWithText;
+      ErrorMessageProvider errorMessageProvider =
+          Provider.of<ErrorMessageProvider>(context, listen: false);
+      var errors = errorMessageProvider.errorsMessageWithText;
+      print(errors.length);
+      CustomDialog.show(title: "Отправьте в тг", text: "${errors.length} - должна стоять цифра три");
       var selected = errors
           .where((element) => !element[1].selected)
           .map((element) => errors.indexOf(element));
       print(selected);
       if (selected.length == 0) {
-        selectOptionsErrorProvider.setNextPage(true);
-        loadToHard(errors);
+        errorMessageProvider.setNextPage(true);
+        await loadToHard(errorMessageProvider);
       } else {
         selected.forEach((element) {
           print(element);
@@ -81,19 +86,15 @@ class _SelectUnitState extends State<SelectUnit> {
   }
 
   Function getUnits(BuildContext context) {
-    print("PRESSING");
-    return (var errorMessageProvider) async {
-      // SingletonUnits().setSpeed(errorMessageProvider[0][1].inputData);
-      // SingletonUnits().setDistance(errorMessageProvider[1][1].inputData);
-      // SingletonUnits().setFuelConsumption(errorMessageProvider[2][1].inputData);
-      // SingletonUnits().setCurrency(errorMessageProvider[3][1].inputData);
+    return (ErrorMessageProvider provider) async {
+      List errorMessageProvider = provider.errorsMessageWithText;
       SingletonUnits().setSpeed(SingletonStoreUnits().speed.KM_D);
       SingletonUnits().setDistance(errorMessageProvider[0][1].inputData);
       SingletonUnits().setFuelConsumption(errorMessageProvider[1][1].inputData);
       SingletonUnits().setCurrency(errorMessageProvider[2][1].inputData);
       SingletonUnits().setToTheDisk();
-      print(SingletonUserInformation().emailOrPhone);
-      selectOptionsErrorProvider.setNextPage(true);
+
+
       await SingletonConnection().submitUnits();
       await SingletonConnection().getAllMarkaForRegister();
       Navigator.of(context).popAndPushNamed("/registration_auto");
@@ -121,21 +122,23 @@ class _SelectUnitState extends State<SelectUnit> {
     double width = MediaQuery.of(context).size.width;
     return WillPopScope(
       onWillPop: _onWillPop(context),
-      child: ChangeNotifierProvider.value(
-        value: selectOptionsErrorProvider,
+      child: ChangeNotifierProvider(
+        create: (_) => new ErrorMessageProvider(""),
         child: SelectOptions(
           key: UniqueKey(),
           width: width,
           height: width * 1.4,
           icon: "assets/unit.svg",
           aboveText: "Выбор единицы измерения".tr,
-          child: ListOfDropDownItemWithText(
-            item: items,
-            disabledHeightOfItem: width * 0.11,
-            enabledHeightOfItem: width * 0.25,
-            width: width,
-            heightOfDropDownItems: width * 0.66,
-            provider: selectOptionsErrorProvider,
+          child: Consumer<ErrorMessageProvider>(
+            builder: (context, provider, child) => ListOfDropDownItemWithText(
+              item: items,
+              disabledHeightOfItem: width * 0.11,
+              enabledHeightOfItem: width * 0.25,
+              width: width,
+              heightOfDropDownItems: width * 0.66,
+              provider: provider,
+            ),
           ),
           loadToHard: getUnits(context),
           clickEvent: readyToTheNext,

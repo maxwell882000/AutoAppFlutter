@@ -57,28 +57,7 @@ class User extends StatelessWidget {
   }
 
   Future<bool> _onWillPop() async {
-    bool response = await showDialog(
-      context: Get.context,
-      barrierDismissible: false,
-      builder: (context) => ChoiceDialog(
-        text: "Вы уверены что хотите выйти ?".tr,
-      ),
-    );
-    if (response) {
-      if (SingletonUserInformation().pop) {
-        response = false;
-      }
-      SingletonGlobal().prefs.remove("user");
-      SingletonGlobal().prefs.remove("token");
-      FireBaseService().deleteToken();
-      SingletonUserInformation().setEmailOrPhone("");
-      SingletonUserInformation().clean();
-      SingletonRecomendation().clean();
-      SingletonRegistrationAuto().clean();
-      if (!response) {
-        Navigator.of(Get.context).popAndPushNamed("/select");
-      }
-    }
+    bool response = await SingletonUserInformation().LOGOUT();
     return response;
   }
 
@@ -227,7 +206,7 @@ class User extends StatelessWidget {
                         if (results == true) {
                           print("HERE COOL");
                           userProvider.setNO_ACCOUNT(false);
-
+                          SingletonUserInformation().setNOACCOUNT(false);
                           userProvider.updateData(
                             SingletonUserInformation().run,
                             SingletonUserInformation().average,
@@ -255,7 +234,6 @@ class User extends StatelessWidget {
                                 SingletonUserInformation().average);
                             userProvider.setChanged(true);
                             userProvider.setLoading(false);
-
                           });
                         }
                         userProvider.setNextPage(false);

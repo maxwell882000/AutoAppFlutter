@@ -44,7 +44,7 @@ class CardsUser extends StatefulWidget {
   final Widget secondChild;
   final String appBarName;
   final Widget checkWidget;
-
+  final Function onPop;
   CardsUser(
       {Key key,
       this.provider,
@@ -59,7 +59,8 @@ class CardsUser extends StatefulWidget {
       this.appBarName,
       this.dateProvider,
       this.checkProvider,
-      this.checkWidget})
+      this.checkWidget,
+      this.onPop})
       : super(key: key);
 
   @override
@@ -589,15 +590,31 @@ class _CardsUserState extends State<CardsUser> {
                       )
                     : marginHeight(width),
                 marginHeight(width),
-                Center(
-                  child: SizedBox(
-                    width: width * 0.42,
-                    child: Buttons(
-                        hexValueOFColor: "#7FA5C9",
-                        nameOfTheButton: nameButton,
-                        height: width,
-                        onPressed: readyButton),
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Buttons(
+                          hexValueOFColor: "#7FA5C9",
+                          nameOfTheButton: nameButton,
+                          height: width*0.8,
+                          onPressed: readyButton),
+                    ),
+                    SizedBox(
+                      width: Get.width*0.1,
+                    ),
+                    Flexible(
+                      child: Buttons(
+                          hexValueOFColor: "#7FA5C9",
+                          nameOfTheButton: "Назад",
+                          height: width*0.8,
+                          onPressed: (context) async{
+                          if( await widget.onPop()){
+                            Navigator.of(context).pop();
+                          }
+                          }),
+                    ),
+                  ],
                 )
               ],
             ),

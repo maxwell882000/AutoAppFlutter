@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/helper_clesses/ChildAndButtonColumn.dart';
 
 import 'package:get/get.dart';
 import 'InitialPointOfAccount/Base.dart';
@@ -39,7 +40,7 @@ class SelectOptions extends StatelessWidget {
       height: height,
       icon: icon,
       aboveText: aboveText,
-      child: ChildAndButton(
+      child: ChildAndButtonColumn(
         width: width,
         heightOfButton: heightOfButton,
         widthOfButton: widthOfButton,

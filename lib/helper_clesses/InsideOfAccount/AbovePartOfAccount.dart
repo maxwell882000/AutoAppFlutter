@@ -165,7 +165,7 @@ class AbovePartOfAccount extends StatelessWidget {
               child: GestureDetector(
                 onTap: ()=>provider.setSortChange(true),
                 child: Container(
-                  height: width * 0.19,
+
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(
                       vertical: width * 0.04, horizontal: width * 0.04),
@@ -173,35 +173,15 @@ class AbovePartOfAccount extends StatelessWidget {
                     color: Color.fromRGBO(223, 88, 103, 1),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          "${provider.changeDetail}",
-                          style: TextStyle(
-                            fontFamily: "Montserrat",
-                            fontSize: width * 0.03,
-                            color: HexColor("#FFFFFF"),
-                          ),
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.visible,
-                        ),
-                      ),
-                      Flexible(
-                        child: Text(
-                          "деталей нуждаются в проверке/замене".tr,
-                          style: TextStyle(
-                            fontFamily: "Montserrat",
-                            fontSize: width * 0.03,
-                            color: HexColor("#FFFFFF"),
-                          ),
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.visible,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    "${provider.changeDetail}" + "\nдеталей нуждаются в проверке/замене".tr,
+                    style: TextStyle(
+                      fontFamily: "Montserrat",
+                      fontSize: width * 0.03,
+                      color: HexColor("#FFFFFF"),
+                    ),
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.visible,
                   ),
                 ),
               ),
@@ -211,7 +191,6 @@ class AbovePartOfAccount extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                height: width * 0.19,
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(
                     vertical: width * 0.04, horizontal: width * 0.04),
@@ -256,7 +235,6 @@ class AbovePartOfAccount extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                height: width * 0.19,
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(
                     vertical: width * 0.04, horizontal: width * 0.04),

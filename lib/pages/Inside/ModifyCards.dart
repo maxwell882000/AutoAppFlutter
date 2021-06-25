@@ -462,6 +462,7 @@ class _ModifyCardsState extends State<ModifyCards> {
         value: provider,
         child: CardsUser(
           recommendationFunction: recomendationCards(context),
+          onPop: _onWillPop,
           secondChild: widget.child,
           middleChild: ListExpenses(child: addExpenses()),
           childAboveButton: [
@@ -472,7 +473,7 @@ class _ModifyCardsState extends State<ModifyCards> {
           provider: provider,
           runProvider: runProvider,
           commentsProvider: commentsProvider,
-          nameButton: "Сохранить".tr,
+          nameButton: "Завершить".tr,
           dateProvider: dateProvider,
           appBarName: "Редактирование карточки".tr + " " + widget.appBarName,
           readyButton: ready(width),

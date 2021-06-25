@@ -41,7 +41,7 @@ class ListOfDropDownItemWithText extends StatefulWidget {
         enabledHeightOfItem: enabledHeightOfItem,
         heightOfDropDownItems: heightOfDropDownItems,
         itemWithTextField: itemWithTextField,
-        provider: provider,
+
       );
 }
 
@@ -61,7 +61,7 @@ class _ListOfDropDownItemWithTextState
     this.enabledHeightOfItem,
     this.heightOfDropDownItems,
     this.itemWithTextField,
-    this.provider,
+
   });
 
   int selection;
@@ -70,11 +70,12 @@ class _ListOfDropDownItemWithTextState
   List dropDownItem;
   List<Widget> rowWithText;
   List collectionOfPreparedData;
-  final ErrorMessageProvider provider;
+
 
   @override
   void initState() {
     super.initState();
+    widget.provider.errorsMessageWithText.clear();
     dataPreparing();
   }
 
@@ -89,12 +90,14 @@ class _ListOfDropDownItemWithTextState
     final String textHelper = value[0];
     final String textHint = value[1];
 
-    final ErrorMessageProvider errors = new ErrorMessageProvider(textHint);
-    final List errorsWithText = [textHelper, errors];
-    provider.setErrorsMessageWithText(errorsWithText);
-    return ChangeNotifierProvider<ErrorMessageProvider>.value(
+    return ChangeNotifierProvider<ErrorMessageProvider>(
       key: UniqueKey(),
-      value: errors,
+      create:(_) {
+        final ErrorMessageProvider errors = new ErrorMessageProvider(textHint);
+        final List errorsWithText = [textHelper, errors];
+        widget.provider.setErrorsMessageWithText(errorsWithText);
+        return errors;
+      },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -157,13 +160,13 @@ class _ListOfDropDownItemWithTextState
               removed.forEach((e) =>
               {
                 rowWithText.removeAt(collectionOfPreparedData.indexOf(e)),
-                provider.errorsMessageWithText.removeAt(collectionOfPreparedData.indexOf(e)),
+               widget. provider.errorsMessageWithText.removeAt(collectionOfPreparedData.indexOf(e)),
                 collectionOfPreparedData.remove(e),
               });
             }
             else if(sub[3]==2 && index < collectionOfPreparedData.length){
               rowWithText.removeAt(index);
-              provider.errorsMessageWithText.removeAt(index);
+              widget.provider.errorsMessageWithText.removeAt(index);
               collectionOfPreparedData.removeAt(index);
             }
           }
@@ -179,29 +182,29 @@ class _ListOfDropDownItemWithTextState
   Widget getUpdate(List v , int index) {
     final String textHelper = v[1];
     final String textHint = v[2];
-    ErrorMessageProvider errors = provider.newErrorMessageProvider(textHint);
+    ErrorMessageProvider errors = widget.provider.newErrorMessageProvider(textHint);
     if (v[0] == 1) {
       errors.setTextField(true);
     } else {
       errors.setItems(v[3]);
     }
     final List errorsWithText = [textHelper, errors];
-    provider.errorsMessageWithText.insert(index,errorsWithText);
-    return getWidget(provider, errorsWithText, textHelper, v, errors);
+   widget. provider.errorsMessageWithText.insert(index,errorsWithText);
+    return getWidget(widget.provider, errorsWithText, textHelper, v, errors);
   }
 
   Widget getTextCombiningWithTextField(List v) {
     final String textHelper = v[1];
     final String textHint = v[2];
-    ErrorMessageProvider errors = provider.newErrorMessageProvider(textHint);
+    ErrorMessageProvider errors = widget.provider.newErrorMessageProvider(textHint);
     if (v[0] == 1) {
       errors.setTextField(true);
     } else if (v[0]==0) {
       errors.setItems(v[3]);
     }
     final List errorsWithText = [textHelper, errors];
-    provider.errorsMessageWithText.add(errorsWithText);
-    return getWidget(provider, errorsWithText, textHelper, v, errors);
+    widget.provider.errorsMessageWithText.add(errorsWithText);
+    return getWidget(widget.provider, errorsWithText, textHelper, v, errors);
   }
   Widget choiceOfWidget(List element, ErrorMessageProvider errors){
     Widget choice;
@@ -314,16 +317,6 @@ class _ListOfDropDownItemWithTextState
           .map((value) => getTextCombiningWithTextField(value))
           .toList();
     }
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-
-    // provider.errorsMessageWithText.forEach((element) {
-    //   element[1].dispose();
-    // });
-    super.dispose();
   }
 
   @override

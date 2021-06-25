@@ -103,11 +103,18 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
     ],
     [
       'ПОЛУЧИТЬ PRO ДОСТУП'.tr,
-      (context) async {
+          (context) async {
         final result = await Navigator.popAndPushNamed(context, "/pro_account");
+      },
+    ],
+    [
+      'Выйти из аккаунта'.tr,
+          (context) {
+        SingletonUserInformation().LOGOUT();
       },
       HexColor("#DF5867")
     ],
+
   ];
   bool filter = false;
   bool settings = false;

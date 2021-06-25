@@ -163,6 +163,7 @@ class _CreateCardsState extends State<CreateCards> {
       child: ChangeNotifierProvider.value(
         value: provider,
         child: CardsUser(
+          onPop: _onWillPop(context),
           provider: provider,
           runProvider: runProvider,
           commentsProvider: commentsProvider,
