@@ -40,7 +40,7 @@ class _MenuState extends State<Menu> {
         "${SingletonUserInformation().marka} ${SingletonUserInformation().model}",
     number: "${SingletonUserInformation().number}",
     techPassport: "${SingletonUserInformation().techPassport}",
-    tenure: "${SingletonUserInformation().tenure()} лет",
+    tenure: "${SingletonUserInformation().tenure()}",
     clearSettings: false,
   );
   double height = 0;

@@ -46,7 +46,7 @@ class User extends StatelessWidget {
               "${SingletonUserInformation().marka} ${SingletonUserInformation().model}",
           number: "${SingletonUserInformation().number}",
           techPassport: "${SingletonUserInformation().techPassport}",
-          tenure: "${SingletonUserInformation().tenure()} лет",
+          tenure: "${SingletonUserInformation().tenure()}",
           clearSettings: false,
         );
 

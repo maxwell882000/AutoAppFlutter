@@ -43,7 +43,7 @@ class SingletonUserInformation {
   final Cards _cards = new Cards();
   CardUser _newCard = new CardUser.newCard();
   static final SingletonUserInformation _instance =
-  SingletonUserInformation._internal();
+      SingletonUserInformation._internal();
 
   void cleanTransport() {
     _id = 0;
@@ -67,6 +67,7 @@ class SingletonUserInformation {
     _cards.clean();
     _pop = false;
   }
+
   void clean() {
     _userId = 0;
     cleanTransport();
@@ -263,9 +264,7 @@ class SingletonUserInformation {
     final now = DateTime.now();
     print("DATESSS");
     print(date);
-    final int days = now
-        .difference(date)
-        .inDays;
+    final int days = now.difference(date).inDays;
     print(days);
     if (days == 0) {
       SingletonUnits().convertSpeedForUser(0, days);
@@ -287,9 +286,7 @@ class SingletonUserInformation {
   List createList(CardUser element) {
     if (element.change.run == 0) {
       DateTime now = DateTime.now();
-      int days = now
-          .difference(element.date)
-          .inDays;
+      int days = now.difference(element.date).inDays;
       int current = element.change.time - days;
       current = current < 0 ? 0 : current;
       int time = SingletonUnits()
@@ -322,7 +319,7 @@ class SingletonUserInformation {
       int time = 0;
       if (_average > 0) time = tranRun ~/ _average;
       int days =
-      SingletonUnits().translateTimeToDays(SingletonUnits().time, time);
+          SingletonUnits().translateTimeToDays(SingletonUnits().time, time);
       done = done > total ? total : done;
 
       double percantage = done / total;
@@ -343,7 +340,8 @@ class SingletonUserInformation {
   factory SingletonUserInformation() {
     return _instance;
   }
-  Future<bool> LOGOUT() async{
+
+  Future<bool> LOGOUT() async {
     bool response = await showDialog(
       context: Get.context,
       barrierDismissible: false,
@@ -352,7 +350,6 @@ class SingletonUserInformation {
       ),
     );
     if (response) {
-
       if (SingletonUserInformation().pop) {
         response = false;
       }
@@ -368,8 +365,8 @@ class SingletonUserInformation {
       }
     }
   }
-  Map<String, dynamic> toJson() =>
-      {
+
+  Map<String, dynamic> toJson() => {
         'nameOfTransport': _nameOfTransport,
         'marka': _marka,
         'model': _model,
@@ -428,22 +425,20 @@ class SingletonUserInformation {
 
   String tenure() {
     if (!_NO_ACCOUNT) {
-      final int year = DateTime
-          .now()
-          .year;
+      final int year = DateTime.now().year;
       final int yearOfPurchase =
-      _yearOfPurchase != null && _yearOfPurchase.isNotEmpty
-          ? int.parse(_yearOfPurchase)
-          : 0;
+          _yearOfPurchase != null && _yearOfPurchase.isNotEmpty
+              ? int.parse(_yearOfPurchase)
+              : 0;
       final int tenure = year - yearOfPurchase;
-      return tenure.toString();
+      return tenure.toString() + " " +  SingletonUnits().convertYearToString(tenure);
     }
+    return "";
   }
 
   void updateRun() {
     SingletonConnection().updateRunOfUser(id, run);
   }
-
 
   SingletonUserInformation._internal();
 }
@@ -482,8 +477,7 @@ class Expenses {
     _id = id;
   }
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "all_time": all_time,
         "in_this_month": in_this_month,
       };
@@ -556,8 +550,8 @@ class CardUser {
       'name_of_card': nameOfCard,
       'date': date.toString(),
     };
-    if (comments.isNotEmpty){
-      json.addAll({'comments':comments});
+    if (comments.isNotEmpty) {
+      json.addAll({'comments': comments});
     }
     return json;
   }
@@ -580,7 +574,8 @@ class CardUser {
     _change.clean();
   }
 
-  CardUser(int id,
+  CardUser(
+      int id,
       String nameOfCard,
       DateTime date,
       String comments,

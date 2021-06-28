@@ -29,10 +29,11 @@ class _SelectUnitState extends State<SelectUnit> {
     [
       "Расстояние".tr,
       "Выберите растояние".tr,
-      SingletonStoreUnits().distance.CM,
+
       SingletonStoreUnits().distance.KM,
       SingletonStoreUnits().distance.M,
-      SingletonStoreUnits().distance.MM
+      // SingletonStoreUnits().distance.CM,
+      // SingletonStoreUnits().distance.MM
     ],
     [
       "Расход топлива".tr,
@@ -65,8 +66,8 @@ class _SelectUnitState extends State<SelectUnit> {
       ErrorMessageProvider errorMessageProvider =
           Provider.of<ErrorMessageProvider>(context, listen: false);
       var errors = errorMessageProvider.errorsMessageWithText;
-      print(errors.length);
-      CustomDialog.show(title: "Отправьте в тг", text: "${errors.length} - должна стоять цифра три");
+      // print(errors.length);
+      // CustomDialog.show(title: "Отправьте в тг", text: "${errors.length} - должна стоять цифра три");
       var selected = errors
           .where((element) => !element[1].selected)
           .map((element) => errors.indexOf(element));

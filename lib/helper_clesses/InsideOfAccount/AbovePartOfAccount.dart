@@ -1,13 +1,14 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_projects/Provider/UserProvider.dart';
 import 'package:flutter_projects/Singleton/SingletonUnits.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
+
 class AbovePartOfAccount extends StatelessWidget {
   final List informationAboutCar;
   final double width;
+
   // final String nameOfCar = "${SingletonUserInformation().marka} ${SingletonUserInformation().model}";
   // final String number = "${SingletonUserInformation().number}";
   // final String techPassport ="${SingletonUserInformation().techPassport}";
@@ -20,12 +21,11 @@ class AbovePartOfAccount extends StatelessWidget {
 
   AbovePartOfAccount({Key key, this.informationAboutCar, this.width})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     UserProvider provider = Provider.of<UserProvider>(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Container(
         height: width * 0.6,
         width: width * 0.52,
@@ -33,7 +33,7 @@ class AbovePartOfAccount extends StatelessWidget {
           color: Color.fromRGBO(62, 124, 165, 1),
           borderRadius: BorderRadius.circular(10),
         ),
-        padding: EdgeInsets.symmetric( horizontal: width * 0.03),
+        padding: EdgeInsets.symmetric(horizontal: width * 0.03),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,29 +48,29 @@ class AbovePartOfAccount extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: width*0.05,
-            ),
-           Text(
-           "${provider.number}",
-           style: TextStyle(
-             fontFamily: "Montserrat",
-             fontSize: width * 0.034,
-             color: HexColor("#FFFFFF"),
-           ),
-            ),
-       SizedBox(
-              height: width*0.035,
+              height: width * 0.05,
             ),
             Text(
-           "${provider.techPassport}",
-           style: TextStyle(
-             fontFamily: "Montserrat",
-             fontSize: width * 0.034,
-             color: HexColor("#FFFFFF"),
-           ),
+              "${provider.number}",
+              style: TextStyle(
+                fontFamily: "Montserrat",
+                fontSize: width * 0.034,
+                color: HexColor("#FFFFFF"),
+              ),
             ),
-          SizedBox(
-              height: width*0.035,
+            SizedBox(
+              height: width * 0.035,
+            ),
+            Text(
+              "${provider.techPassport}",
+              style: TextStyle(
+                fontFamily: "Montserrat",
+                fontSize: width * 0.034,
+                color: HexColor("#FFFFFF"),
+              ),
+            ),
+            SizedBox(
+              height: width * 0.035,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,7 +85,7 @@ class AbovePartOfAccount extends StatelessWidget {
                 ),
                 Flexible(
                   child: Text(
-                    "${provider.run.toStringAsExponential(3)} ${SingletonUnits().distance}",
+                    "${provider.run.toStringAsFixed(0)} ${SingletonUnits().distance}",
                     style: TextStyle(
                       fontFamily: "Montserrat",
                       fontSize: width * 0.025,
@@ -96,19 +96,19 @@ class AbovePartOfAccount extends StatelessWidget {
                 ),
               ],
             ),
-        SizedBox(
-              height: width*0.035,
+            SizedBox(
+              height: width * 0.035,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-           "Срок Владения:".tr,
-           style: TextStyle(
-                 fontFamily: "Montserrat",
-                 fontSize: width * 0.025,
-                 color: HexColor("#FFFFFF"),
-           ),
+                  "Срок Владения:".tr,
+                  style: TextStyle(
+                    fontFamily: "Montserrat",
+                    fontSize: width * 0.025,
+                    color: HexColor("#FFFFFF"),
+                  ),
                 ),
                 Flexible(
                   child: Text(
@@ -124,36 +124,35 @@ class AbovePartOfAccount extends StatelessWidget {
               ],
             ),
             SizedBox(
-              height: width*0.035,
+              height: width * 0.035,
             ),
-             Row(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-               children: [
-                 Text(
-           "Средний пробег:".tr + " ",
-           style: TextStyle(
-                 fontFamily: "Montserrat",
-                 fontSize: width * 0.025,
-                 color: HexColor("#FFFFFF"),
-           ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Средний пробег:".tr + " ",
+                  style: TextStyle(
+                    fontFamily: "Montserrat",
+                    fontSize: width * 0.025,
+                    color: HexColor("#FFFFFF"),
+                  ),
+                ),
+                Flexible(
+                  child: Text(
+                    "${provider.averageRun.toStringAsFixed(0)} ${SingletonUnits().speed}",
+                    style: TextStyle(
+                      fontFamily: "Montserrat",
+                      fontSize: width * 0.025,
+                      color: HexColor("#FFFFFF"),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
             ),
-                 Flexible(
-                   child: Text(
-                     "${provider.averageRun.toStringAsExponential(3)} ${SingletonUnits().speed}",
-                       style: TextStyle(
-                         fontFamily: "Montserrat",
-                         fontSize: width * 0.025,
-                         color: HexColor("#FFFFFF"),
-                         fontWeight: FontWeight.bold,
-                       ),
-                   ),
-                 ),
-               ],
-             ),
           ],
         ),
       ),
-  
       Container(
         height: width * 0.6,
         width: width * 0.4,
@@ -163,25 +162,27 @@ class AbovePartOfAccount extends StatelessWidget {
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: ()=>provider.setSortChange(true),
+                onTap: () => provider.setSortChange(true),
                 child: Container(
-
                   width: double.infinity,
-                  padding: EdgeInsets.symmetric(
-                      vertical: width * 0.04, horizontal: width * 0.04),
+                  padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: Color.fromRGBO(223, 88, 103, 1),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Text(
-                    "${provider.changeDetail}" + "\nдеталей нуждаются в проверке/замене".tr,
-                    style: TextStyle(
-                      fontFamily: "Montserrat",
-                      fontSize: width * 0.03,
-                      color: HexColor("#FFFFFF"),
+                  child: Center(
+                    child: Text(
+                      "${provider.changeDetail}" +
+                          "\n" +
+                          "деталей нуждаются в проверке/замене".tr,
+                      style: TextStyle(
+                        fontFamily: "Montserrat",
+                        fontSize: width * 0.03,
+                        color: HexColor("#FFFFFF"),
+                      ),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.visible,
                     ),
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.visible,
                   ),
                 ),
               ),
@@ -189,94 +190,62 @@ class AbovePartOfAccount extends StatelessWidget {
             SizedBox(
               height: width * 0.02,
             ),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(
-                    vertical: width * 0.04, horizontal: width * 0.04),
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(255, 204, 51, 1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        "Расход на детали за всё время".tr,
-                        style: TextStyle(
-                          fontFamily: "Montserrat",
-                          fontSize: width * 0.03,
-                          color: HexColor("#42424A"),
-                        ),
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.visible,
-                      ),
-                    ),
-                    Flexible(
-                      child: Text(
-                        "${provider.expenseAll} ${SingletonUnits().currency}",
-                        style: TextStyle(
-                          fontFamily: "Montserrat",
-                          fontSize: width * 0.03,
-                          color: HexColor("#42424A"),
-                        ),
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.visible,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            containerTextRight(
+              title: "Расход на детали за всё время".tr,
+              body: "${provider.expenseAll} ${SingletonUnits().currency}",
             ),
             SizedBox(
               height: width * 0.02,
             ),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(
-                    vertical: width * 0.04, horizontal: width * 0.04),
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(255, 204, 51, 1),
-                  borderRadius: BorderRadius.circular(10),
+            containerTextRight(
+                title: "Расход на детали за этот месяц".tr,
+                body: "${provider.expenseMonth} ${SingletonUnits().currency}")
+          ],
+        ),
+      ),
+    ]);
+  }
+
+  Widget containerTextRight({String title, String body}) {
+    return Expanded(
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Color.fromRGBO(255, 204, 51, 1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontFamily: "Montserrat",
+                  fontSize: width * 0.03,
+                  color: HexColor("#42424A"),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        "Расход на детали за этот месяц".tr,
-                        style: TextStyle(
-                          fontFamily: "Montserrat",
-                          fontSize: width * 0.03,
-                          color: HexColor("#42424A"),
-                        ),
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.visible,
-                      ),
-                    ),
-                    Flexible(
-                      child: Text(
-                        "${provider.expenseMonth} ${SingletonUnits().currency}",
-                        style: TextStyle(
-                          fontFamily: "Montserrat",
-                          fontSize: width * 0.03,
-                          color: HexColor("#42424A"),
-                        ),
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.visible,
-                      ),
-                    ),
-                  ],
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.visible,
+              ),
+            ),
+            Flexible(
+              child: Text(
+                body,
+                style: TextStyle(
+                  fontFamily: "Montserrat",
+                  fontSize: width * 0.03,
+                  color: HexColor("#42424A"),
                 ),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.visible,
               ),
             ),
           ],
         ),
       ),
-    ]);
+    );
   }
 }

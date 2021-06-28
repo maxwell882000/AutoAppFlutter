@@ -182,6 +182,15 @@ class SingletonUnits {
      return "дней".tr;
     }
   }
+  String convertYearToString(int years){
+    if (years == 1){
+      return "год".tr;
+    }
+    else if (years > 1 && years < 5) {
+      return "года".tr;
+    }
+  }
+
   @override
   String toString() {
     return toJson().toString();

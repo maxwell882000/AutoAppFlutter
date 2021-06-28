@@ -145,7 +145,7 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
       "${SingletonUserInformation().marka} ${SingletonUserInformation().model}",
       "${SingletonUserInformation().number}",
       "${SingletonUserInformation().techPassport}",
-      "${SingletonUserInformation().tenure()} лет",
+      "${SingletonUserInformation().tenure()}",
       false,
     );
     provider.setIndicators([]);
