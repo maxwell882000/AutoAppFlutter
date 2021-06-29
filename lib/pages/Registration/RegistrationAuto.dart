@@ -38,16 +38,32 @@ class _RegistrationAutoState extends State<RegistrationAuto> {
               !element[1].selected && element[0] != "ТЕХ ПАСПОРТ".tr)
           .map((element) => errors.indexOf(element))
           .toList();
-      print(selected);
-      if (selected.length == 0) {
-        // selectOptionsErrorProvider.setNextPage(true);
-        loadToHard(errors);
-      } else {
+
+      if (selected.length != 0) {
         selected.forEach((element) {
           var error = errors[element];
           print(error);
           error[1].setError(true);
         });
+        // selectOptionsErrorProvider.setNextPage(true);
+      } else {
+        double run = double.parse(errors[6][1].inputData);
+        double initial_run = double.parse(errors[7][1].inputData);
+        int yearOfMade = int.parse(errors[3][1].inputData);
+        int yearOfPurchase = int.parse(errors[4][1].inputData);
+        if (run < initial_run) {
+          errors[7][1].setError(true);
+          CustomDialog.show(
+              title: "ОШИБКА".tr,
+              text: "Начальный пробег не может быть больше пробега".tr);
+          return;
+        } else if (yearOfMade > yearOfPurchase) {
+          CustomDialog.show(
+              title: "ОШИБКА".tr,
+              text: "Год производство не может быть позже года покупки".tr);
+          return;
+        }
+        loadToHard(errors);
       }
     };
   }
@@ -65,21 +81,20 @@ class _RegistrationAutoState extends State<RegistrationAuto> {
       SingletonUserInformation().setYearOfPurchase(errors[4][1].inputData);
       SingletonUserInformation().setNumber(errors[5][1].inputData);
       SingletonUserInformation().setRun(double.parse(errors[6][1].inputData));
-      SingletonUserInformation().setTechPassport(errors[7][1].inputData);
-      SingletonUserInformation().setTypeOfCar(errors[8][1].inputData);
       SingletonUserInformation()
-          .setNumberOfTank(int.parse(errors[9][1].inputData));
-      SingletonUserInformation().setFirstTankType(errors[10][1].inputData);
+          .setInitialRun(double.parse(errors[7][1].inputData));
+      SingletonUserInformation().setTechPassport(errors[8][1].inputData);
+      SingletonUserInformation().setTypeOfCar(errors[9][1].inputData);
       SingletonUserInformation()
-          .setFirstTankVolume(int.parse(errors[11][1].inputData));
-      SingletonUserInformation().setInitialRun(SingletonUserInformation().run);
-      print("Run ${SingletonUserInformation().run}");
-      print(
-          "Run after ${SingletonUnits().convertDistanceForDB(SingletonUserInformation().run)}");
+          .setNumberOfTank(int.parse(errors[10][1].inputData));
+      SingletonUserInformation().setFirstTankType(errors[11][1].inputData);
+      SingletonUserInformation()
+          .setFirstTankVolume(int.parse(errors[12][1].inputData));
+
       if (SingletonUserInformation().numberOfTank == 2) {
-        SingletonUserInformation().setSecondTankType(errors[12][1].inputData);
+        SingletonUserInformation().setSecondTankType(errors[13][1].inputData);
         SingletonUserInformation()
-            .setSecondTankVolume(int.parse(errors[13][1].inputData));
+            .setSecondTankVolume(int.parse(errors[14][1].inputData));
       } else {
         SingletonUserInformation().setSecondTankType("");
         SingletonUserInformation().setSecondTankVolume(0);
@@ -96,8 +111,8 @@ class _RegistrationAutoState extends State<RegistrationAuto> {
           Navigator.of(context).pop();
           CustomDialog.show(
               text:
-              "Пожалуйста преобретите pro account , чтоб иметь больше карточек"
-                  .tr,
+                  "Пожалуйста преобретите pro account , чтоб иметь больше карточек"
+                      .tr,
               title: "Ошибка".tr);
           return;
         }
@@ -114,14 +129,14 @@ class _RegistrationAutoState extends State<RegistrationAuto> {
             SingletonUserInformation().cards.setId(json['id_cards']);
             pop = true;
             SingletonConnection().recommendData().then((value) {
-            Navigator.of(context).popAndPushNamed("/authorized", result: pop);
+              Navigator.of(context).popAndPushNamed("/authorized", result: pop);
             });
             return;
           }
           SingletonRegistrationAuto().clean();
           if (args == MenuPOP.NO_ACCOUNT) {
             SingletonConnection().recommendData().then((value) {
-            Navigator.of(context).pop(true);
+              Navigator.of(context).pop(true);
             });
             return;
           }
@@ -129,7 +144,6 @@ class _RegistrationAutoState extends State<RegistrationAuto> {
             Navigator.of(context).popAndPushNamed("/authorized");
           });
         } else {
-
           errors[0][1].setNameOfHelper(json['error']);
           errors[0][1].setError(true);
           selectOptionsErrorProvider.setNextPage(false);

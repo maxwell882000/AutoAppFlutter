@@ -262,9 +262,9 @@ class SingletonUserInformation {
   void averageRun() {
     final DateTime d = DateTime.parse("2021-02-04 09:45:54.925347Z");
     final now = DateTime.now();
-    print("DATESSS");
-    print(date);
-    final int days = now.difference(date).inDays;
+    // print("DATESSS");
+    final dateYear = DateTime(int.parse(yearOfPurchase));
+    final int days = now.difference(dateYear).inDays;
     print(days);
     if (days == 0) {
       SingletonUnits().convertSpeedForUser(0, days);
@@ -379,6 +379,7 @@ class SingletonUserInformation {
         'secondTankType': _secondTankType,
         'secondTankVolume': _secondTankVolume,
         'run': SingletonUnits().convertDistanceForDB(_run),
+        'initial_run': _initialRun != null ? SingletonUnits().convertDistanceForDB(_initialRun) : SingletonUnits().convertDistanceForDB(_run),
         'tech_passport': _techPassport,
         'expenses': expenses.toJson(),
         'type_car': getTypeOfCarToBack(),
@@ -431,7 +432,9 @@ class SingletonUserInformation {
               ? int.parse(_yearOfPurchase)
               : 0;
       final int tenure = year - yearOfPurchase;
-      return tenure.toString() + " " +  SingletonUnits().convertYearToString(tenure);
+      return tenure.toString() +
+          " " +
+          SingletonUnits().convertYearToString(tenure);
     }
     return "";
   }

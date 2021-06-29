@@ -172,9 +172,11 @@ class AbovePartOfAccount extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      "${provider.changeDetail}" +
+                      "нуждаются в замене/проверке".tr +
                           "\n" +
-                          "деталей нуждаются в проверке/замене".tr,
+                          "${provider.changeDetail}" +
+                          "\n" +
+                          "деталей".tr,
                       style: TextStyle(
                         fontFamily: "Montserrat",
                         fontSize: width * 0.03,
