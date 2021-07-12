@@ -100,6 +100,7 @@ class _LogInSelectingOptionState extends State<LogInSelectingOption> {
             .setEmailOrPhone(deepLink.queryParameters['emailOrPhone']);
         SingletonUserInformation()
             .setUserId(id);
+        SingletonUserInformation().setPop(true);
         print("WATCH" + deepLink.path);
         print(path);
         if (path == "/select_unit"){

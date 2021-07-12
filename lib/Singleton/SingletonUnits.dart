@@ -84,9 +84,7 @@ class SingletonUnits {
   }
 }
  int translateTimeFromDays(String time, int days){
-    print("time $time and other type ${SingletonStoreUnits().time.S} ");
-    print("compareTo ${time.compareTo(SingletonStoreUnits().time.S)}");
-    print("check ${time ==SingletonStoreUnits().time.S}");
+
    if (time == SingletonStoreUnits().time.S) {
      _time = SingletonStoreUnits().time.S;
      return days* 86400;
@@ -117,16 +115,12 @@ class SingletonUnits {
     }
   }
   double convertSpeedForUser(double run,int days) {
-    print("SPEED $speed amd ${SingletonStoreUnits().speed.KM_C} and ${speed == SingletonStoreUnits().speed.KM_C} and "
-        "${SingletonStoreUnits().speed.M_D.compareTo(speed)}");
+
     RegExp regExp = new RegExp(SingletonStoreUnits().speed.KM_C.toLowerCase().trim());
     String sp = speed.split("/").first;
     String dd = speed.split("/").last;
     _speedDistance = sp;
-    print(sp);
-    print(dd);
-    print(translateDistance(sp, 1));
-    print("KM EQUAL OR NOT ");
+
     return _averageFind(run, sp, days, dd);
     // print(regExp.stringMatch(speed.toLowerCase().trim()));
     // if (speed == SingletonStoreUnits().speed.M_D) {
@@ -152,19 +146,16 @@ class SingletonUnits {
     //   return _averageFind(run, SingletonStoreUnits().distance.KM, days, SingletonStoreUnits().time.H);
     // } else if (speed == SingletonStoreUnits().speed.KM_C) {
     //   _speedDistance = SingletonStoreUnits().distance.KM;
-    //   print("SPEED"+_speedDistance +"RUN " + run.toString() + "DAYS " + days.toString());
+    //   `print`("SPEED"+_speedDistance +"RUN " + run.toString() + "DAYS " + days.toString());
     //   return _averageFind(run, SingletonStoreUnits().distance.KM, days, SingletonStoreUnits().time.S);
     // }
   }
   double _averageFind(double run, String translateRun, int days, String time){
-    print("TIME $time");
-    print("DAYS $days");
+
         double translatedRun = translateDistance(translateRun, run);
-        print("TIME $time");
-        print("DAYS $days");
+
         int translatedTime = translateTimeFromDays(time,days);
-        print("FIRST $translatedTime");
-        print("FIRST $translatedRun");
+
         return translatedRun/translatedTime;
   }
   void setToTheDisk() {
@@ -188,6 +179,9 @@ class SingletonUnits {
     }
     else if (years > 1 && years < 5) {
       return "года".tr;
+    }
+    else {
+      return "лет".tr;
     }
   }
 

@@ -24,13 +24,13 @@
         </intent>
     </queries>
     <application
-        android:icon="@mipmap/ic_launcher"
-        android:label="flutter_projects"
+        android:icon="@mipmap/launcher_icon"
+        android:label="Auto App"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBYVfz_xYfxBKXAIxBNny6QLU-ABTOlI2w" />
+            android:value="AIzaSyDitzm-AyWwQmCBolIi0qz0cKCEDmedO8g" />
 
         <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
             <intent-filter>

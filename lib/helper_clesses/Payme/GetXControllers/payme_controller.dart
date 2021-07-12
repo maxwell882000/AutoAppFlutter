@@ -13,103 +13,117 @@ class PaymeController extends GetxController {
   bool _loading = false;
 
   Payme _payme;
+
   void setNumberCard(String numberCard) {
-    this._numberCard = numberCard.replaceAll(" ", '');
+    this._numberCard = numberCard.replaceAll("-", '').replaceAll(" ", "");
     update();
   }
+
   void setCode(String code) {
     this._code = code;
     update();
   }
+
   static PaymeController get to => Get.find();
+
   String get numberCard => _numberCard;
 
   String get code => _code;
+
   String get date => _date;
 
   bool get loading => _loading;
 
-  void setLoading(bool loading){
+  void setLoading(bool loading) {
     this._loading = loading;
     update();
   }
 
-  void setPayme(Payme payme){
+  void setPayme(Payme payme) {
     _payme = payme;
   }
+
   void setDate(String date) {
     String changed = date.replaceAll("/", "");
     this._date = changed;
     update();
   }
-  String validateNumber(text){
+
+  String validateNumber(String text) {
     RegExp regExp = new RegExp(r"^[0-9]{16}$");
-    return regExp.hasMatch(text) ? null: "Пожалуйста введите правильный номер карты".tr;
-  }
-  String validateDate(text){
-    RegExp regExp = new RegExp(r"^[0-9]{2}/[0-9]{2}$");
-    return regExp.hasMatch(text)? null: "Формат: 01/21".tr;
-  }
-  String validateCode(String text) {
-    return text.isNotEmpty?null:"Пожалуйтса заполните поле".tr;
+    return regExp.hasMatch(text.replaceAll('-', ""))
+        ? null
+        : "Пожалуйста введите правильный номер карты".tr;
   }
 
-  void formSubmit(GlobalKey<FormState> _formState , String amountId ) async{
+  String validateDate(text) {
+    RegExp regExp = new RegExp(r"^[0-9]{2}/[0-9]{2}$");
+    return regExp.hasMatch(text) ? null : "Формат: 01/21".tr;
+  }
+
+  String validateCode(String text) {
+    return text.isNotEmpty ? null : "Пожалуйтса заполните поле".tr;
+  }
+
+  void formSubmit(GlobalKey<FormState> _formState, String amountId) async {
     setLoading(true);
 
-      if(_formState.currentState.validate()){
-        _formState.currentState.save();
-        print(date);
-        print(numberCard);
-        setPayme(new Payme(
+    if (_formState.currentState.validate()) {
+      _formState.currentState.save();
+      print(date);
+      print(numberCard);
+      setPayme(new Payme(
           number: numberCard,
           expire: date,
           userId: SingletonUserInformation().userId.toString(),
-          amountId: amountId
-        ));
-        try {
-          final result = await _payme.cardsCreate();
-          if (!result) {
-            await _payme.getVerifyCode();
-            CustomDialog.dialog(
-              barrierDismissible: false,
-              context: Get.context,
-              width: Get.width,
-              child: CodeVerification(),
-              alignment: Alignment.center,
-            );
-          }
+          amountId: amountId));
+      try {
+        final result = await _payme.cardsCreate();
+        if (!result) {
+          await _payme.getVerifyCode();
+          CustomDialog.dialog(
+            barrierDismissible: false,
+            context: Get.context,
+            width: Get.width,
+            child: CodeVerification(),
+            alignment: Alignment.center,
+          );
         }
-        catch(e){
-          CustomDialog.show(text: e, title: "Ошибка".tr);
-        }
+      } catch (e) {
+        CustomDialog.show(text: e, title: "Ошибка".tr);
       }
-      setLoading(false);
+    }
+    setLoading(false);
   }
+
   Future resendCode() async {
     setLoading(true);
     try {
       await _payme.getVerifyCode();
       CustomDialog.show(
           text: "Код подтверждения успешно отправлен!".tr,
-          title: "Отправлен".tr
-      );
-    }
-    catch(e){
-      CustomDialog.show(text: e , title: "Ошибка".tr);
+          title: "Отправлен".tr);
+    } catch (e) {
+      CustomDialog.show(text: e, title: "Ошибка".tr);
     }
     setLoading(false);
   }
-  void sendCode(GlobalKey<FormState> _formState) async{
+
+  void sendCode(GlobalKey<FormState> _formState) async {
     setLoading(true);
-    if(_formState.currentState.validate()){
+    if (_formState.currentState.validate()) {
       _formState.currentState.save();
       try {
         final result = await _payme.cardsVerify(code);
-      }
-      catch(e){
-
-        CustomDialog.show(text: e , title: "Ошибка".tr);
+        if (!SingletonUserInformation().proAccount)
+          CustomDialog.show(
+              text: "Вы успешно преобрели подписку".tr, title: "Успех".tr);
+        else
+          CustomDialog.show(
+              text: "Вы успешно обновили подписку".tr, title: "Успех".tr);
+        SingletonUserInformation().setProAccount(true);
+      } catch (e) {
+        CustomDialog.show(text: e, title: "Ошибка".tr);
       }
     }
     setLoading(false);

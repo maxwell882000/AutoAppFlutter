@@ -470,7 +470,7 @@ class SingletonConnection {
     }
 
      Map got;
-    print("ASDASDASD");
+    print("SENDING DATA");
     print(json);
     if (SingletonUserInformation().cards.id != null &&
         SingletonUserInformation().cards.id != 0) {

@@ -13,12 +13,14 @@ class Errors {
     -31300: "Неверно указана дата истечения срока действия карты".tr,
     -31001: "Не подключено смс-информирование.".tr,
     -31300: "Карта с таким номером не найдена".tr,
-
   };
 
   static Map server = {
-    'success' : "Вы успешно оформили подписку, ежемесячно с вашего баланса будет сниматься сумма в размере".tr,
-    'error' : "Произошла ошибка во время оплаты, попытайтесь позже!".tr
+    'success':
+        "Вы успешно оформили подписку, ежемесячно с вашего баланса будет сниматься сумма в размере"
+            .tr,
+    'error': "Произошла ошибка во время оплаты, попытайтесь позже!".tr,
+
   };
 
   static void handlePayme(Map errors, String elseThrow) {
@@ -31,12 +33,13 @@ class Errors {
     }
     throw throwing;
   }
+
   static void handleServer(Map errors) {
-    String throwing = "";
+
     Navigator.of(Get.context).pop();
     Navigator.of(Get.context).pop();
     if (errors['success'] == false) {
-      throw  server['error'];
+      throw errors['message'];
     }
   }
 }

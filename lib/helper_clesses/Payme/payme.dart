@@ -6,8 +6,8 @@ import 'package:flutter_projects/Singleton/SingletonRestApi.dart';
 import 'package:flutter_projects/helper_clesses/Payme/errors.dart';
 
 class Payme {
-  final String _url = "https://checkout.test.paycom.uz/api";
-  final String _id = "5e730e8e0b852a417aa49ceb";
+  final String _url = "https://checkout.paycom.uz/api";
+  final String _id = "60c056c00d44ad63647a92cc";
   final String number;
   final String CARDS_CREATE_METHOD = "cards.create";
   final String CARDS_GET_VERIFY_CODE = "cards.get_verify_code";

@@ -90,7 +90,6 @@ class _ModifyCardsState extends State<ModifyCards> {
   Function choiceWidget(double width, ErrorMessageProvider repeatDistProvider,
       ErrorMessageProvider repeatTimeProvider) {
     return (provider) {
-
       final double run =
           SingletonRecomendation().recommendationProbeg(provider.inputData);
 
@@ -110,7 +109,11 @@ class _ModifyCardsState extends State<ModifyCards> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    run == null ? "" : "$run ${SingletonUnits().distance}",
+                    run == null ||
+                            (repeatTimeProvider.inputData != null &&
+                                repeatTimeProvider.inputData.isNotEmpty)
+                        ? ""
+                        : "$run ${SingletonUnits().distance}",
                     style: TextStyle(
                       color: HexColor("#42424A"),
                       fontFamily: 'Roboto',
@@ -140,7 +143,9 @@ class _ModifyCardsState extends State<ModifyCards> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    run == null
+                    run == null ||
+                            (repeatDistProvider.inputData != null &&
+                                repeatDistProvider.inputData.isNotEmpty)
                         ? ""
                         : days != null
                             ? "$days ${SingletonUnits().convertDaysToString(days)}"
@@ -181,7 +186,10 @@ class _ModifyCardsState extends State<ModifyCards> {
               ),
               Consumer<CheckProvider>(
                 builder: (context, provider, child) {
-                  return Visibility(visible: provider.checked, maintainState: true, child: child);
+                  return Visibility(
+                      visible: provider.checked,
+                      maintainState: true,
+                      child: child);
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -192,12 +200,11 @@ class _ModifyCardsState extends State<ModifyCards> {
                       child: Form(
                         key: _destForm,
                         child: TextFieldHelper(
-                          onlyInteger: true,
-                          onTap: () {
-                            _timeForm.currentState.validate();
-                          },
-                          validate: CardStatic.cleanTextField
-                        ),
+                            onlyInteger: true,
+                            onTap: () {
+                              _timeForm.currentState.validate();
+                            },
+                            validate: CardStatic.cleanTextField),
                       ),
                     ),
                     SizedBox(
@@ -240,6 +247,7 @@ class _ModifyCardsState extends State<ModifyCards> {
       }
     };
   }
+
   @override
   void initState() {
     provider.setNameOfHelper(widget.appBarName);
@@ -375,15 +383,16 @@ class _ModifyCardsState extends State<ModifyCards> {
             SingletonUserInformation().setRun(run);
             SingletonUserInformation().updateRun();
           } else {
-            runProvider.setNameOfHelper("Пробег всегда должен увеличиваться".tr);
+            runProvider
+                .setNameOfHelper("Пробег всегда должен увеличиваться".tr);
             runProvider.setError(true);
             return;
           }
         }
         if (commentsProvider.inputData.isNotEmpty)
-        SingletonUserInformation()
-            .newCard
-            .setComments(commentsProvider.inputData);
+          SingletonUserInformation()
+              .newCard
+              .setComments(commentsProvider.inputData);
         if (check.checked) {
           if (repeatDistProvider.inputData.isNotEmpty) {
             double run = double.parse(repeatDistProvider.inputData) +
@@ -396,9 +405,18 @@ class _ModifyCardsState extends State<ModifyCards> {
                 .change
                 .setTime(int.parse(repeatTimeProvider.inputData));
             SingletonUserInformation().newCard.change.setRun(0);
+          } else {
+            final double run = SingletonRecomendation()
+                    .recommendationProbeg(provider.inputData) +
+                SingletonUserInformation().run;
+            SingletonUserInformation().newCard.change.setRun(run);
+            SingletonUserInformation().newCard.change.setTime(0);
           }
-        }else {
-          SingletonUserInformation().newCard.change.setRun(SingletonUserInformation().run);
+        } else {
+          SingletonUserInformation()
+              .newCard
+              .change
+              .setRun(SingletonUserInformation().run);
         }
 
         SingletonUserInformation().newCard.setExpense([]);
@@ -420,7 +438,7 @@ class _ModifyCardsState extends State<ModifyCards> {
         barrierDismissible: false,
         builder: (context) => DataNotSave());
     if (response) {
-     SingletonConnection().cleanTemp();
+      SingletonConnection().cleanTemp();
     }
     return response;
   }
@@ -467,7 +485,7 @@ class _ModifyCardsState extends State<ModifyCards> {
           middleChild: ListExpenses(child: addExpenses()),
           childAboveButton: [
             'assets/reload.svg',
-            "Повторить".tr + "\n" + "действие".tr+"\n" + "карточки через".tr,
+            "Повторить".tr + "\n" + "действие".tr + "\n" + "карточки через".tr,
             choiceWidget(width, repeatDistProvider, repeatTimeProvider),
           ],
           provider: provider,

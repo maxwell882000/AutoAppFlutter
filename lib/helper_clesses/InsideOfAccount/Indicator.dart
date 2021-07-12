@@ -228,7 +228,7 @@ class _IndicatorState extends State<Indicator> {
                   child: Align(
                     alignment: Alignment.topRight,
                     child: Text(
-                      "на  ${dataDistance is double ?dataDistance.toInt():dataDistance} ${SingletonUnits().distance}",
+                      "${"через".tr}  ${dataDistance is double ?dataDistance.toInt():dataDistance} ${SingletonUnits().distance}",
                       textAlign: TextAlign.end,
                       style: TextStyle(
                           color: HexColor("42424A"),
@@ -241,7 +241,7 @@ class _IndicatorState extends State<Indicator> {
                   child: Align(
                     alignment: Alignment.topRight,
                     child: Text(
-                        dataTime is int || dataTime is double? "${"через".tr} ${dataTime.toInt()} ${SingletonUnits().convertDaysToString(dataTime.toInt())}":dataTime,
+                        dataTime is int || dataTime is double? "${dataTime.toInt()} ${SingletonUnits().convertDaysToString(dataTime.toInt())}":dataTime,
                       textAlign: TextAlign.end,
                       style: TextStyle(
                           color: HexColor("42424A"),

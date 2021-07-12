@@ -7,9 +7,12 @@ class LocationService extends GetxService {
   final double MAX_SPEED = 1.3;
 
   Future init() async{
+
     await determinePosition();
     return this;
+
   }
+
   Future<void> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -21,18 +24,18 @@ class LocationService extends GetxService {
           title: "Ошибка",
           body:
               "Пожалуйста включите геолакацию чтоб использовать все функции приложения");
-      return Future.error('Location services are disabled.');
+      // return Future.error('Location services are disabled.');
     }
 
     permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.deniedForever) {
+      if (permission == LocationPermission.deniedForever) {
       NotificationService().createNotification(
           channelKey: "back_channel",
           title: "Ошибка",
           body:
               "Пожалуйста включите геолакацию чтоб использовать все функции приложения");
-      return Future.error(
-          'Location permissions are permantly denied, we cannot request permissions.');
+      // return Future.error(
+      //     'Location permissions are permantly denied, we cannot request permissions.');
     }
 
     if (permission == LocationPermission.denied) {
@@ -44,8 +47,8 @@ class LocationService extends GetxService {
             title: "Ошибка",
             body:
                 "Пожалуйста включите геолакацию чтоб использовать все функции приложения");
-        return Future.error(
-            'Location permissions are denied (actual value: $permission).');
+        // return Future.error(
+        //     'Location permissions are denied (actual value: $permission).');
       }
     }
   }

@@ -122,6 +122,11 @@ class _CreateCardsState extends State<CreateCards> {
               .change
               .setTime(int.parse(repeatTimeProvider.inputData));
           SingletonUserInformation().newCard.change.setRun(0);
+        } else {
+          final double run =
+          SingletonRecomendation().recommendationProbeg(provider.inputData) + SingletonUserInformation().run;
+          SingletonUserInformation().newCard.change.setRun(run);
+          SingletonUserInformation().newCard.change.setTime(0);
         }
 
         Navigator.of(context).pop(true);

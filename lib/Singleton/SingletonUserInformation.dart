@@ -262,10 +262,10 @@ class SingletonUserInformation {
   void averageRun() {
     final DateTime d = DateTime.parse("2021-02-04 09:45:54.925347Z");
     final now = DateTime.now();
-    // print("DATESSS");
+
     final dateYear = DateTime(int.parse(yearOfPurchase));
     final int days = now.difference(dateYear).inDays;
-    print(days);
+
     if (days == 0) {
       SingletonUnits().convertSpeedForUser(0, days);
       _average = 0;
@@ -423,15 +423,26 @@ class SingletonUserInformation {
     String result = await SingletonStoreToTheDiskAndLoad().getFromDisk('user');
     fromJson(json.decode(result));
   }
-
+  int toInt(String date) {
+    return date != null && date.isNotEmpty
+        ? int.parse(date)
+        : 0;
+  }
   String tenure() {
     if (!_NO_ACCOUNT) {
+
       final int year = DateTime.now().year;
-      final int yearOfPurchase =
-          _yearOfPurchase != null && _yearOfPurchase.isNotEmpty
-              ? int.parse(_yearOfPurchase)
-              : 0;
+      print(_yearOfPurchase);
+      final int yearOfPurchase = toInt(_yearOfPurchase);
+
+      print("YEAR OF PURCHASE");
+      print(yearOfPurchase);
+      print(yearOfMade);
+      print(year);
       final int tenure = year - yearOfPurchase;
+      if(tenure==0 ){
+        return "Меньше года".tr;
+      }
       return tenure.toString() +
           " " +
           SingletonUnits().convertYearToString(tenure);

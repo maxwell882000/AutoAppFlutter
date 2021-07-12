@@ -7,8 +7,9 @@ class TextFieldHelperClean extends StatelessWidget {
   final TextInputType textInputType;
   final List<TextInputFormatter> textInputFormatter;
   final Function onSave;
+  final int maxLength;
   final Function onValidate;
-  const TextFieldHelperClean({Key key,this.nameOfHelper, this.textInputType,this.textInputFormatter,this.onSave, this.onValidate}) : super(key: key);
+  const TextFieldHelperClean({Key key,this.nameOfHelper, this.textInputType,this.textInputFormatter,this.onSave,this.maxLength, this.onValidate}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +26,7 @@ class TextFieldHelperClean extends StatelessWidget {
                 onSaved: (text)=>onSave(text),
                 cursorColor: Color.fromRGBO(66, 66, 74, 1),
                 cursorHeight: Get.width * 0.045,
+                maxLength: maxLength,
                 textAlign: TextAlign.left,
                 autocorrect: false,
                 maxLines: 1,

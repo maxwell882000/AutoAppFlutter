@@ -25,11 +25,13 @@ class NotificationService extends GetxService {
   static void initializeNotification(String channelKey) {
     AwesomeNotifications().initialize(
       // set the icon to null if you want to use the default app icon
-        null,
+        'resource://drawable/icon',
         [
           NotificationChannel(
               channelKey: channelKey,
               playSound: true,
+              enableVibration: true,
+
               channelName: 'Basic notifications',
               channelDescription: 'Notification channel for basic tests',
               defaultColor: Colors.white,

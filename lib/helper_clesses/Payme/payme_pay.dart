@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_projects/helper_clesses/Buttons.dart';
 
 import 'package:flutter_projects/helper_clesses/LoadingScreen.dart';
 
 import 'package:flutter_projects/helper_clesses/TextInput/TextFieldHelperClean.dart';
+import 'package:flutter_projects/helper_clesses/TextInput/TextInputFormatter/CardFormatter.dart';
+import 'package:flutter_projects/helper_clesses/TextInput/TextInputFormatter/DatePaymeFormatter.dart';
 
 import 'package:get/get.dart';
 
@@ -64,6 +67,11 @@ class PaymePay extends StatelessWidget {
                         ),
                         TextFieldHelperClean(
                             nameOfHelper: "Введите номер карты".tr,
+                            maxLength: 19,
+                            textInputFormatter: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              CardFormatter(),
+                            ],
                             onSave: _.setNumberCard,
                             onValidate: _.validateNumber),
                         SizedBox(
@@ -91,6 +99,11 @@ class PaymePay extends StatelessWidget {
                                 child: TextFieldHelperClean(
                               nameOfHelper: "Месяц/Год".tr,
                               onValidate: _.validateDate,
+                              maxLength: 5,
+                              textInputFormatter: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                DatePaymeFormatter(),
+                              ],
                               onSave: _.setDate,
                             ))
                           ],

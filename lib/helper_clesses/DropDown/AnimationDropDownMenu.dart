@@ -38,17 +38,20 @@ class AnimationDropDownMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     pressedScroll();
-    return AnimatedContainerBorder(
-      duration:pressed ? 1000 : 600,
+    return SizedBox(
       height: pressed ? null : Get.width * 0.12,
-      child: ListView(
-        padding: EdgeInsets.zero,
-        shrinkWrap: true,
-        controller: scroll,
-          physics: scrolling == 1
-                  ? AlwaysScrollableScrollPhysics()
-                  : NeverScrollableScrollPhysics(),
-        children: dropDownWidget.toList(),
+      child: AnimatedContainerBorder(
+        duration:pressed ? 1000 : 600,
+        height: null,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          shrinkWrap: true,
+          controller: scroll,
+            physics: scrolling == 1
+                    ? AlwaysScrollableScrollPhysics()
+                    : NeverScrollableScrollPhysics(),
+          children: dropDownWidget.toList(),
+        ),
       ),
     );
   }

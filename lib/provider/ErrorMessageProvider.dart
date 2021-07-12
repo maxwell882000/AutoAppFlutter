@@ -47,7 +47,7 @@ class ErrorMessageProvider with ChangeNotifier {
 
   List get errorsMessageWithText => _errorsMessageWithText;
 
-  Widget get recommendations => _recommendations;
+  SizedBox get recommendations => _recommendations;
 
   bool get error => _error;
 
