@@ -12,7 +12,8 @@ class TranslationService extends GetxService {
   static TranslationService get service => Get.find<TranslationService>();
   static final languages = [
     'ru',
-    'uz'
+    'uz',
+    'en',
   ];
 
   // initialize the translation service by loading the assets/locales folder

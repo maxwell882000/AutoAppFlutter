@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 class Language extends StatelessWidget {
   Language({Key key}) : super(key: key);
 
-  final List items = ["Русский Язык".tr, "O`zbek tilli".tr];
+  final List items = ["Русский Язык".tr, "O`zbek tilli".tr, "English language".tr];
 
   final ErrorMessageProvider errorsMessage =
       new ErrorMessageProvider("Выберите Язык".tr);
@@ -22,8 +22,11 @@ class Language extends StatelessWidget {
       return;
     } else if (choosenLanguage == items[0]) {
       SingletonGlobal().setLanguageSecond(Languages.RUSSIAN);
-    } else {
+    } else if (choosenLanguage == items[1]) {
       SingletonGlobal().setLanguageSecond(Languages.UZBEK);
+    }
+    else {
+      SingletonGlobal().setLanguageSecond(Languages.English);
     }
   }
 
@@ -59,6 +62,7 @@ class Language extends StatelessWidget {
             width: width,
             uzbekFlag: "assets/uzbekistan.svg",
             russionFlag: "assets/russion.svg",
+            englishFlag: "assets/united-kingdom.svg",
             disabledHeight: width * 0.11,
             enabledHeight: width * 0.25,
           ),

@@ -38,117 +38,152 @@ class AbovePartOfAccount extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "${provider.nameOfCar}",
-              style: TextStyle(
-                fontFamily: "Montserrat",
-                fontWeight: FontWeight.bold,
-                fontSize: width * 0.038,
-                color: HexColor("#FFFFFF"),
+            Flexible(
+              flex:2,
+              child: Text(
+                "${provider.nameOfCar}",
+                style: TextStyle(
+                  fontFamily: "Montserrat",
+                  fontWeight: FontWeight.bold,
+                  fontSize: width * 0.038,
+                  color: HexColor("#FFFFFF"),
+                ),
               ),
             ),
-            SizedBox(
-              height: width * 0.05,
-            ),
-            Text(
-              "${provider.number}",
-              style: TextStyle(
-                fontFamily: "Montserrat",
-                fontSize: width * 0.034,
-                color: HexColor("#FFFFFF"),
+            Flexible(
+              child: SizedBox(
+                height: width * 0.05,
               ),
             ),
-            SizedBox(
-              height: width * 0.035,
-            ),
-            Text(
-              "${provider.techPassport}",
-              style: TextStyle(
-                fontFamily: "Montserrat",
-                fontSize: width * 0.034,
-                color: HexColor("#FFFFFF"),
+            Flexible(
+              flex: 2,
+              child: Text(
+                "${provider.number}",
+                style: TextStyle(
+                  fontFamily: "Montserrat",
+                  fontSize: width * 0.034,
+                  color: HexColor("#FFFFFF"),
+                ),
               ),
             ),
-            SizedBox(
-              height: width * 0.035,
+            Flexible(
+
+              child: SizedBox(
+                height: width * 0.035,
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Текущий пробег:".tr,
-                  style: TextStyle(
-                    fontFamily: "Montserrat",
-                    fontSize: width * 0.025,
-                    color: HexColor("#FFFFFF"),
-                  ),
+            Flexible(
+              flex: 2,
+              child: Text(
+                "${provider.techPassport}",
+                style: TextStyle(
+                  fontFamily: "Montserrat",
+                  fontSize: width * 0.034,
+                  color: HexColor("#FFFFFF"),
                 ),
-                Flexible(
-                  child: Text(
-                    "${provider.run.toStringAsFixed(0)} ${SingletonUnits().distance}",
-                    style: TextStyle(
-                      fontFamily: "Montserrat",
-                      fontSize: width * 0.025,
-                      color: HexColor("#FFFFFF"),
-                      fontWeight: FontWeight.bold,
+              ),
+            ),
+            Flexible(
+              child: SizedBox(
+                height: width * 0.035,
+              ),
+            ),
+            Flexible(
+              flex: 3,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      "Текущий пробег:".tr,
+                      style: TextStyle(
+                        fontFamily: "Montserrat",
+                        fontSize: width * 0.025,
+                        color: HexColor("#FFFFFF"),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: width * 0.035,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Срок Владения:".tr,
-                  style: TextStyle(
-                    fontFamily: "Montserrat",
-                    fontSize: width * 0.025,
-                    color: HexColor("#FFFFFF"),
-                  ),
-                ),
-                Flexible(
-                  child: Text(
-                    "${provider.tenure}",
-                    style: TextStyle(
-                      fontFamily: "Montserrat",
-                      fontSize: width * 0.025,
-                      color: HexColor("#FFFFFF"),
-                      fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Text(
+                      "${provider.run.toStringAsFixed(0)} ${SingletonUnits().distance}",
+                      style: TextStyle(
+                        fontFamily: "Montserrat",
+                        fontSize: width * 0.025,
+                        color: HexColor("#FFFFFF"),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            SizedBox(
-              height: width * 0.035,
+            Flexible(
+              child: SizedBox(
+                height: width * 0.035,
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Средний пробег:".tr + " ",
-                  style: TextStyle(
-                    fontFamily: "Montserrat",
-                    fontSize: width * 0.025,
-                    color: HexColor("#FFFFFF"),
-                  ),
-                ),
-                Flexible(
-                  child: Text(
-                    "${provider.averageRun.toStringAsFixed(0)} ${SingletonUnits().speed}",
-                    style: TextStyle(
-                      fontFamily: "Montserrat",
-                      fontSize: width * 0.025,
-                      color: HexColor("#FFFFFF"),
-                      fontWeight: FontWeight.bold,
+            Flexible(
+              flex: 2,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      "Срок Владения:".tr,
+                      style: TextStyle(
+                        fontFamily: "Montserrat",
+                        fontSize: width * 0.025,
+                        color: HexColor("#FFFFFF"),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  Flexible(
+                    child: Text(
+                      "${provider.tenure}",
+                      style: TextStyle(
+                        fontFamily: "Montserrat",
+                        fontSize: width * 0.025,
+                        color: HexColor("#FFFFFF"),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Flexible(
+              child: SizedBox(
+                height: width * 0.035,
+              ),
+            ),
+            Flexible(
+              flex: 2,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      "Средний пробег:".tr + " ",
+                      style: TextStyle(
+                        fontFamily: "Montserrat",
+                        fontSize: width * 0.025,
+                        color: HexColor("#FFFFFF"),
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    child: Text(
+                      "${provider.averageRun.toStringAsFixed(0)} ${SingletonUnits().speed}",
+                      style: TextStyle(
+                        fontFamily: "Montserrat",
+                        fontSize: width * 0.025,
+                        color: HexColor("#FFFFFF"),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

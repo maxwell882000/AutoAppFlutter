@@ -14,11 +14,13 @@ class Base extends StatelessWidget {
   final String aboveText;
   final String icon;
   final double height;
+  final ScrollPhysics physics;
   const Base({
     Key key,
     this.child,
     this.width,
     this.icon,
+    this.physics = const NeverScrollableScrollPhysics(),
     this.aboveText,
     this.height,
   }) : super(key: key);
@@ -28,9 +30,11 @@ class Base extends StatelessWidget {
 
     var provider = Provider.of<ErrorMessageProvider>(context);
     return Scaffold(
+
       backgroundColor: HexColor("#F0F8FF"),
       body: Center(
         child: SingleChildScrollView(
+          physics: physics ,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

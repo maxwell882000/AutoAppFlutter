@@ -13,6 +13,7 @@ class DropDownItem extends StatefulWidget {
   final List items;
   final String russionFlag;
   final String uzbekFlag;
+  final String englishFlag;
   final double width;
   final double disabledHeight;
   final double enabledHeight;
@@ -23,6 +24,7 @@ class DropDownItem extends StatefulWidget {
     this.items,
     this.russionFlag = "",
     this.uzbekFlag = "",
+    this.englishFlag = "",
     this.width,
     this.disabledHeight,
     this.enabledHeight,
@@ -171,7 +173,7 @@ class _DropDownItemState extends State<DropDownItem> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SvgPicture.asset(
-                      item != items[0] ? uzbekFlag : russionFlag,
+                      item != items[0] ? items[1] == item ? uzbekFlag : widget.englishFlag : russionFlag,
                       width: width * 0.05,
                     ),
                     SizedBox(

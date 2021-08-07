@@ -27,12 +27,18 @@ class SingletonGlobal {
   Languages get language => _language;
 
   Locale get locale {
-    String _locale = _language != Languages.UZBEK ? "ru" : "uz";
+    String _locale = "";
+    switch (_language){
+      case Languages.UZBEK:  _locale = 'uz'; break;
+      case Languages.English: _locale = 'en'; break;
+      case Languages.RUSSIAN: _locale = 'ru'; break;
+      case Languages.EMPTY: _locale = 'uz';break;
+    }
     return Get.find<TranslationService>().fromStringToLocale(_locale);
   }
 
   void saveLanguage() {
-    prefs.setInt('language', _language == Languages.UZBEK ? 1 : 0);
+    prefs.setInt('language', _language.index);
     Get.updateLocale(locale);
   }
 
@@ -51,7 +57,7 @@ class SingletonGlobal {
   }
 
   void setLanguage(int language) {
-    this._language = language == 0 ? Languages.RUSSIAN : Languages.UZBEK;
+    this._language = Languages.values[language];
   }
 
   void setImages(List images) {
@@ -115,6 +121,7 @@ enum Languages {
   EMPTY,
   UZBEK,
   RUSSIAN,
+  English,
 }
 
 enum Requests { SUCCESSFULLY_CREATED, NOT_FOUND, NO_MORE_ACCOUNT, NO_INTERNET , FORBIDDEN , UPDATE_RUN }

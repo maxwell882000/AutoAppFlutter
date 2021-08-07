@@ -269,7 +269,7 @@ class _CardsUserState extends State<CardsUser> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            child,
+            Flexible(child: child),
             Text(
               chosenDate,
               style: TextStyle(
@@ -446,14 +446,19 @@ class _CardsUserState extends State<CardsUser> {
                                     width: width * 0.05,
                                   ),
                                   marginWidth(width),
-                                  Text(
-                                    "${dateProvider.nameOfHelper}",
-                                    style: TextStyle(
-                                      color: HexColor("#42424A"),
-                                      fontFamily: 'Montserrat',
-                                      fontSize: width * 0.035,
-                                      fontWeight: FontWeight.bold,
+                                  Flexible(
+                                    child: Text(
+                                      "${dateProvider.nameOfHelper}",
+                                      style: TextStyle(
+                                        color: HexColor("#42424A"),
+                                        fontFamily: 'Montserrat',
+                                        fontSize: width * 0.032,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
+                                  ),
+                                  SizedBox(
+                                    width: width*0.003,
                                   ),
                                 ],
                               )),
@@ -606,7 +611,7 @@ class _CardsUserState extends State<CardsUser> {
                     Flexible(
                       child: Buttons(
                           hexValueOFColor: "#7FA5C9",
-                          nameOfTheButton: "Назад",
+                          nameOfTheButton: "Назад".tr,
                           height: width*0.8,
                           onPressed: (context) async{
                           if( await widget.onPop()){

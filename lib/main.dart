@@ -118,7 +118,7 @@ class MyApp extends StatelessWidget {
           background: Container(
             color: Color(0xFFF5F5F5),
           )),
-      initialRoute: "/direct",
+      initialRoute:"/direct",
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate
