@@ -111,7 +111,7 @@
   "Зарегестрироваться через Facebook": "Register via Facebook",
   "Зарегестрироватьcя через Google": "Register via Google",
   "Заргестрироваться": "Register",
-  "через": "after",
+
   "ВОЗМОЖНОСТЬ ДОБАВИТЬ БОЛЬШЕ 1 АВТО В ПРОФИЛЬ": "Ability to add more than 1 car",
   "Возможность отслеживать и добавлять неограниченное количество авто деталей (в бесплатном можно отслеживать 10 и добавить 5)": "Ability to track and add unlimited amount of cards (you can only track 10 and add 5 in free version))",
   "Комментарий": "Comment",
@@ -190,7 +190,7 @@
   "Вы успешно оформили подписку, ежемесячно с вашего баланса будет сниматься сумма в размере": "You have successfully subscribed, the monthly amount will be deducted from your balance in the amount of",
   "Получить": "Get",
   "ВИД МАШИНЫ": "Car type",
-  "Выберите тип машины": "Choose the car type",
+
   "Механика": "Mechanical",
   "Автомат": "Automatic",
   "Обновить пробег!": "Update the driven distance of the car!",
@@ -205,13 +205,16 @@
   "Завершить": "Finish",
   "Сохранить точку": "Save the spot",
   "Пожалуйста отметьте точку чтоб сохранить!": "Please mark the spot to save!",
-  "Меньше года": "Less than year",
-  "Вы успешно преобрели подписку": "You are successfully purchased subscription",
+  "через" : "left",
+  "Вы успешно преобрели подписку": "You have successfully purchased the subscription",
   "Успех": "Success",
-  "Вы успешно обновили подписку": "Your subscription was updated",
-  "Повторить": "Repeat",
-  "действие": "action",
-  "карточки через": "of the card after",
-  "Вы можете пополнить ваш баланс в Paynet! Вам всего лишь нужно вести ваш ID!": "You can fill your balance in Paynet! You just have to enter your ID",
-  "ОБНОВИТЬ ПРОБЕГ": "Update run"
+  "Меньше года": "Less than a year",
+  "Вы успешно обновили подписку": "You have successfully updated your subscription",
+  "Повторить" : "Repeat",
+  "действие" : "action",
+  "карточки через" : "Cards via",
+  "Вы можете пополнить ваш баланс в Paynet! Вам всего лишь нужно вести ваш ID!": "Ypu can fill up your balance via Paynet! Just enter your ID!",
+  "ОБНОВИТЬ ПРОБЕГ" : "Update the driven distance",
+  "Выберите тип машины": "Select a car type",
+  "Предложения": "Offers"
 }

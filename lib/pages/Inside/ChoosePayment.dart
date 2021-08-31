@@ -26,7 +26,7 @@ class ChoosePayment extends StatelessWidget {
         .map<Subscribe>(
           (e) => new Subscribe(
               id: e['id'],
-              nameSubscribe: e['name_subscribe'],
+              nameSubscribe: e['name'],
               price: e['price'],
               duration: e['duration'],
               type: e['type']),

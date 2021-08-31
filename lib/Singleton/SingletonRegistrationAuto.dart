@@ -116,7 +116,20 @@ class SingletonRegistrationAuto {
     print(sub);
     return sub.isEmpty ? [] : sub[0];
   }
-
+  List deleteBelow(String helper, String chosen) {
+    if (helper == "КОЛИЧЕСТВО БАКОВ".tr) {
+        if (chosen == "2"){
+          return ["ТИП".tr, ""];
+        }
+        else {
+          return ["ТИП 1го бака".tr, "ТИП 2го бака".tr];
+        }
+    }
+    return [
+      '',
+      ''
+    ];
+  }
   List get item => _item;
 
   void setItem(List item) {

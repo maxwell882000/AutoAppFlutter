@@ -212,7 +212,7 @@
   "Получить": "Olish",
   "ВИД МАШИНЫ": "Mashina turi",
 
-  "Выберите тип машины": "Выберите тип машины",
+
 
   "Механика": "Mexanika",
   "Автомат": "Avtomat",
@@ -229,14 +229,17 @@
   "Завершить": "Yakunlash",
   "Сохранить точку": "Nuqtani saqlash",
   "Пожалуйста отметьте точку чтоб сохранить!": "Saqlash uchun nuqtani belgilang!",
-  "через" : "qo`ldi",
-  "Вы успешно преобрели подписку": "Siz muvaffaqiyatli obuna bo'ldingiz",
-  "Успех": "Muvaffaqiyat",
-  "Меньше года": "Yilldan kamirok qo`ldi",
-  "Вы успешно обновили подписку": "Вы успешно обновили подписку",
-  "Повторить" : "Repeat",
-  "действие" : "action",
-  "карточки через" : "of the card after",
-  "Вы можете пополнить ваш баланс в Paynet! Вам всего лишь нужно вести ваш ID!": "Вы можете пополнить ваш баланс в Paynet! Вам всего лишь нужно вести ваш ID!"
-  "ОБНОВИТЬ ПРОБЕГ" : ""
+  "через" : "qoldi",
+  "Вы успешно преобрели подписку": "Siz muvoffaqiyatli obuna bo'ldingiz",
+
+  "Успех": "Muvoffaqiyat",
+  "Меньше года": "Bir yildan kamirok qoldi",
+  "Вы успешно обновили подписку": "Siz obunani muvoffaqiyatli yangiladingiz",
+  "Повторить" : "Qaytarish",
+  "действие" : "harakat",
+  "карточки через" : "kartochkalar orqali",
+  "Вы можете пополнить ваш баланс в Paynet! Вам всего лишь нужно вести ваш ID!": "Siz o'z balansingizni Paynet orqali to'ldirishingiz mumkin! O'z ID raqamingizni kirgizsangiz bo'ldi!",
+  "Предложения": "Takliflar",
+  "ОБНОВИТЬ ПРОБЕГ" : "Haydalgan masofani yangilash",
+  "Выберите тип машины": "Mashina turini tanlang"
 }

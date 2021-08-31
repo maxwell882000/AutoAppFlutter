@@ -364,6 +364,7 @@ class SingletonUserInformation {
         Navigator.of(Get.context).popAndPushNamed("/select");
       }
     }
+    return response;
   }
 
   Map<String, dynamic> toJson() => {
@@ -382,6 +383,7 @@ class SingletonUserInformation {
         'initial_run': _initialRun != null ? SingletonUnits().convertDistanceForDB(_initialRun) : SingletonUnits().convertDistanceForDB(_run),
         'tech_passport': _techPassport,
         'expenses': expenses.toJson(),
+        'lang' : SingletonGlobal().language.index,
         'type_car': getTypeOfCarToBack(),
       };
 

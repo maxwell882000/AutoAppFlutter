@@ -65,6 +65,7 @@ class SingletonRecomendation {
     _id = json['id_model'];
     _textAbove = json['text_above'];
     _imageName = json['image_name'];
+    if (json['recomendations'] != null)
     json['recomendations']
         .forEach((e) => _recomendations.add(new Recomendations(e)));
   }
@@ -96,7 +97,7 @@ class Recomendations {
 
   Recomendations(Map<String, dynamic> json) {
     _id = json['id'];
-    _mainName = json['main_name'];
+    _mainName = json['main'];
     _description = json['description'];
     _recomendedProbeg = json['recomended_probeg'];
   }

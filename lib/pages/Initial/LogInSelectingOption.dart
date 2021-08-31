@@ -67,7 +67,7 @@ class _LogInSelectingOptionState extends State<LogInSelectingOption> {
   }
 
   Future<void> _launchURLFacebook() async {
-    const url = 'https://facebook.com';
+    var url = '${SingletonConnection.URL}/loginFacebook/';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -242,7 +242,7 @@ class _LogInSelectingOptionState extends State<LogInSelectingOption> {
                             }),
                             nameOfTheButton: nameButtonUsual,
                           ),
-                        ],
+                        ],  
                       ),
                     ),
                     SizedBox(

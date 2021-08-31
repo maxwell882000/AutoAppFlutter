@@ -3,7 +3,7 @@ import 'package:flutter_projects/Singleton/SingletonConnection.dart';
 import 'package:flutter_projects/service/translation_service.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import'dart:io' show Platform;
+import 'dart:io' show Platform;
 import 'SingletonUserInformation.dart';
 
 class SingletonGlobal {
@@ -20,6 +20,10 @@ class SingletonGlobal {
 
   SharedPreferences get prefs => _prefs;
 
+  String get language_URL => "?lang=${_language.index}";
+
+  Map get language_MAP => {"lang": _language.index};
+
   List get images => _images;
 
   List get expenses => _expenses;
@@ -28,11 +32,19 @@ class SingletonGlobal {
 
   Locale get locale {
     String _locale = "";
-    switch (_language){
-      case Languages.UZBEK:  _locale = 'uz'; break;
-      case Languages.English: _locale = 'en'; break;
-      case Languages.RUSSIAN: _locale = 'ru'; break;
-      case Languages.EMPTY: _locale = 'uz';break;
+    switch (_language) {
+      case Languages.UZBEK:
+        _locale = 'uz';
+        break;
+      case Languages.English:
+        _locale = 'en';
+        break;
+      case Languages.RUSSIAN:
+        _locale = 'ru';
+        break;
+      case Languages.EMPTY:
+        _locale = 'uz';
+        break;
     }
     return Get.find<TranslationService>().fromStringToLocale(_locale);
   }
@@ -81,7 +93,6 @@ class SingletonGlobal {
     }
   }
 
-
   Future<bool> authorizeUser() async {
     String user = prefs.getString('user') ?? "";
     if (user.isNotEmpty) {
@@ -124,4 +135,11 @@ enum Languages {
   English,
 }
 
-enum Requests { SUCCESSFULLY_CREATED, NOT_FOUND, NO_MORE_ACCOUNT, NO_INTERNET , FORBIDDEN , UPDATE_RUN }
+enum Requests {
+  SUCCESSFULLY_CREATED,
+  NOT_FOUND,
+  NO_MORE_ACCOUNT,
+  NO_INTERNET,
+  FORBIDDEN,
+  UPDATE_RUN
+}

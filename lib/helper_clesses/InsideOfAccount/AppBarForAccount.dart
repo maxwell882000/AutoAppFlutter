@@ -109,8 +109,11 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
     ],
     [
       'Выйти из аккаунта'.tr,
-          (context) {
-        SingletonUserInformation().LOGOUT();
+          (context) async{
+       bool  response =  await SingletonUserInformation().LOGOUT();
+       if (response){
+         Navigator.of(context).pop();
+       }
       },
       HexColor("#DF5867")
     ],

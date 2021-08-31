@@ -6,6 +6,7 @@ import 'package:flutter_projects/Singleton/SingletonRegistrationAuto.dart';
 import 'package:flutter_projects/Singleton/SingletonUnits.dart';
 import 'package:flutter_projects/helper_clesses/TextInput/TextFieldHelper.dart';
 import 'package:flutter_projects/provider/ErrorMessageProvider.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -139,6 +140,8 @@ class _ListOfDropDownItemWithTextState
   Function getAdditionalItems(List element) {
     return (String chosenItem) {
       print("CHOSen : $chosenItem");
+
+      print("ELEMT ${element[1] == "КОЛИЧЕСТВО БАКОВ".tr}");
       List sub = SingletonRegistrationAuto().subList(chosenItem, element[1]);
 
       if (sub.isNotEmpty) {
@@ -148,10 +151,10 @@ class _ListOfDropDownItemWithTextState
         setState(() {
           print(additional);
           print(prepared[0][1]);
-          String str_prepared = prepared[0][1];
+          List str_prepared = SingletonRegistrationAuto().deleteBelow(element[1], chosenItem);
           List removed = collectionOfPreparedData
               .where((element) =>
-                  (element[1].split(" ").first == str_prepared.split(" ").first) || (element[1] == additional))
+                  element[1] == str_prepared[0] ||  element[1] == str_prepared[1] || (element[1] == additional))
               .map((e) => e)
               .toList();
           if (removed.isNotEmpty) {

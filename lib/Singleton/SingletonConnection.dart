@@ -134,11 +134,12 @@ class SingletonConnection {
 
   Future<List> getListForSubscribe({int type}) async {
     final response = await SingletonRestApi.get(
-      url: "$URL/service/?type=$type",
+      url: "$URL/service/?type=$type&lang=${SingletonGlobal().language.index}",
       headers: {'Content-Type': 'application/json'},
     );
     if (response.statusCode == 200) {
       List json = jsonDecode(utf8.decode(response.bodyBytes));
+      print(json);
       return json;
     }
   }
@@ -329,14 +330,16 @@ class SingletonConnection {
 
   Future<void> recommendData() async {
     SingletonRecomendation().clean();
+    print('${SingletonGlobal().language.index}');
     final response = await SingletonRestApi.post(
         url: '$URL/recomendations/',
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, String>{
+        body: jsonEncode(<String, dynamic>{
           'name_of_marka': SingletonUserInformation().marka,
           'name_of_model': SingletonUserInformation().model,
+          'lang': SingletonGlobal().language.index,
         }));
     print("RECOMMEND DATA ");
     print(response.body);
@@ -469,7 +472,7 @@ class SingletonConnection {
       });
     }
 
-     Map got;
+    Map got;
     print("SENDING DATA");
     print(json);
     if (SingletonUserInformation().cards.id != null &&
