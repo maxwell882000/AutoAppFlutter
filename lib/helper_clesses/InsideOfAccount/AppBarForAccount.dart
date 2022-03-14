@@ -203,7 +203,7 @@ class _AppBarForAccountState extends State<AppBarForAccount> {
       title: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          widget.nameBar,
+          Flexible(child: widget.nameBar),
           Flexible(
             child: Text(""),
           ),

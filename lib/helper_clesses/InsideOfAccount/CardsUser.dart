@@ -210,12 +210,14 @@ class _CardsUserState extends State<CardsUser> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              provider.inputData,
-              style: TextStyle(
-                  color: HexColor("#42424A"),
-                  fontFamily: "Roboto",
-                  fontSize: width * 0.03),
+            Flexible(
+              child: Text(
+                provider.inputData,
+                style: TextStyle(
+                    color: HexColor("#42424A"),
+                    fontFamily: "Roboto",
+                    fontSize: width * 0.03),
+              ),
             ),
             pencil(width),
           ],

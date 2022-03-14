@@ -510,6 +510,7 @@ class SingletonConnection {
   }
 
   Future registerCar() async {
+    print(SingletonUserInformation().toJson());
     return SingletonRestApi.post(
         url: '$URL/transport/${SingletonUserInformation().emailOrPhone}/',
         headers: <String, String>{
