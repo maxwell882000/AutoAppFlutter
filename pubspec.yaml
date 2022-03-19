@@ -27,7 +27,7 @@ dependencies:
   hexcolor:
   firebase_core: ^1.2.0
   firebase_messaging: ^10.0.0
-  firebase_dynamic_links:
+  firebase_dynamic_links: ^2.0.9
   url_launcher:
   shared_preferences:
   provider:

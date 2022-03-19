@@ -28,7 +28,7 @@ class _DynamicLinksState extends State<DynamicLinks> {
         onSuccess: (PendingDynamicLinkData dynamicLink) async {
       final Uri deepLink = dynamicLink?.link;
       if (deepLink != null) {
-        print(deepLink.queryParameters['tt']);
+
         Navigator.pushNamed(context, deepLink.path);
       }
     }, onError: (OnLinkErrorException e) async {
