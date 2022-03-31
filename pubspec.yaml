@@ -25,8 +25,8 @@ dependencies:
     sdk: flutter
   flutter_svg: ^0.20.0-nullsafety.3
   hexcolor:
-  firebase_core: ^1.2.0
-  firebase_messaging: ^10.0.0
+  firebase_core: any
+  firebase_messaging: any
   firebase_dynamic_links: ^2.0.9
   url_launcher:
   shared_preferences:
