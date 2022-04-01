@@ -17,7 +17,7 @@ class DropDownItem extends StatefulWidget {
   final double width;
   final double disabledHeight;
   final double enabledHeight;
-  final Function additionalItemsFunction;
+    final Function additionalItemsFunction;
   final Widget iconsAddition;
   const DropDownItem({
     Key key,

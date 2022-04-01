@@ -13,7 +13,7 @@ import 'SingletonUnits.dart';
 import 'SingletonUserInformation.dart';
 
 class SingletonConnection {
-  static final String URL = "https://machina.uz";
+  static final String URL = "http://127.0.0.1:8010";
   static final SingletonConnection _instance = SingletonConnection._internal();
 
   factory SingletonConnection() {

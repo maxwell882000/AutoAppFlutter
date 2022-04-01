@@ -28,14 +28,19 @@ class ChildAndButtonColumn extends ChildAndButton {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(
-                  MediaQuery.of(context).size.width * 0.02),
+          Expanded(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.width * 0.02),
+              ),
+              child: aboveChild,
             ),
-            child: aboveChild,
+          ),
+          SizedBox(
+            height: 10,
           ),
           Container(
             height: width * 0.13,

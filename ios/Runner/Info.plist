@@ -53,6 +53,8 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 <!-- Permission options for the `location` group -->
+<key>NSCameraUsageDescription</key>
+<string> For attaching photos, so the user can see them after </string>
 	<key>NSLocationWhenInUseUsageDescription</key>
         <string>Need location when in use</string>
         <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -65,5 +67,9 @@
         <!-- Permission options for the `photos` group -->
         <key>NSPhotoLibraryUsageDescription</key>
         <string>photos</string>
+        <key>BGTaskSchedulerPermittedIdentifiers</key>
+        <array>
+        	<string>workmanager.background.task</string>
+        </array>
 </dict>
 </plist>

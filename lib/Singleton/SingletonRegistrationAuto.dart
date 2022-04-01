@@ -67,7 +67,13 @@ class SingletonRegistrationAuto {
       [1, "ПРОБЕГ".tr, "Введите пробег".tr, 2],
       [1, "ПРОБЕГ ВО ВРЕМЯ ПРИОБРЕТЕНИЯ".tr, "Введите пробег".tr, 2],
       [1, "ТЕХ ПАСПОРТ".tr, "Введите тех паспорт".tr, 0],
-      [0, "ВИД МАШИНЫ".tr, "Выберите тип машины".tr, "Механика".tr, "Автомат".tr],
+      [
+        0,
+        "ВИД МАШИНЫ".tr,
+        "Выберите тип машины".tr,
+        "Механика".tr,
+        "Автомат".tr
+      ],
       [0, "КОЛИЧЕСТВО БАКОВ".tr, "Выберите количество баков".tr, "1", "2"],
     ];
     _marka = [0, "МАРКА".tr, "Выберите марку".tr];
@@ -113,23 +119,22 @@ class SingletonRegistrationAuto {
         .where((element) => element[0] == chosenItem)
         .map((e) => e)
         .toList();
+    print("SUB lIST");
     print(sub);
     return sub.isEmpty ? [] : sub[0];
   }
+
   List deleteBelow(String helper, String chosen) {
     if (helper == "КОЛИЧЕСТВО БАКОВ".tr) {
-        if (chosen == "2"){
-          return ["ТИП".tr, ""];
-        }
-        else {
-          return ["ТИП 1го бака".tr, "ТИП 2го бака".tr];
-        }
+      if (chosen == "2") {
+        return ["ТИП".tr, ""];
+      } else {
+        return ["ТИП 1го бака".tr, "ТИП 2го бака".tr];
+      }
     }
-    return [
-      '',
-      ''
-    ];
+    return ['', ''];
   }
+
   List get item => _item;
 
   void setItem(List item) {
